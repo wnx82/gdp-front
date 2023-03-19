@@ -1,0 +1,24 @@
+.custom-menu {
+    background-color: #000;
+    border-bottom: 3px solid #fff;
+}
+
+.custom-menu .p-menuitem-link {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-menu .p-menuitem-link:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    .custom-menu .p-menuitem-link {
+        padding: 0 10px;
+    }
+}
