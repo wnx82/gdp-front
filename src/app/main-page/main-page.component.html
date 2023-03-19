@@ -1,13 +1,13 @@
-<a mat-list-item href="#">Home</a>
-<a mat-list-item routerLink="/agents/">Agents</a>
-<a mat-list-item routerLink="/habitations/">Habitations</a>
-<a mat-list-item routerLink="#">Valider une habitation</a>
-<a mat-list-item routerLink="/administration">Administration</a>
-<a mat-list-item routerLink="/error404">error404</a>
-
-
-<span>Portail GDP</span>
-
-
-<router-outlet></router-outlet>
-<!-- <app-footer></app-footer> -->
+<!-- main-page.component.html -->
+<header>
+    <nav class="menu-bar">
+        <button pButton type="button" (click)="showMenu = !showMenu" icon="pi pi-bars" class="menu-button"></button>
+        <p-menubar [model]="menuItems">
+        </p-menubar>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+</main>

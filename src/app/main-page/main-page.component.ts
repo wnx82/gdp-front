@@ -1,7 +1,6 @@
+// app.component.ts
 import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-main-page',
@@ -9,12 +8,38 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./main-page.component.css'],
 })
 export class MainPageComponent {
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay()
-    );
+  showMenu = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  menuItems: MenuItem[] = [
+    {
+      label: 'Home',
+      icon: 'pi pi-home',
+      routerLink: ['/'],
+    },
+    {
+      label: 'Agents',
+      icon: 'pi pi-users',
+      routerLink: ['/agents'],
+    },
+    {
+      label: 'Habitations',
+      icon: 'pi pi-home',
+      routerLink: ['/habitations'],
+    },
+    {
+      label: 'Valider une habitation',
+      icon: 'pi pi-check-square',
+      routerLink: ['/validation-habitation'],
+    },
+    {
+      label: 'Administration',
+      icon: 'pi pi-cog',
+      routerLink: ['/administration'],
+    },
+    {
+      label: 'error404',
+      icon: 'pi pi-exclamation-triangle',
+      routerLink: ['/error404'],
+    },
+  ];
 }
