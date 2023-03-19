@@ -1,3 +1,4 @@
+/* main-page.component.css */
 .custom-menu {
     background-color: #000;
     border-bottom: 3px solid #fff;
@@ -15,6 +16,10 @@
 .custom-menu .p-menuitem-link:hover {
     background-color: #fff;
     color: #000;
+}
+
+.p-menubar {
+    max-width: 100%;
 }
 
 @media (max-width: 768px) {

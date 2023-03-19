@@ -1,1 +1,210 @@
-<p>agents works!</p>
+<h1 class="m-3"><i class="fa-solid fa-user" aria-hidden="true"></i> Liste des agents </h1>
+<button type="button" class="add-button m-4" (click)="toogleTag()">
+    {{ !showMe ? 'Ajouter' : 'Retour'}}
+</button>
+<!-- <button (click)="toogleTag()" class="btn btn-success mb-4" id="add">{{ !showMe ? 'Ajouter' : 'Retour'}}</button> -->
+<div class="m-4" id="container-table" *ngIf="!showMe">
+
+
+
+    <h2>Mes agents</h2>
+    <div class="row">
+        <div *ngFor="let agent of agents" class="col m4 s6">
+            <div (click)="goToAgent(agent)" class="card horizontal" agentsBorderCard>
+                <div class="card-image">
+                    <img class="avatar" [src]="agent.picture" />
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p>{{ agent.firstname }}</p>
+                        <p>{{ agent.lastname }}</p>
+                        <p><small>{{ agent.createdAt | date: 'dd/MM/yyyy' }}</small></p>
+                        <span *ngFor="let type of agent.formations">
+                            {{ type }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+
+        <label for="new-agent">agents name: </label>
+        <input id="new-agent" #agentName />
+
+        <!-- (click) passes input value to add() and then clears the input -->
+        <button type="button" class="add-button" (click)="add(agentName.value); agentName.value=''">
+            Add agent
+        </button>
+    </div>
+
+    <ul class="agents">
+        <li *ngFor="let agent of agents">
+            <!-- <a routerLink="/{{agent._id}}"> -->
+            <span class="badge">{{agent._id}}</span> {{agent.firstname}}
+            <!-- </a> -->
+            <button type="button" class="delete" title="delete agent" (click)="delete(agent)">x</button>
+        </li>
+    </ul>
+
+
+
+
+
+    <!-- <mat-form-field appearance="fill">
+        <mat-label>Input</mat-label>
+        <input matInput>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Select</mat-label>
+        <mat-select>
+            <mat-option value="one">First option</mat-option>
+            <mat-option value="two">Second option</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Textarea</mat-label>
+        <textarea matInput></textarea>
+    </mat-form-field> -->
+
+
+
+
+    <table border="1" class="table table-responsive table-light table-hover  table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th>id</th>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Tel</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+
+        <tr class="table-row" data-href="agents.php?id=' . $Infos['id'] . '">
+        <tr *ngFor="let agent of agents" class="clickable-row" data-href="url://agents.php?id=' . $Infos['id'] . '">
+            <td>
+                {{ agent._id }}
+            </td>
+            <td>
+                {{ agent.matricule }}
+            </td>
+            <td>
+                {{ agent.lastname }}
+            </td>
+            <td>
+                {{ agent.firstname }}
+            </td>
+            <td>
+                {{ agent.tel }}
+            </td>
+            <td><a href="../agents/{{ agent._id }}/" class="link-light badge bg-primary rounded-pill">Modifier</a>
+            </td>
+            <td class="agents">
+                <!-- <button type="button">Supprimer</button> -->
+                <!-- <button type="button" class="delete" title="delete agent" (click)="delete(agent)">Supprimer</button> -->
+                <button type="button" class="agent-delete" title="delete agent"
+                    (click)="delete(agent)">Supprimer</button>
+                <!-- <button type="button" class="delete" title="delete agent" (click)="delete(agent)">Supprimer</button> -->
+                <!-- <a onclick="return confirm('Voulez-vous vraiment supprimer cet élement ?')"
+                    href="../agents/{{ agent.id }}/delete" class="link-light badge bg-danger rounded-pill">Supprimer</a> -->
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<div class="container-lg" id="form" *ngIf="showMe">
+
+    <form action="/agents/create" method="POST">
+
+        <fieldset>
+
+            <legend>Création d'un agent</legend>
+
+            <table>
+                <div class="input-group mb-3">
+                    <div class="m-1">
+                        <tr>
+                            <td>
+                                ID :
+                            </td>
+                            <td><input type="text" class="form-control m-1" name="id" value=""></td>
+                        </tr>
+                        <tr>
+                            <td>Matricule : </td>
+                            <td>
+                                <div class="input-group m-1"><span class="input-group-text" id="basic-addon1">A</span>
+
+                                    <input type="text" class="form-control m-1" maxlength="50" name="matricule"
+                                        id="matricule" autofocus placeholder="Obligatoire" value="">
+                                    <span id="spanChiffre"></span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Nom : </td>
+                            <td><input type="text" class="form-control m-1" maxlength="50" name="lastname"
+                                    placeholder="Obligatoire" value="" id="lastname"></td>
+                            <!-- onkeyup="this.value = this.value.toUpperCase();" -->
+                        </tr>
+                        <tr>
+                            <td>Prenom : </td>
+                            <td><input type="text" class="form-control m-1" maxlength="50" name="firstname"
+                                    placeholder="Obligatoire" value="" id="firstname"></td>
+                            <!-- onkeyup="this.charAt(0).toUpperCase() + this.slice(1)" -->
+                        </tr>
+                        <script>
+
+                        </script>
+                        <tr>
+                            <td>Date de naissance : </td>
+                            <td><input type="date" class="form-control m-1" maxlength="50" name="birthday" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Adresse : </td>
+                            <td><input type="text" class="form-control m-1" maxlength="50" name="adresse"
+                                    placeholder="Adresse" value=""></td>
+                        </tr>
+                        <tr>
+                            <td>Code Postal : </td>
+                            <td><input type="text" class="form-control m-1" maxlength="50" name="cp"
+                                    placeholder="Code Postal" value=""></td>
+                        </tr>
+                        <tr>
+                            <td>Téléphone : </td>
+                            <td><input type="text" class="form-control m-1" maxlength="50" name="tel"
+                                    placeholder="Téléphone" value=""></td>
+                        </tr>
+
+
+                        <div class="button-group m-3">
+                            <tr>
+                                <td>
+                                    <input type="reset" name="bInit" value="Réinitialiser" class="btn bg-danger
+                                                m-1 text-white" />
+                                </td>
+                                <td>
+                                    &nbsp;<input type="submit" name="bAjoutAgent" id="bAjoutAgent" value="Ajouter"
+                                        class="btn btn-primary m-1">
+                                </td>
+
+                            </tr>
+
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </fieldset>
+    </form>
+
+    <!-- <div class="alert alert-danger mt-4 mb-2" role="alert">
+
+    </div> -->
+
+
+</div>
