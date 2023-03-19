@@ -1,4 +1,3 @@
-//./main-page/main-page.component.ts
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';

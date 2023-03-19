@@ -12,11 +12,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./agents/agents.module').then((m) => m.AgentsModule),
   },
-  {
-    path: 'app',
-    loadChildren: () =>
-      import('./main-page/main-page.module').then((m) => m.MainPageModule),
-  },
 ];
 
 @NgModule({

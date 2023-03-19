@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MainPageRoutingModule } from './main-page-routing.module';
-import { MainPageComponent } from './main-page.component';
+// import { RouterModule, Routes } from '@angular/router';
+// import { MainPageComponent } from './main-page.component';
 // import { MenubarModule } from 'primeng/menubar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -15,10 +15,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
-  declarations: [MainPageComponent],
   imports: [
     CommonModule,
-    MainPageRoutingModule,
+
     MatMenuModule,
     // MenubarModule,
     MatToolbarModule,
