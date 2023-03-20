@@ -12,20 +12,12 @@ const baseUrl = 'http://localhost:3003/agents';
 @Injectable({ providedIn: 'root' })
 export class AgentService {
   title = 'Liste des agents';
-  // private agentsUrl = "http://localhost:3003/agents/"; // URL to web api
   private agentsUrl = 'http://localhost:3003/agents'; // URL to web api
 
-  // httpOptions = {
-  //   headers: new HttpHeaders({
-  //     "Content-Type": "application/json; charset=utf-8",
-  //   }),
   httpOptions = {
     headers: new HttpHeaders()
-      .set('Content-Type', 'application/json')
+      .set('Content-Type', 'application/json; charset=utf-8')
       .set('Api-Key', 'xxx'),
-    //   const headers = new HttpHeaders()
-    // .set('Content-Type', 'application/json')
-    // .set('Api-Key', 'xxx')
   };
 
   constructor(
@@ -97,16 +89,6 @@ export class AgentService {
       catchError(this.handleError<Agent>('addAgent'))
     );
   }
-
-  /** DELETE: delete the agent from the server */
-  // deleteAgent(id: number): Observable<Agent> {
-  //   const url = `${this.agentsUrl}/${id}`;
-
-  //   return this.http.delete<Agent>(url, this.httpOptions).pipe(
-  //     tap(_ => this.log(`deleted agent id=${id}`)),
-  //     catchError(this.handleError<Agent>('deleteAgent'))
-  //   );
-  // }
 
   /** DELETE: delete the agent from the server */
   deleteAgent(agent: any): Observable<any> {

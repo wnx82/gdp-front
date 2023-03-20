@@ -1,29 +1,45 @@
-/* main-page.component.css */
-.custom-menu {
-    background-color: #000;
-    border-bottom: 3px solid #fff;
+.b-example-divider {
+    height: 3rem;
+    margin: 5rem 0;
+    border-top: 1px solid #dee2e6;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.custom-menu .p-menuitem-link {
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 0 20px;
-    transition: all 0.3s ease-in-out;
+.container {
+    width: 100%;
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
-.custom-menu .p-menuitem-link:hover {
-    background-color: #fff;
-    color: #000;
+footer {
+    background-color: #f5f5f5;
 }
 
-.p-menubar {
-    max-width: 100%;
+.bi {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
 }
 
-@media (max-width: 768px) {
-    .custom-menu .p-menuitem-link {
-        padding: 0 10px;
-    }
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fa-brands {
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-2xl {
+    font-size: 2.5rem;
 }
