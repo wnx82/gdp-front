@@ -1,40 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
 /* Import Primeng styles */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
-@import "primeng/resources/primeng.min.css";
-@import "@angular/material/theming";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import 'node_modules/primeicons/primeicons.css';
+@import 'node_modules/primeng/resources/themes/nova/theme.css';
+@import 'node_modules/primeng/resources/primeng.min.css';
+@import '@angular/material/theming';
 /* @include mat-core(); */
 /* Your application styles */
 /* ... */
 /* You can add global styles to this file, and also import other style files */
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  position: relative;
-  font-family: "Roboto", sans-serif;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 0.5rem;
-  background-color: #fff;
-  margin: 1.25rem 0 1.25rem 0;
-  box-shadow: 0 0.25rem 0.5rem #e6edef;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    margin: 1.25rem 0 1.25rem 0;
+    box-shadow: 0 0.25rem 0.5rem #e6edef;
 
-  .card-head {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #edf1f7;
-    font-size: 1rem;
-    font-weight: 600;
-  }
+    .card-head {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 1rem;
+        font-weight: 600;
+    }
 
-  .card-body {
-    padding: 1rem 1.5rem;
-  }
+    .card-body {
+        padding: 1rem 1.5rem;
+    }
 }

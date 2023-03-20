@@ -1,0 +1,63 @@
+<div>
+
+    <div>
+        <h2>Liste des rues</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Denomination</th>
+                    <th>Nom</th>
+                    <th>Quartier</th>
+                    <th>Code Postal</th>
+                    <th>Localite</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let rue of rues">
+                    <td>{{rue.denomination}}</td>
+                    <td>{{rue.nom}}</td>
+                    <td>{{rue.quartier}}</td>
+                    <td>{{rue.cp}}</td>
+                    <td>{{rue.localite}}</td>
+                    <td>
+
+                        <p-button label="Modifier" icon="pi pi-pencil" (click)="selectRue(rue)"></p-button>
+
+
+                        <button pButton pRipple type="button" label="Supprimer" class="p-button-danger"
+                            icon="pi pi-trash" (click)="deleteRue(rue._id)"></button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button (click)="toggleAdd()">Ajouter une rue</button>
+    </div>
+
+
+    <div *ngIf="isAdding || isEditing">
+        <h2>{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}</h2>
+        <form #rueForm="ngForm" (ngSubmit)="isAdding ? addRue(rueForm.value) : editRue(rueForm.value)">
+            <div>
+                <label>Nom de la rue:</label>
+                <input type="text" name="nom" [(ngModel)]="selectedRue.nom" required>
+            </div>
+            <div>
+                <label>Code postal:</label>
+                <input type="text" name="codePostal" [(ngModel)]="selectedRue.codePostal" required>
+            </div>
+            <div>
+                <label>Ville:</label>
+                <input type="text" name="ville" [(ngModel)]="selectedRue.ville" required>
+            </div>
+            <div>
+                <label>Pays:</label>
+                <input type="text" name="pays" [(ngModel)]="selectedRue.pays" required>
+            </div>
+            <div>
+                <button type="submit">{{isAdding ? 'Ajouter' : 'Modifier'}}</button>
+                <button type="button" (click)="cancel()">Annuler</button>
+            </div>
+        </form>
+    </div>
