@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Agent } from './agent';
-import { MessageService } from '../message.service';
+import { MessageService } from '../../message.service';
 
 const baseUrl = 'http://localhost:3003/agents';
 

@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: 'agents',
     loadChildren: () =>
-      import('./agents/agents.module').then((m) => m.AgentsModule),
+      import('./components/agents/agents.module').then((m) => m.AgentsModule),
   },
 ];
 

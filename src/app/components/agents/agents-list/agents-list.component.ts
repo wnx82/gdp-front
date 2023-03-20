@@ -18,6 +18,7 @@ export class AgentsListComponent {
   getAgents(): void {
     this.agentService.getAgents().subscribe((agents) => {
       this.agents = agents.filter((agent) => !agent.deletedAt);
+      console.log('Agents filtrés :', this.agents);
     });
   }
 
