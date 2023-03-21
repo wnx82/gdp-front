@@ -48,62 +48,72 @@
         </div>
     </div>
 
-    <div *ngIf="isAdding || isEditing" class="p-dialog p-component-overlay">
-        <div class="p-dialog-content p-dialog-content-vcentered">
-            <div class="p-dialog-header">
-                <h5 class="p-dialog-title">{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}</h5>
-                <button class="p-dialog-header-icon p-link" (click)="cancel()">
-                    <i class="pi pi-times"></i>
-                </button>
+    <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
+        [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
+        [style]="{width: '50vw'}" (onHide)="cancel()">
+
+        <form class="p-fluid">
+            <div class="p-field">
+                <span class="p-float-label">
+                    <input type="text" id="title" name="title" [(ngModel)]="selectedMission.title" required pInputText>
+                    <label for="title">Titre</label>
+                </span>
             </div>
-            <div class="p-dialog-body">
-                <form class="form-flex-container">
-                    <div class="form-flex-column">
-                        <div class="p-field">
-                            <label for="title">Titre</label>
-                            <input type="text" class="p-inputtext" id="title" [(ngModel)]="selectedMission.title"
-                                name="title" required>
-                        </div>
-                        <div class="p-field">
-                            <label for="description">Description</label>
-                            <textarea class="p-inputtextarea" id="description" [(ngModel)]="selectedMission.description"
-                                name="description" rows="3"></textarea>
-                        </div>
-                        <div class="p-field">
-                            <label for="category">Catégorie</label>
-                            <input type="text" class="p-inputtext" id="category" [(ngModel)]="selectedMission.category"
-                                name="category" required>
-                        </div>
-                    </div>
-                    <div class="form-flex-column">
-                        <div class="p-field">
-                            <label for="horaire">Horaire</label>
-                            <input type="text" class="p-inputtext" id="horaire" [(ngModel)]="selectedMission.horaire"
-                                name="horaire" required>
-                        </div>
-                        <div class="p-field">
-                            <label for="priority">Priorité</label>
-                            <input type="number" class="p-inputnumber" id="priority"
-                                [(ngModel)]="selectedMission.priority" name="priority" required>
-                        </div>
-                        <div class="p-field">
-                            <label for="contact">Contact</label>
-                            <input type="text" class="p-inputtext" id="contact" [(ngModel)]="selectedMission.contact"
-                                name="contact">
-                        </div>
-                        <div class="p-field-checkbox">
-                            <input type="checkbox" id="visibility" [(ngModel)]="selectedMission.visibility"
-                                name="visibility">
-                            <label for="visibility">Visible</label>
-                        </div>
-                    </div>
-                </form>
+            <div class="p-field">
+                <span class="p-float-label">
+                    <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
+                        [(ngModel)]="selectedMission.description" [autoResize]="false"></textarea>
+                    <label for="description">Description</label>
+                </span>
             </div>
 
-            <div class="p-dialog-footer">
-                <button type="button" class="p-button p-button-secondary" (click)="cancel()">Annuler</button>
-                <button type="button" class="p-button p-button-primary"
-                    (click)="isAdding ? addMission(selectedMission) : editMission(selectedMission)">Enregistrer</button>
+            <div class="p-field">
+                <span class="p-float-label">
+                    <input type="text" id="category" name="category" [(ngModel)]="selectedMission.category" required
+                        pInputText>
+                    <label for="category">Catégorie</label>
+                </span>
             </div>
+            <div class="p-field">
+                <span class="p-float-label">
+                    <input type="text" id="horaire" name="horaire" [(ngModel)]="selectedMission.horaire" required
+                        pInputText>
+                    <label for="horaire">Horaire</label>
+                </span>
+            </div>
+            <!-- <div class="p-field">
+                <span class="p-float-label">
+                    <p-inputNumber id="priority" name="priority" [(ngModel)]="selectedMission.priority"></p-inputNumber>
+                    <label for="priority">Priorité</label>
+                </span>
+            </div> -->
+            <div class="p-field">
+                <span class="p-float-label">
+                    <p-inputNumber [(ngModel)]="selectedMission.priority" [showButtons]="true" inputId="stacked">
+                    </p-inputNumber>
+                    <label for="priority">Priorité</label>
+                </span>
+            </div>
+            <div class="p-field">
+                <span class="p-float-label">
+                    <input type="text" id="contact" name="contact" [(ngModel)]="selectedMission.contact" pInputText>
+                    <label for="contact">Contact</label>
+                </span>
+            </div>
+            <div class="p-field-checkbox">
+                <p-checkbox [(ngModel)]="selectedMission.visibility" id="visibility" name="visibility"
+                    [binary]="true"></p-checkbox>
+
+                <label for="visibility" class="p-checkbox-label">Visible</label>
+            </div>
+
+
+        </form>
+
+        <div class="p-dialog-footer">
+            <button type="button" class="p-button p-button-secondary" (click)="cancel()">Annuler</button>
+            <button type="button" class="p-button p-button-primary"
+                (click)="isAdding ? addMission(selectedMission) : editMission(selectedMission)">Enregistrer</button>
         </div>
-    </div>
+
+    </p-dialog>
