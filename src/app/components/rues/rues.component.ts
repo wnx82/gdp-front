@@ -79,12 +79,12 @@ export class RuesComponent implements OnInit {
     }
 
     editRue(rue: any) {
-        const { id, ...rueToUpdate } = rue;
+        const { _id, ...rueToUpdate } = rue;
         this.http
-            .patch<any>(`http://localhost:3003/rues/${id}`, rueToUpdate)
+            .patch<any>(`http://localhost:3003/rues/${_id}`, rueToUpdate)
             .subscribe(
                 data => {
-                    const index = this.rues.findIndex(r => r.id === data.id);
+                    const index = this.rues.findIndex(r => r._id === data._id);
                     this.rues[index] = data;
                     this.selectedRue = {};
                     this.isEditing = false;
@@ -109,6 +109,7 @@ export class RuesComponent implements OnInit {
 
     selectRue(rue: any) {
         this.selectedRue = { ...rue };
+        console.log(this.selectedRue);
     }
 
     cancel() {

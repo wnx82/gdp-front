@@ -25,6 +25,8 @@
                 <tbody>
                     <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
                         <td>{{rue._id}}</td>
+
+                        <td>{{rue.denomination}}</td>
                         <td>{{rue.nom}}</td>
                         <td>{{rue.quartier}}</td>
                         <td>{{rue.cp}}</td>
@@ -52,7 +54,8 @@
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" [style]="{width: '50vw'}"
-        (onHide)="cancel()">
+        (onHide)="selectedRue = {}">
+
         <form #rueForm="ngForm" (ngSubmit)="isAdding ? addRue(rueForm.value) : editRue(rueForm.value)">
             <div class="p-field">
                 <span class="p-float-label">
@@ -132,22 +135,6 @@
                     <input type="text" id="idTronconCentral" name="idTronconCentral"
                         [(ngModel)]="selectedRue.idTronconCentral" required pInputText>
                     <label for="idTronconCentral">ID troncon central</label>
-                </span>
-            </div>
-
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="idQuartier" name="idQuartier" [(ngModel)]="selectedRue.idQuartier" required
-                        pInputText>
-                    <label for="idQuartier">ID quartier</label>
-                </span>
-            </div>
-
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="idDistrict" name="idDistrict" [(ngModel)]="selectedRue.idDistrict" required
-                        pInputText>
-                    <label for="idDistrict">ID district</label>
                 </span>
             </div>
 
