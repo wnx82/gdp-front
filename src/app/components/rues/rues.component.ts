@@ -79,6 +79,12 @@ export class RuesComponent implements OnInit {
     }
 
     editRue(rue: any) {
+        if (!rue._id) {
+            console.log(
+                "L'identifiant de la rue à mettre à jour est manquant ou invalide !"
+            );
+            return;
+        }
         const { _id, ...rueToUpdate } = rue;
         this.http
             .patch<any>(`http://localhost:3003/rues/${_id}`, rueToUpdate)
