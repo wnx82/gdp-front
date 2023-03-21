@@ -79,18 +79,13 @@ export class RuesComponent implements OnInit {
     }
 
     editRue(rue: any) {
-        if (!rue._id) {
-            console.log(
-                "L'identifiant de la rue à mettre à jour est manquant ou invalide !"
-            );
-            return;
-        }
-        const { _id, ...rueToUpdate } = rue;
+        const { id, ...rueToUpdate } = rue;
+
         this.http
-            .patch<any>(`http://localhost:3003/rues/${_id}`, rueToUpdate)
+            .patch<any>(`http://localhost:3003/rues/${id}`, rueToUpdate)
             .subscribe(
                 data => {
-                    const index = this.rues.findIndex(r => r._id === data._id);
+                    const index = this.rues.findIndex(r => r.id === data.id);
                     this.rues[index] = data;
                     this.selectedRue = {};
                     this.isEditing = false;
@@ -115,7 +110,6 @@ export class RuesComponent implements OnInit {
 
     selectRue(rue: any) {
         this.selectedRue = { ...rue };
-        console.log(this.selectedRue);
     }
 
     cancel() {
