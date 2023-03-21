@@ -1,6 +1,6 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
     <div class="logo-container">
-        <button class="logo" (click)="toggleCollapse()">G</button>
+        <button class="logo" (click)="toggleCollapse()" *ngIf="collapsed || navData.length === 0">G</button>
         <div class="logo-text" @fadeInOut *ngIf="collapsed">GDP - Portail</div>
         <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
             <i class="fal fa-times close-icon"></i>
@@ -9,8 +9,8 @@
     <div class="scrollwrap scrollwrap_delayed">
         <ul class="sidenav-nav">
             <li class="sidenav-nav-item" *ngFor="let data of navData">
-                <a class="sidenav-nav-link" (click)="handleClick(data)" *ngIf="data.items && data.items.length > 0"
-                    [ngClass]="getActiveClass(data)">
+                <a class="sidenav-nav-link" *ngIf="data.items && data.items.length > 0" [ngClass]="getActiveClass(data)"
+                    (click)="data.expanded ? toggleCollapse() : handleClick(data)">
                     <i class="sidenav-link-icon" [class]="data.icon"></i>
                     <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
                         {{data.label}}
