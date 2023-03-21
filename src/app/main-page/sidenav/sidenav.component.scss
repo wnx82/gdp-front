@@ -1,6 +1,6 @@
 .sidenav {
     background: #263238;
-    transition: all .5s ease;
+    transition: all 0.5s ease;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -75,7 +75,7 @@
             color: #f3f3f3;
             text-decoration: none;
             border-radius: 0.625rem;
-            transition: all .3s ease;
+            transition: all 0.3s ease;
 
             .sidenav-link-icon {
                 font-size: 22px;
@@ -137,7 +137,7 @@
             color: #898989;
             text-decoration: none;
             border-radius: 0.625rem;
-            transition: all .3s ease;
+            transition: all 0.3s ease;
 
             .sublevel-link-icon {
                 font-size: 4px;
@@ -198,4 +198,18 @@
 .scrollwrap {
     scrollbar-width: thin;
     scrollbar-color: #556268 transparent;
+}
+
+.sidenav-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: #fff;
+
+    width: 100%;
 }
