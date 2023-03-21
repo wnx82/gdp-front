@@ -11,6 +11,12 @@ export class RuesComponent implements OnInit {
     selectedRue: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
+    currentPage: number = 1;
+    itemsPerPage: number = 50;
+    localite: string = '';
+    cp: string = '';
+    nom: string = '';
+    quartier: string = '';
 
     constructor(private http: HttpClient) {}
 
@@ -18,8 +24,31 @@ export class RuesComponent implements OnInit {
         this.getRues();
     }
 
+    onPageChange(event: { page: number }) {
+        this.currentPage = event.page + 1;
+        this.getRues();
+    }
+
     getRues() {
-        this.http.get<any[]>('http://localhost:3003/rues/').subscribe(
+        let url = `http://localhost:3003/rues/?page=${this.currentPage}&pageSize=${this.itemsPerPage}`;
+
+        if (this.localite) {
+            url += `&localite=${this.localite}`;
+        }
+
+        if (this.cp) {
+            url += `&cp=${this.cp}`;
+        }
+
+        if (this.nom) {
+            url += `&nom=${this.nom}`;
+        }
+
+        if (this.quartier) {
+            url += `&quartier=${this.quartier}`;
+        }
+
+        this.http.get<any[]>(url).subscribe(
             data => {
                 this.rues = data;
             },
@@ -85,5 +114,10 @@ export class RuesComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
+    }
+
+    search() {
+        this.currentPage = 1;
+        this.getRues();
     }
 }

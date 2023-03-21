@@ -9,6 +9,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
+import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +21,7 @@ import { BodyComponent } from './main-page/body/body.component';
 import { SidenavComponent } from './main-page/sidenav/sidenav.component';
 import { SublevelMenuComponent } from './main-page/sidenav/sublevel-menu.component';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
+import { MissionsComponent } from './components/missions/missions.component';
 
 @NgModule({
     declarations: [
@@ -27,9 +30,10 @@ import { DashboardComponent } from './main-page/dashboard/dashboard.component';
         LoaderComponent,
         FooterComponent,
         BodyComponent,
-        DashboardComponent,
         SidenavComponent,
         SublevelMenuComponent,
+        DashboardComponent,
+        MissionsComponent,
     ],
     imports: [
         BrowserModule,
@@ -43,6 +47,8 @@ import { DashboardComponent } from './main-page/dashboard/dashboard.component';
         FormlyModule.forRoot(),
         FormlyBootstrapModule,
         ButtonModule,
+        PaginatorModule,
+        InputTextModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
