@@ -1,21 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-
-interface Mission {
-    id: number;
-    title: string;
-    description: string;
-    category: string;
-    horaire: string;
-    priority: number;
-    contact: string;
-    visibility: boolean;
-    annexes: string[];
-    createdAt: string;
-    updatedAt: string;
-}
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-missions',
@@ -23,59 +8,86 @@ interface Mission {
     styleUrls: ['./missions.component.css'],
 })
 export class MissionsComponent implements OnInit {
-    missions: Mission[] = [];
-    selectedMission: Mission = {} as Mission;
+    missions: any[] = [];
+    selectedMission: any = {};
     isAdding = false;
     isEditing = false;
+    title: string = '';
+    description: string = '';
+    category: string = '';
+    horaire: string = '';
+    contact: string = '';
+    visibility: boolean = false;
+    annexes: string[] = [];
+    createdAt: string = '';
+    updatedAt: string = '';
 
     constructor(private http: HttpClient) {}
-
-    readonly BASE_URL = 'http://localhost:3003/missions/';
+    readonly BASE_URL = 'http://localhost:3003/missions';
+    // url = 'http://localhost:3003/missions/';
 
     ngOnInit() {
         this.getMissions();
     }
 
     getMissions() {
-        this.http
-            .get<Mission[]>(this.BASE_URL)
-            .pipe(
-                map(data => (this.missions = data)),
-                catchError(error => throwError(error))
-            )
-            .subscribe();
+        this.http.get<any[]>(`${this.BASE_URL}`).subscribe(
+            data => {
+                this.missions = data.filter(mission => !mission.deletedAt);
+            },
+            error => {
+                console.log(error);
+            }
+        );
     }
 
-    addMission(mission: Mission) {
-        this.http
-            .post<Mission>(this.BASE_URL, mission)
-            .pipe(
-                map(data => this.missions.push(data)),
-                catchError(error => throwError(error))
-            )
-            .subscribe(() => {
+    addMission(mission: any) {
+        this.http.post<any>(`${this.BASE_URL}`, mission).subscribe(
+            data => {
+                this.missions.push(data);
                 this.isAdding = false;
-            });
+                this.getMissions();
+            },
+            error => {
+                console.log(error);
+            }
+        );
     }
 
-    editMission(mission: Mission) {
+    // editMission(mission: Mission) {
+    //     this.http
+    //         .put<Mission>(`${this.BASE_URL}${mission.id}`, mission)
+    //         .pipe(
+    //             map(data => {
+    //                 const index = this.missions.findIndex(
+    //                     m => m.id === data.id
+    //                 );
+    //                 this.missions[index] = data;
+    //                 this.selectedMission = {} as Mission;
+    //             }),
+    //             catchError(error => throwError(error))
+    //         )
+    //         .subscribe(() => {
+    //             this.isEditing = false;
+    //         });
+    // }
+    editMission(mission: any) {
         this.http
-            .put<Mission>(`${this.BASE_URL}${mission.id}`, mission)
-            .pipe(
-                map(data => {
+            .patch<any>(`${this.BASE_URL}/${mission.id}`, mission)
+            .subscribe(
+                data => {
                     const index = this.missions.findIndex(
-                        m => m.id === data.id
+                        r => r._id === data._id
                     );
                     this.missions[index] = data;
-                    this.selectedMission = {} as Mission;
-                }),
-                catchError(error => throwError(error))
-            )
-            .subscribe(() => {
-                this.isEditing = false;
-            });
+                    this.selectedMission = {};
+                    this.isEditing = false;
+                },
+                error => {
+                    console.log(error);
+                }
+            );
     }
-
     // deleteMission(id: number) {
     //   this.http.delete<Mission>(`${this.BASE_URL}${id}`).pipe(
     //     map(() => (this.missions = this.missions.filter(m => m.id !== id))),
@@ -83,28 +95,29 @@ export class MissionsComponent implements OnInit {
     //   ).subscribe();
     // }
     deleteMission(id: number) {
-        this.http.delete<Mission>(`${this.BASE_URL}/${id}`).subscribe(
+        this.http.delete<any>(`${this.BASE_URL}/${id}`).subscribe(
             () => {
                 this.missions = this.missions.filter(m => m.id !== id);
+                this.getMissions();
             },
             error => {
                 console.log(error);
             }
         );
     }
-    selectMission(mission: Mission) {
+    selectMission(mission: any) {
         this.selectedMission = { ...mission };
     }
 
     cancel() {
-        this.selectedMission = {} as Mission;
+        this.selectedMission = {};
         this.isAdding = false;
         this.isEditing = false;
     }
 
     toggleAdd() {
         this.isAdding = !this.isAdding;
-        this.selectedMission = {} as Mission;
+        this.selectedMission = {};
     }
 
     toggleEdit() {

@@ -38,8 +38,14 @@
                                 icon="pi pi-pencil" style="margin-right: 5px;"
                                 (click)="selectMission(mission); toggleEdit()"></button>
 
+
+                            <!-- <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button> -->
+
+                            <!-- <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button> -->
                             <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteMission(mission.id)"></button>
+                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button>
 
                         </td>
                     </tr>
@@ -89,7 +95,8 @@
             </div> -->
             <div class="p-field">
                 <span class="p-float-label">
-                    <p-inputNumber [(ngModel)]="selectedMission.priority" [showButtons]="true" inputId="stacked">
+                    <p-inputNumber [(ngModel)]="selectedMission.priority" [showButtons]="true" inputId="stacked"
+                        id="priority" name="priority">
                     </p-inputNumber>
                     <label for="priority">Priorité</label>
                 </span>
@@ -112,8 +119,8 @@
 
         <div class="p-dialog-footer">
             <button type="button" class="p-button p-button-secondary" (click)="cancel()">Annuler</button>
-            <button type="button" class="p-button p-button-primary"
-                (click)="isAdding ? addMission(selectedMission) : editMission(selectedMission)">Enregistrer</button>
+            <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
         </div>
 
     </p-dialog>
