@@ -3,6 +3,7 @@
     <table>
         <thead>
             <tr>
+                <th>id</th>
                 <th>Denomination</th>
                 <th>Nom</th>
                 <th>Quartier</th>
@@ -13,7 +14,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
-                <td>{{rue.denomination}}</td>
+                <td>{{rue._id}}</td>
                 <td>{{rue.nom}}</td>
                 <td>{{rue.quartier}}</td>
                 <td>{{rue.cp}}</td>

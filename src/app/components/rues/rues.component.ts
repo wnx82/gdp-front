@@ -48,9 +48,17 @@ export class RuesComponent implements OnInit {
             url += `&quartier=${this.quartier}`;
         }
 
+        // this.http.get<any[]>(url).subscribe(
+        //     data => {
+        //         this.rues = data;
+        //     },
+        //     error => {
+        //         console.log(error);
+        //     }
+        // );
         this.http.get<any[]>(url).subscribe(
             data => {
-                this.rues = data;
+                this.rues = data.filter(rue => !rue.deletedAt);
             },
             error => {
                 console.log(error);
@@ -90,6 +98,7 @@ export class RuesComponent implements OnInit {
         this.http.delete<any>(`http://localhost:3003/rues/${id}`).subscribe(
             () => {
                 this.rues = this.rues.filter(r => r.id !== id);
+                this.getRues();
             },
             error => {
                 console.log(error);
