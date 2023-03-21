@@ -17,6 +17,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./components/rues/rues.module').then(m => m.RuesModule),
     },
+    {
+        path: 'missions',
+        loadChildren: () =>
+            import('./components/missions/missions.module').then(
+                m => m.MissionsModule
+            ),
+    },
 ];
 
 @NgModule({

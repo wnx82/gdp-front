@@ -1,148 +1,142 @@
 <div>
-
-    <div>
-        <h2>Liste des rues</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Denomination</th>
-                    <th>Nom</th>
-                    <th>Quartier</th>
-                    <th>Code Postal</th>
-                    <th>Localite</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
-                    <td>{{rue.denomination}}</td>
-                    <td>{{rue.nom}}</td>
-                    <td>{{rue.quartier}}</td>
-                    <td>{{rue.cp}}</td>
-                    <td>{{rue.localite}}</td>
-                    <td>
-                        <p-button label="Modifier" icon="pi pi-pencil" (click)="selectRue(rue)"></p-button>
-                        <button pButton pRipple type="button" label="Supprimer" class="p-button-danger"
-                            icon="pi pi-trash" (click)="deleteRue(rue._id)"></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <p-paginator [totalRecords]="rues.length" [rows]="itemsPerPage"
-            (onPageChange)="onPageChange($event)"></p-paginator>
+    <h2>Liste des rues</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Denomination</th>
+                <th>Nom</th>
+                <th>Quartier</th>
+                <th>Code Postal</th>
+                <th>Localite</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
+                <td>{{rue.denomination}}</td>
+                <td>{{rue.nom}}</td>
+                <td>{{rue.quartier}}</td>
+                <td>{{rue.cp}}</td>
+                <td>{{rue.localite}}</td>
+                <td>
+                    <p-button label="Modifier" icon="pi pi-pencil" (click)="selectRue(rue)"></p-button>
+                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger" icon="pi pi-trash"
+                        (click)="deleteRue(rue._id)"></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p-paginator [totalRecords]="rues.length" [rows]="itemsPerPage" (onPageChange)="onPageChange($event)"></p-paginator>
 
 
 
-        <button pButton pRipple type="button" label="Ajouter une rue" class="p-button-secondary" icon="pi pi-road"
-            style="margin-top: 3px;" (click)="toggleAdd()"></button>
+    <button pButton pRipple type="button" label="Ajouter une rue" class="p-button-secondary" icon="pi pi-road"
+        style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
 
-    </div>
+</div>
 
 
-    <div *ngIf="isAdding || isEditing">
-        <h2>{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}</h2>
-        <form #rueForm="ngForm" (ngSubmit)="isAdding ? addRue(rueForm.value) : editRue(rueForm.value)">
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="nom" name="nom" [(ngModel)]="selectedRue.nom" required pInputText>
-                    <label for="nom">Nom de la rue</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="denomination" name="denomination" [(ngModel)]="selectedRue.denomination"
-                        required pInputText>
-                    <label for="denomination">Denomination</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="cp" name="cp" [(ngModel)]="selectedRue.cp" required pInputText>
-                    <label for="cp">Code postal</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="localite" name="localite" [(ngModel)]="selectedRue.localite" required
-                        pInputText>
-                    <label for="localite">Localite</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="quartier" name="quartier" [(ngModel)]="selectedRue.quartier" required
-                        pInputText>
-                    <label for="quartier">Quartier</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="codeRue" name="codeRue" [(ngModel)]="selectedRue.codeRue" required
-                        pInputText>
-                    <label for="codeRue">Code rue</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="traductionNl" name="traductionNl" [(ngModel)]="selectedRue.traductionNl"
-                        required pInputText>
-                    <label for="traductionNl">Traduction NL</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="xMin" name="xMin" [(ngModel)]="selectedRue.xMin" required pInputText>
-                    <label for="xMin">X min</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="xMax" name="xMax" [(ngModel)]="selectedRue.xMax" required pInputText>
-                    <label for="xMax">X max</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="yMin" name="yMin" [(ngModel)]="selectedRue.yMin" required pInputText>
-                    <label for="yMin">Y min</label>
-                </span>
-            </div>
+<div *ngIf="isAdding || isEditing">
+    <h2>{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}</h2>
+    <form #rueForm="ngForm" (ngSubmit)="isAdding ? addRue(rueForm.value) : editRue(rueForm.value)">
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="nom" name="nom" [(ngModel)]="selectedRue.nom" required pInputText>
+                <label for="nom">Nom de la rue</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="denomination" name="denomination" [(ngModel)]="selectedRue.denomination" required
+                    pInputText>
+                <label for="denomination">Denomination</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="cp" name="cp" [(ngModel)]="selectedRue.cp" required pInputText>
+                <label for="cp">Code postal</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="localite" name="localite" [(ngModel)]="selectedRue.localite" required pInputText>
+                <label for="localite">Localite</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="quartier" name="quartier" [(ngModel)]="selectedRue.quartier" required pInputText>
+                <label for="quartier">Quartier</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="codeRue" name="codeRue" [(ngModel)]="selectedRue.codeRue" required pInputText>
+                <label for="codeRue">Code rue</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="traductionNl" name="traductionNl" [(ngModel)]="selectedRue.traductionNl" required
+                    pInputText>
+                <label for="traductionNl">Traduction NL</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="xMin" name="xMin" [(ngModel)]="selectedRue.xMin" required pInputText>
+                <label for="xMin">X min</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="xMax" name="xMax" [(ngModel)]="selectedRue.xMax" required pInputText>
+                <label for="xMax">X max</label>
+            </span>
+        </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="yMin" name="yMin" [(ngModel)]="selectedRue.yMin" required pInputText>
+                <label for="yMin">Y min</label>
+            </span>
+        </div>
 
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="yMax" name="yMax" [(ngModel)]="selectedRue.yMax" required pInputText>
-                    <label for="yMax">Y max</label>
-                </span>
-            </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="yMax" name="yMax" [(ngModel)]="selectedRue.yMax" required pInputText>
+                <label for="yMax">Y max</label>
+            </span>
+        </div>
 
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="idTronconCentral" name="idTronconCentral"
-                        [(ngModel)]="selectedRue.idTronconCentral" required pInputText>
-                    <label for="idTronconCentral">ID troncon central</label>
-                </span>
-            </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="idTronconCentral" name="idTronconCentral"
+                    [(ngModel)]="selectedRue.idTronconCentral" required pInputText>
+                <label for="idTronconCentral">ID troncon central</label>
+            </span>
+        </div>
 
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="idQuartier" name="idQuartier" [(ngModel)]="selectedRue.idQuartier" required
-                        pInputText>
-                    <label for="idQuartier">ID quartier</label>
-                </span>
-            </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="idQuartier" name="idQuartier" [(ngModel)]="selectedRue.idQuartier" required
+                    pInputText>
+                <label for="idQuartier">ID quartier</label>
+            </span>
+        </div>
 
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="idDistrict" name="idDistrict" [(ngModel)]="selectedRue.idDistrict" required
-                        pInputText>
-                    <label for="idDistrict">ID district</label>
-                </span>
-            </div>
+        <div class="p-field">
+            <span class="p-float-label">
+                <input type="text" id="idDistrict" name="idDistrict" [(ngModel)]="selectedRue.idDistrict" required
+                    pInputText>
+                <label for="idDistrict">ID district</label>
+            </span>
+        </div>
 
-            <div>
-                <button type="submit">{{isAdding ? 'Ajouter' : 'Modifier'}}</button>
-                <button type="button" (click)="cancel()">Annuler</button>
-            </div>
-        </form>
-    </div>
+        <div>
+            <button type="submit">{{isAdding ? 'Ajouter' : 'Modifier'}}</button>
+            <button type="button" (click)="cancel()">Annuler</button>
+        </div>
+    </form>
+</div>

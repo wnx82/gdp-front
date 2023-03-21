@@ -21,7 +21,6 @@ import { BodyComponent } from './main-page/body/body.component';
 import { SidenavComponent } from './main-page/sidenav/sidenav.component';
 import { SublevelMenuComponent } from './main-page/sidenav/sublevel-menu.component';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
-import { MissionsComponent } from './components/missions/missions.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +32,6 @@ import { MissionsComponent } from './components/missions/missions.component';
         SidenavComponent,
         SublevelMenuComponent,
         DashboardComponent,
-        MissionsComponent,
     ],
     imports: [
         BrowserModule,

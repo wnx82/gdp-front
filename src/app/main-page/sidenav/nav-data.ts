@@ -95,6 +95,10 @@ export const navbarData: INavbarData[] = [
                 routeLink: 'rues',
                 label: 'Liste des rues',
             },
+            {
+                routeLink: 'missions',
+                label: 'Liste des missions',
+            },
         ],
     },
 ];
