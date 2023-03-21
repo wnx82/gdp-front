@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
     declarations: [RuesComponent],
     imports: [
@@ -18,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
         ButtonModule,
         PaginatorModule,
         InputTextModule,
+        DialogModule,
     ],
 })
 export class RuesModule {}

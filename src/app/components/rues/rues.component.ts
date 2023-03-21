@@ -79,8 +79,9 @@ export class RuesComponent implements OnInit {
     }
 
     editRue(rue: any) {
+        const { id, ...rueToUpdate } = rue;
         this.http
-            .put<any>(`http://localhost:3003/rues/${rue.id}`, rue)
+            .patch<any>(`http://localhost:3003/rues/${id}`, rueToUpdate)
             .subscribe(
                 data => {
                     const index = this.rues.findIndex(r => r.id === data.id);
