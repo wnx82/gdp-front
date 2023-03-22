@@ -1,0 +1,139 @@
+<div class="container">
+    <h1>Liste des agents</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les agents supprimés"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;"
+                (click)="deleteDeletedAgents()"></button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let agent of agents">
+                        <td>{{agent.id}}</td>
+
+                        <td>{{agent.matricule}}</td>
+                        <td>{{agent.lastname}}</td>
+                        <td>{{agent.firstname}}</td>
+                        <td>{{agent.tel}}</td>
+                        <td>{{agent.email}}</td>
+                        <td>
+                            <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                                icon="pi pi-pencil" style="margin-right: 5px;"
+                                (click)="selectAgent(agent); toggleEdit()"></button>
+                            <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                                icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary"
+                icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button>
+        </div>
+    </div>
+
+    <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedAgent={}">
+
+
+        <form #agentForm="ngForm" (ngSubmit)="isAdding ? addAgent(agentForm.value) : editAgent(agentForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="matricule" name="matricule" [(ngModel)]="selectedAgent.matricule"
+                                required pInputText>
+                            <label for="matricule">Matricule</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="lastname" name="lastname" [(ngModel)]="selectedAgent.lastname"
+                                required pInputText>
+                            <label for="lastname">Nom</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="firstname" name="firstname" [(ngModel)]="selectedAgent.firstname"
+                                required pInputText>
+                            <label for="firstname">Prénom</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="adresse" name="adresse" [(ngModel)]="selectedAgent.adresse"
+                                pInputText>
+                            <label for="adresse">Adresse</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText>
+                            <label for="tel">Téléphone</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" pInputText>
+                            <label for="email">Email</label>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="p-col-6">
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="ville" name="ville" [(ngModel)]="selectedAgent.ville" pInputText>
+                            <label for="ville">Ville</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="pays" name="pays" [(ngModel)]="selectedAgent.pays" pInputText>
+                            <label for="pays">Pays</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="telephone" name="telephone" [(ngModel)]="selectedAgent.telephone"
+                                pInputText>
+                            <label for="telephone">Téléphone</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="email" id="email" name="email" [(ngModel)]="selectedAgent.email" pInputText>
+                            <label for="email">E-mail</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-d-flex p-jc-between">
+                <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+
+                <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                    icon="pi pi-times" (click)="cancel()"></button>
+            </div>
+        </form>
