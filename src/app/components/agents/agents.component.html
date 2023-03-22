@@ -11,7 +11,41 @@
 
         </div>
     </div>
-    <div class="row">
+
+    <ng-container *ngFor="let agent of agents">
+        <div class="card-deck">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <p-card header="{{agent.matricule}}" subheader="{{agent.firstname}} {{agent.lastname}}"
+                    [style]="{width: '360px'}" styleClass="p-card-shadow card-content">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" src="{{agent.picture}}" style="max-width: 50%; height: auto;">
+                    </ng-template>
+                    <p style="font-size: 16px;">Tél: {{agent.tel}}</p>
+                    <p style="font-size: 16px; margin-bottom: 10px;">Email: {{agent.email}}</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
+                        repudiandae
+                        numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam
+                        perferendis
+                        esse,
+                        cupiditate neque quas!</p>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                            icon="pi pi-pencil" style="margin-right: 5px;"
+                            (click)="selectAgent(agent); toggleEdit()"></button>
+                        <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                            icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
+                    </ng-template>
+                </p-card>
+            </div>
+        </div>
+    </ng-container>
+
+
+
+    <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
+        style="margin-top: 3px;" (click)="toggleAdd()"></button>
+
+    <!-- <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered">
                 <thead>
@@ -49,7 +83,7 @@
             <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary"
                 icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button>
         </div>
-    </div>
+    </div> -->
 
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedAgent={}">
@@ -79,13 +113,7 @@
                             <label for="firstname">Prénom</label>
                         </span>
                     </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="adresse" name="adresse" [(ngModel)]="selectedAgent.adresse"
-                                pInputText>
-                            <label for="adresse">Adresse</label>
-                        </span>
-                    </div>
+
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText>
@@ -99,33 +127,7 @@
                         </span>
                     </div>
 
-                </div>
-                <div class="p-col-6">
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="ville" name="ville" [(ngModel)]="selectedAgent.ville" pInputText>
-                            <label for="ville">Ville</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="pays" name="pays" [(ngModel)]="selectedAgent.pays" pInputText>
-                            <label for="pays">Pays</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="telephone" name="telephone" [(ngModel)]="selectedAgent.telephone"
-                                pInputText>
-                            <label for="telephone">Téléphone</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="email" id="email" name="email" [(ngModel)]="selectedAgent.email" pInputText>
-                            <label for="email">E-mail</label>
-                        </span>
-                    </div>
+
                 </div>
             </div>
 

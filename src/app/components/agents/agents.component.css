@@ -26,3 +26,17 @@
     border-color: #007ad9;
     box-shadow: 0 0 5px #007ad9;
 }
+
+.card-deck {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.card-deck:last-child {
+    margin-right: 0;
+}
+
+.card-content {
+    text-align: center !important;
+}
