@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-rues',
@@ -7,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
     styleUrls: ['./rues.component.css'],
 })
 export class RuesComponent implements OnInit {
+    private apiUrl: string | undefined;
     rues: any[] = [];
     selectedRue: any = {};
     isAdding: boolean = false;
@@ -19,6 +21,7 @@ export class RuesComponent implements OnInit {
     quartier: string = '';
 
     constructor(private http: HttpClient) {}
+    readonly API_URL = `${environment.apiUrl}/rues`;
 
     ngOnInit() {
         this.getRues();
@@ -30,7 +33,7 @@ export class RuesComponent implements OnInit {
     }
 
     getRues() {
-        let url = `http://localhost:3003/rues/?page=${this.currentPage}&pageSize=${this.itemsPerPage}`;
+        let url = `${this.API_URL}/?page=${this.currentPage}&pageSize=${this.itemsPerPage}`;
 
         if (this.localite) {
             url += `&localite=${this.localite}`;
@@ -65,9 +68,8 @@ export class RuesComponent implements OnInit {
             }
         );
     }
-
     addRue(rue: any) {
-        this.http.post<any>('http://localhost:3003/rues/', rue).subscribe(
+        this.http.post<any>(`${this.API_URL}`, rue).subscribe(
             data => {
                 this.rues.push(data);
                 this.isAdding = false;
@@ -79,7 +81,7 @@ export class RuesComponent implements OnInit {
     }
 
     editRue(rue: any) {
-        const url = `http://localhost:3003/rues/${rue.id}`;
+        const url = `${this.API_URL}/${rue.id}`;
 
         this.http.patch<any>(url, rue).subscribe(
             data => {
@@ -95,10 +97,24 @@ export class RuesComponent implements OnInit {
     }
 
     deleteRue(id: number) {
-        this.http.delete<any>(`http://localhost:3003/rues/${id}`).subscribe(
+        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
                 this.rues = this.rues.filter(r => r.id !== id);
                 this.getRues();
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    }
+    deleteDeletedRues() {
+        const url = `${this.API_URL}/purge`;
+        this.http.post(url, {}).subscribe(
+            () => {
+                console.log(
+                    'Les rues supprimées ont été supprimées définitivement.'
+                );
+                this.getRues(); // Met à jour la liste des rues affichées
             },
             error => {
                 console.log(error);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConfirmationService } from 'primeng/api';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-missions',
@@ -8,6 +8,7 @@ import { ConfirmationService } from 'primeng/api';
     styleUrls: ['./missions.component.css'],
 })
 export class MissionsComponent implements OnInit {
+    private apiUrl: string | undefined;
     missions: any[] = [];
     selectedMission: any = {};
     isAdding = false;
@@ -23,7 +24,7 @@ export class MissionsComponent implements OnInit {
     updatedAt: string = '';
 
     constructor(private http: HttpClient) {}
-    readonly BASE_URL = 'http://localhost:3003/missions';
+    readonly API_URL = `${environment.apiUrl}/missions`;
     // url = 'http://localhost:3003/missions/';
 
     ngOnInit() {
@@ -31,7 +32,7 @@ export class MissionsComponent implements OnInit {
     }
 
     getMissions() {
-        this.http.get<any[]>(`${this.BASE_URL}`).subscribe(
+        this.http.get<any[]>(`${this.API_URL}`).subscribe(
             data => {
                 this.missions = data.filter(mission => !mission.deletedAt);
             },
@@ -42,7 +43,7 @@ export class MissionsComponent implements OnInit {
     }
 
     addMission(mission: any) {
-        this.http.post<any>(`${this.BASE_URL}`, mission).subscribe(
+        this.http.post<any>(`${this.API_URL}`, mission).subscribe(
             data => {
                 this.missions.push(data);
                 this.isAdding = false;
@@ -56,7 +57,7 @@ export class MissionsComponent implements OnInit {
 
     // editMission(mission: Mission) {
     //     this.http
-    //         .put<Mission>(`${this.BASE_URL}${mission.id}`, mission)
+    //         .put<Mission>(`${this.API_URL}${mission.id}`, mission)
     //         .pipe(
     //             map(data => {
     //                 const index = this.missions.findIndex(
@@ -73,7 +74,7 @@ export class MissionsComponent implements OnInit {
     // }
     editMission(mission: any) {
         this.http
-            .patch<any>(`${this.BASE_URL}/${mission.id}`, mission)
+            .patch<any>(`${this.API_URL}/${mission.id}`, mission)
             .subscribe(
                 data => {
                     const index = this.missions.findIndex(
@@ -89,13 +90,13 @@ export class MissionsComponent implements OnInit {
             );
     }
     // deleteMission(id: number) {
-    //   this.http.delete<Mission>(`${this.BASE_URL}${id}`).pipe(
+    //   this.http.delete<Mission>(`${this.API_URL}${id}`).pipe(
     //     map(() => (this.missions = this.missions.filter(m => m.id !== id))),
     //     catchError(error => throwError(error))
     //   ).subscribe();
     // }
     deleteMission(id: number) {
-        this.http.delete<any>(`${this.BASE_URL}/${id}`).subscribe(
+        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
                 this.missions = this.missions.filter(m => m.id !== id);
                 this.getMissions();
