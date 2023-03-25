@@ -126,7 +126,27 @@
                             <label for="email">Email</label>
                         </span>
                     </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <p-autoComplete [(ngModel)]="selectedAgent.rue" [dropdown]="true"
+                                [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
+                                (onSelect)="selectedAgent.rue = $event" placeholder="Rue">
+                                <ng-template let-item pTemplate="item">
+                                    {{ item }}
+                                </ng-template>
+                            </p-autoComplete>
 
+
+
+
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="numero" name="numero" [(ngModel)]="selectedAgent.numero" pInputText>
+                            <label for="numero">Numéro</label>
+                        </span>
+                    </div>
 
                 </div>
             </div>

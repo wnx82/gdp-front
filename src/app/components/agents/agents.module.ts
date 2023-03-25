@@ -11,6 +11,8 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 import { CardModule } from 'primeng/card';
 
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
 @NgModule({
     declarations: [AgentsComponent],
     imports: [
@@ -22,6 +24,7 @@ import { CardModule } from 'primeng/card';
         InputTextModule,
         DialogModule,
         CardModule,
+        AutoCompleteModule,
     ],
 })
 export class AgentsModule {}

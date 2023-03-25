@@ -10,15 +10,25 @@ import { environment } from 'src/environments/environment';
 export class AgentsComponent implements OnInit {
     private apiUrl: string | undefined;
     agents: any[] = [];
+    filteredRues: any[] = [];
     selectedAgent: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-
+    rues: any[] = [];
     constructor(private http: HttpClient) {}
     readonly API_URL = `${environment.apiUrl}/agents`;
 
     ngOnInit() {
         this.getAgents();
+        this.http.get<any[]>('http://localhost:3003/rues').subscribe(
+            data => {
+                this.rues = data;
+                console.log(this.rues);
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
 
     getAgents() {
@@ -104,5 +114,18 @@ export class AgentsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
+    }
+
+    filterRues(event: any) {
+        let filteredRues = [];
+        let query = event.query.toLowerCase();
+        for (let i = 0; i < this.rues.length; i++) {
+            let rue = this.rues[i];
+            let fullName = `${rue.denomination} ${rue.nom}`.toLowerCase();
+            if (fullName.indexOf(query) === 0) {
+                filteredRues.push(fullName);
+            }
+        }
+        this.filteredRues = filteredRues;
     }
 }
