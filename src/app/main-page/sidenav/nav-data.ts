@@ -7,28 +7,28 @@ export const navbarData: INavbarData[] = [
         label: 'Dashboard',
     },
     {
-        routeLink: 'products',
-        icon: 'fal fa-box-open',
-        label: 'Products',
+        routeLink: 'agents',
+        icon: 'fal fa-users',
+        label: 'Users',
         items: [
             {
-                routeLink: 'products/level1.1',
+                routeLink: 'agents',
                 label: 'Level 1.1',
                 items: [
                     {
-                        routeLink: 'products/level2.1',
+                        routeLink: 'agents',
                         label: 'Level 2.1',
                     },
                     {
-                        routeLink: 'products/level2.2',
+                        routeLink: 'agents',
                         label: 'Level 2.2',
                         items: [
                             {
-                                routeLink: 'products/level3.1',
+                                routeLink: 'agents',
                                 label: 'Level 3.1',
                             },
                             {
-                                routeLink: 'products/level3.2',
+                                routeLink: 'agents',
                                 label: 'Level 3.2',
                             },
                         ],
@@ -36,28 +36,29 @@ export const navbarData: INavbarData[] = [
                 ],
             },
             {
-                routeLink: 'products/level1.2',
+                routeLink: 'agents',
                 label: 'Level 1.2',
             },
         ],
     },
+
     {
         routeLink: 'statistics',
         icon: 'fal fa-chart-bar',
         label: 'Statistics',
     },
     {
-        routeLink: 'coupens',
-        icon: 'fal fa-tags',
-        label: 'Coupens',
+        routeLink: 'constats',
+        icon: 'fal fa-file-invoice',
+        label: 'Constats',
         items: [
             {
-                routeLink: 'coupens/list',
-                label: 'List Coupens',
+                routeLink: 'constats',
+                label: 'Liste constats',
             },
             {
-                routeLink: 'coupens/create',
-                label: 'Create Coupens',
+                routeLink: 'constats/create',
+                label: 'Create constat',
             },
         ],
     },
