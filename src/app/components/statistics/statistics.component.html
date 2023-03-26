@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-head {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            font-size: 16px;
+        }
+
+        .chart {
+            height: 300px;
+            width: 500px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dashboard</h1>
+    <div class="card">
+
+        <div class="card-head">📊 Statistiques</div>
+        <div class="card-body">
+            <a no-open href="http://google.com/">Google!</a>
+            <div class="chart">Nombres d'agents : {{ agentCount }}<br>
+                Nombres de rues : {{ ruesCount }}<br>
+                Nombres de missions : {{ missionsCount }}<br>
+            </div>
+            <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
+        </div>
+    </div>
+
+    <script>
+        const lastUpdatedDate = new Date();
+        document.getElementById("last-updated-date").innerHTML = lastUpdatedDate.toDateString();
+    </script>
+
+
+
+</body>
+
+</html>

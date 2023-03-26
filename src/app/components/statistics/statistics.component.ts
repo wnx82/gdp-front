@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
+    selector: 'app-statistics',
+    templateUrl: './statistics.component.html',
+    styleUrls: ['./statistics.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class StatisticsComponent {
     agentCount = 0; // Initialise la propriété agentCount à zéro
     ruesCount = 0; // Initialise la propriété agentCount à zéro
     missionsCount = 0; // Initialise la propriété agentCount à zéro

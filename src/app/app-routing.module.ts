@@ -30,6 +30,18 @@ const routes: Routes = [
                 m => m.MissionsModule
             ),
     },
+    {
+        path: 'statistics',
+        loadChildren: () =>
+            import('./components/statistics/statistics.module').then(
+                m => m.StatisticsModule
+            ),
+    },
+    {
+        path: 'media',
+        loadChildren: () =>
+            import('./components/media/media.module').then(m => m.MediaModule),
+    },
 ];
 
 @NgModule({

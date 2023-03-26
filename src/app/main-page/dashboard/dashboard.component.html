@@ -37,27 +37,28 @@
                 Nombres de rues : {{ ruesCount }}<br>
                 Nombres de missions : {{ missionsCount }}<br>
             </div>
-            <p>Monthly sales for the past 12 months</p>
+            <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
         </div>
     </div>
 
+
     <div class="card">
-        <div class="card-head">Top Products</div>
+        <div class="card-head">Top PV</div>
         <div class="card-body">
             <ul>
-                <li>Product A</li>
-                <li>Product B</li>
-                <li>Product C</li>
+                <li>Rue A</li>
+                <li>Rue B</li>
+                <li>Rue C</li>
             </ul>
-            <p>Top selling products for the past month</p>
+            <p>Top avertissements / pv for the past month</p>
         </div>
     </div>
 
     <div class="card">
-        <div class="card-head">Customer Satisfaction</div>
+        <div class="card-head">Agent Satisfaction</div>
         <div class="card-body">
-            <div class="chart">Insert customer satisfaction chart here</div>
-            <p>Customer satisfaction ratings for the past month</p>
+            <div class="chart">Insert Agent satisfaction chart here</div>
+            <p>Agent satisfaction ratings for the past month</p>
         </div>
     </div>
 
