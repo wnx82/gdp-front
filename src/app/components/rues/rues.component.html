@@ -16,7 +16,6 @@
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>Denomination</th>
                         <th>Nom</th>
                         <th>Quartier</th>
                         <th>Code Postal</th>
@@ -27,9 +26,7 @@
                 <tbody>
                     <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
                         <td>{{rue._id}}</td>
-
-                        <td>{{rue.denomination}}</td>
-                        <td>{{rue.nom}}</td>
+                        <td>{{rue.nomComplet}}</td>
                         <td>{{rue.quartier}}</td>
                         <td>{{rue.cp}}</td>
                         <td>{{rue.localite}}</td>
@@ -77,15 +74,19 @@
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="nomComplet" name="nomComplet" [(ngModel)]="selectedRue.nomComplet"
+                                pInputText>
+                            <label for="nomComplet">Nom Complet</label>
+                        </span>
+                    </div>
                     <div class="p-field ">
                         <span class="p-float-label">
                             <p-inputNumber id="cp" name="cp" [(ngModel)]="selectedRue.cp"></p-inputNumber>
                             <label for="cp">Code postal</label>
                         </span>
                     </div>
-
-
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="localite" name="localite" [(ngModel)]="selectedRue.localite"
@@ -93,8 +94,6 @@
                             <label for="localite">Localite</label>
                         </span>
                     </div>
-
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="quartier" name="quartier" [(ngModel)]="selectedRue.quartier"

@@ -40,54 +40,51 @@
         </div>
     </ng-container>
 
-
-
     <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
         style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
     <!-- <div class="row">
-        <div class="col-md-12">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Matricule</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Téléphone</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let agent of agents">
-                        <td>{{agent.id}}</td>
-
-                        <td>{{agent.matricule}}</td>
-                        <td>{{agent.lastname}}</td>
-                        <td>{{agent.firstname}}</td>
-                        <td>{{agent.tel}}</td>
-                        <td>{{agent.email}}</td>
-                        <td>
-                            <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                                icon="pi pi-pencil" style="margin-right: 5px;"
-                                (click)="selectAgent(agent); toggleEdit()"></button>
-                            <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary"
-                icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button>
-        </div>
-    </div> -->
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Matricule</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Téléphone</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agent of agents">
+                                <td>{{agent.id}}</td>
+        
+                                <td>{{agent.matricule}}</td>
+                                <td>{{agent.lastname}}</td>
+                                <td>{{agent.firstname}}</td>
+                                <td>{{agent.tel}}</td>
+                                <td>{{agent.email}}</td>
+                                <td>
+                                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                                        icon="pi pi-pencil" style="margin-right: 5px;"
+                                        (click)="selectAgent(agent); toggleEdit()"></button>
+                                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                                        icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+        
+                    <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary"
+                        icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button>
+                </div>
+            </div> -->
 
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedAgent={}">
-
 
         <form #agentForm="ngForm" (ngSubmit)="isAdding ? addAgent(agentForm.value) : editAgent(agentForm.value)">
             <div class="p-grid">
@@ -108,12 +105,11 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="firstname" name="firstname" [(ngModel)]="selectedAgent.firstname"
-                                required pInputText>
+                            <input type="text" id="firstname" name="firstname" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="selectedAgent.firstname" required pInputText>
                             <label for="firstname">Prénom</label>
                         </span>
                     </div>
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText>
@@ -130,15 +126,12 @@
                         <span class="p-float-label">
                             <p-autoComplete [(ngModel)]="selectedAgent.rue" [dropdown]="true"
                                 [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
-                                (onSelect)="selectedAgent.rue = $event" placeholder="Rue">
+                                (onSelect)="selectedAgent.rue = $event" placeholder="Rue"
+                                [ngModelOptions]="{standalone: true}">
                                 <ng-template let-item pTemplate="item">
                                     {{ item }}
                                 </ng-template>
                             </p-autoComplete>
-
-
-
-
                         </span>
                     </div>
                     <div class="p-field">

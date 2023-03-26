@@ -114,18 +114,33 @@ export class AgentsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
+        console.log(this.selectedAgent);
     }
 
     filterRues(event: any) {
-        let filteredRues = [];
-        let query = event.query.toLowerCase();
-        for (let i = 0; i < this.rues.length; i++) {
-            let rue = this.rues[i];
-            let fullName = `${rue.denomination} ${rue.nom}`.toLowerCase();
-            if (fullName.indexOf(query) === 0) {
-                filteredRues.push(fullName);
-            }
-        }
-        this.filteredRues = filteredRues;
+        const query = event.query.toLowerCase();
+        this.filteredRues = this.rues
+            .filter(
+                rue =>
+                    typeof rue.nomComplet === 'string' &&
+                    rue.nomComplet.toLowerCase().includes(query)
+            )
+
+            .sort((a, b) => {
+                const aIndex = a.nomComplet.toLowerCase().indexOf(query);
+                const bIndex = b.nomComplet.toLowerCase().indexOf(query);
+                if (aIndex < bIndex) {
+                    return -1;
+                }
+                if (aIndex > bIndex) {
+                    return 1;
+                }
+                // Si les deux rues ont la même position de la requête,
+                // on les trie par ordre alphabétique
+                return a.nomComplet.localeCompare(b.nomComplet);
+            })
+
+            .slice(0, 10)
+            .map(rue => rue.nomComplet);
     }
 }
