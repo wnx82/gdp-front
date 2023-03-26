@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RuesRoutingModule } from './rues-routing.module';
-import { RuesComponent } from './rues.component';
+
+import { CategoriesRoutingModule } from './categories-routing.module';
+import { CategoriesComponent } from './categories.component';
 
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -10,10 +11,10 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
-    declarations: [RuesComponent],
+    declarations: [CategoriesComponent],
     imports: [
         CommonModule,
-        RuesRoutingModule,
+        CategoriesRoutingModule,
         FormsModule,
         ButtonModule,
         PaginatorModule,
@@ -21,4 +22,4 @@ import { DialogModule } from 'primeng/dialog';
         DialogModule,
     ],
 })
-export class RuesModule {}
+export class CategoriesModule {}

@@ -42,6 +42,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./components/media/media.module').then(m => m.MediaModule),
     },
+    {
+        path: 'categories',
+        loadChildren: () =>
+            import('./components/categories/categories.module').then(
+                m => m.CategoriesModule
+            ),
+    },
 ];
 
 @NgModule({
