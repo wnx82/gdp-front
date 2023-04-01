@@ -15,7 +15,7 @@
     <ng-container *ngFor="let agent of agents">
         <div class="card-deck">
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <p-card header="{{agent.matricule}}" subheader="{{agent.firstname}} {{agent.lastname}}"
+                <p-card header="A{{agent.matricule}}" subheader="{{agent.firstname}} {{agent.lastname}}"
                     [style]="{width: '360px'}" styleClass="p-card-shadow card-content">
                     <ng-template pTemplate="header">
                         <img alt="Card" src="{{agent.picture}}" style="max-width: 50%; height: auto;">
@@ -86,13 +86,15 @@
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedAgent={}">
 
-        <form #agentForm="ngForm" (ngSubmit)="isAdding ? addAgent(agentForm.value) : editAgent(agentForm.value)">
+        <form #agentForm="ngForm" (ngSubmit)="isAdding ? addAgent(agentForm.value) : editAgent(agentForm.value)"
+            ngNativeValidate>
+
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="matricule" name="matricule" [(ngModel)]="selectedAgent.matricule"
-                                required pInputText>
+                            <input type="number" id="matricule" name="matricule" [(ngModel)]="selectedAgent.matricule"
+                                required="Veuillez saisir le matricule" pInputText>
                             <label for="matricule">Matricule</label>
                         </span>
                     </div>
@@ -118,8 +120,24 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" pInputText>
+                            <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" required
+                                pInputText>
                             <label for="email">Email</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="password" name="password" [(ngModel)]="selectedAgent.password"
+                                required pInputText>
+                            <label for="password">password</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="number" id="userAccess" name="userAccess"
+                                [(ngModel)]="selectedAgent.userAccess" required pInputText min="0" max="10"
+                                title="Veuillez saisir un nombre entre 0 et 10">
+                            <label for="userAccess">userAccess</label>
                         </span>
                     </div>
                     <div class="p-field">
@@ -152,3 +170,4 @@
                     icon="pi pi-times" (click)="cancel()"></button>
             </div>
         </form>
+    </p-dialog>

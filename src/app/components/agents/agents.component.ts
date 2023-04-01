@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
@@ -20,15 +21,26 @@ export class AgentsComponent implements OnInit {
 
     ngOnInit() {
         this.getAgents();
-        this.http.get<any[]>('http://localhost:3003/rues').subscribe(
-            data => {
-                this.rues = data;
-                console.log(this.rues);
-            },
-            error => {
-                console.error(error);
-            }
-        );
+
+        const ruesLocalStorage = localStorage.getItem('rues');
+
+        if (ruesLocalStorage === null) {
+            // Si les rues n'existent pas encore dans le local storage
+            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
+                data => {
+                    this.rues = data;
+                    localStorage.setItem('rues', JSON.stringify(this.rues));
+                    console.log('Sauvegarde des rues dans le local storage');
+                },
+                error => {
+                    console.error(error);
+                }
+            );
+        } else {
+            // Les rues existent dans le local storage
+            this.rues = JSON.parse(ruesLocalStorage);
+            console.log('Rues déjà chargées');
+        }
     }
 
     getAgents() {
