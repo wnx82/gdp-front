@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     declarations: [CategoriesComponent],
@@ -20,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
         PaginatorModule,
         InputTextModule,
         DialogModule,
+        ToastModule
     ],
 })
 export class CategoriesModule {}

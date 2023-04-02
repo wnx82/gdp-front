@@ -1,7 +1,7 @@
 <p>categories works!</p>
 <div class="container">
     <h1>Liste des catégories</h1>
-
+    <p-toast></p-toast>
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
@@ -55,6 +55,14 @@
 
                     <div class="p-field">
                         <span class="p-float-label">
+                            <input type="text" id="id" name="id" [(ngModel)]="selectedData._id" required pInputText>
+                            <label for="id">id</label>
+                        </span>
+
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+
                             <input type="text" id="title" name="title" [(ngModel)]="selectedData.title" required
                                 pInputText>
                             <label for="title">Titre</label>
@@ -65,6 +73,7 @@
                 </div>
 
                 <div class="p-d-flex p-jc-between">
+
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                         class="p-button-sm p-button-success"
                         icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
