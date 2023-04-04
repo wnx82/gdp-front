@@ -120,6 +120,12 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
+                            <p-calendar [(ngModel)]="date" [showIcon]="true"></p-calendar>
+                            <label for="birthday">Date de naissance</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
                             <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" required
                                 pInputText>
                             <label for="email">Email</label>

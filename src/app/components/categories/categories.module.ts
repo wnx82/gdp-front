@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 
+
 @NgModule({
     declarations: [CategoriesComponent],
     imports: [

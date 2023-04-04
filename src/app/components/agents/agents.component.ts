@@ -18,6 +18,7 @@ export class AgentsComponent implements OnInit {
     rues: any[] = [];
     constructor(private http: HttpClient) {}
     readonly API_URL = `${environment.apiUrl}/agents`;
+    date!: Date;
 
     ngOnInit() {
         this.getAgents();

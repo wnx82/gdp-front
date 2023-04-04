@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CardModule } from 'primeng/card';
 
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     declarations: [AgentsComponent],
@@ -25,6 +26,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
         DialogModule,
         CardModule,
         AutoCompleteModule,
+        CalendarModule
     ],
 })
 export class AgentsModule {}

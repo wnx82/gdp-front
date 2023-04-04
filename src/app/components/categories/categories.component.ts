@@ -66,26 +66,27 @@ export class CategoriesComponent implements OnInit {
     //         }
     //     );
     // }
-edit(donnee: any) {
-    console.log('donnee', donnee); // Vérifiez si `donnee` est bien défini et contient la propriété `_id`
-    const url = `${this.API_URL}/${donnee.id}`;
+    edit(donnee: any) {
+        console.log('donnee', donnee); // Vérifiez si `donnee` est bien défini et contient la propriété `_id`
+        const url = `${this.API_URL}/${donnee.id}`;
 
-    console.log('id', donnee.id);
-
-    this.http.patch<any>(url, donnee).subscribe(
-        data => {
-            console.log('data', data); // Vérifiez si la propriété `_id` est présente dans la réponse
-            const index = this.donnees.findIndex(a => a._id === data._id);
-            this.donnees[index] = data;
-            this.selectedData = {};
-            this.isEditing = false;
-            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie modifiée' });
-        },
-        error => {
-            console.log(error);
-        }
-    );
-}
+        // console.log('id', donnee.id);
+        // console.log('url', url);
+        // console.log('donnee', donnee)
+        this.http.patch<any>(url, donnee).subscribe(
+            data => {
+                console.log('data', data); // Vérifiez si la propriété `_id` est présente dans la réponse
+                const index = this.donnees.findIndex(a => a._id === data._id);
+                this.donnees[index] = data;
+                this.selectedData = {};
+                this.isEditing = false;
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie modifiée' });
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    }
 
 
     deleteDonnee(id: number) {
