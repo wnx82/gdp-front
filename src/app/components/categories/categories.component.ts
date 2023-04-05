@@ -70,9 +70,6 @@ export class CategoriesComponent implements OnInit {
         console.log('donnee', donnee); // Vérifiez si `donnee` est bien défini et contient la propriété `_id`
         const url = `${this.API_URL}/${donnee.id}`;
 
-        // console.log('id', donnee.id);
-        // console.log('url', url);
-        // console.log('donnee', donnee)
         this.http.patch<any>(url, donnee).subscribe(
             data => {
                 console.log('data', data); // Vérifiez si la propriété `_id` est présente dans la réponse

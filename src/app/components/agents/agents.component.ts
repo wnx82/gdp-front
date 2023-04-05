@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { LocalStorageService } from '../../services/local-storage.service';
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
@@ -15,8 +16,9 @@ export class AgentsComponent implements OnInit {
     selectedAgent: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
+    constructor(private http: HttpClient,private localStorageService: LocalStorageService) {}
+    storedValue: any;
     rues: any[] = [];
-    constructor(private http: HttpClient) {}
     readonly API_URL = `${environment.apiUrl}/agents`;
     date!: Date;
 
