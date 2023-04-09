@@ -67,28 +67,26 @@ export class CategoriesComponent implements OnInit {
     //     );
     // }
     edit(id: number, donnee: any) {
-        console.log('donnee', donnee);
         if (!donnee || !donnee.id) {
             console.error('Données invalides', donnee);
             return;
         }
         const url = `${this.API_URL}/${id}`;
-        console.log('url', url);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
         });
-        console.log('headers', headers);
         this.http.put<any>(url, donnee, { headers }).subscribe(
             data => {
-                console.log('Réponse de l\'API :', data);
+                // console.log('Réponse de l\'API :', data);
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.get()
             },
             error => {
-                console.error('Erreur de requête PUT', error);
+                console.error('Erreur de requête put', error);
                 if (error.error && error.error.message) {
                     console.error('Message d\'erreur du serveur :', error.error.message);
                 }
