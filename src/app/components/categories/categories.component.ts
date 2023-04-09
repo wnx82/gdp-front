@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 
@@ -16,13 +16,13 @@ export class CategoriesComponent implements OnInit {
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-    constructor(private http: HttpClient,private messageService: MessageService) {}
+    constructor(private http: HttpClient, private messageService: MessageService) { }
     readonly API_URL = `${environment.apiUrl}/categories`;
     ngOnInit(): void {
         this.get();
     }
     private handleError(error: any): void {
-        this.messageService.add({severity: 'error', summary: 'Error', detail: error.message});
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
     }
 
     get() {
@@ -30,7 +30,7 @@ export class CategoriesComponent implements OnInit {
         this.http.get<any[]>(url).subscribe(
             data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
-                
+
             },
             error => {
                 console.log(error);
@@ -66,24 +66,39 @@ export class CategoriesComponent implements OnInit {
     //         }
     //     );
     // }
-    edit(donnee: any) {
-        console.log('donnee', donnee); // Vérifiez si `donnee` est bien défini et contient la propriété `_id`
-        const url = `${this.API_URL}/${donnee.id}`;
-
-        this.http.patch<any>(url, donnee).subscribe(
+    edit(id: number, donnee: any) {
+        console.log('donnee', donnee);
+        if (!donnee || !donnee.id) {
+            console.error('Données invalides', donnee);
+            return;
+        }
+        const url = `${this.API_URL}/${id}`;
+        console.log('url', url);
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+        console.log('headers', headers);
+        this.http.put<any>(url, donnee, { headers }).subscribe(
             data => {
-                console.log('data', data); // Vérifiez si la propriété `_id` est présente dans la réponse
-                const index = this.donnees.findIndex(a => a._id === data._id);
+                console.log('Réponse de l\'API :', data);
+                const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie modifiée' });
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
             },
             error => {
-                console.log(error);
+                console.error('Erreur de requête PUT', error);
+                if (error.error && error.error.message) {
+                    console.error('Message d\'erreur du serveur :', error.error.message);
+                }
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué' });
             }
         );
     }
+
+
+
 
 
     deleteDonnee(id: number) {

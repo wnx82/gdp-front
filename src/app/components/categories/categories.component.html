@@ -49,25 +49,25 @@
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedData={}">
 
-        <form #donneeForm="ngForm" (ngSubmit)="isAdding ? add(donneeForm.value) : edit(donneeForm.value)">
+        <form #donneeForm="ngForm"
+            (ngSubmit)="isAdding ? add(donneeForm.value) : edit(selectedData._id, donneeForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="id" name="id" [(ngModel)]="selectedData._id" required pInputText>
+                            <input type="text" id="id" name="id" [(ngModel)]="selectedData._id" required pInputText
+                                hidden>
                             <label for="id">id</label>
                         </span>
-
                     </div>
+
                     <div class="p-field">
                         <span class="p-float-label">
-
                             <input type="text" id="title" name="title" [(ngModel)]="selectedData.title" required
                                 pInputText>
                             <label for="title">Titre</label>
                         </span>
-
                     </div>
 
                 </div>
@@ -83,6 +83,5 @@
                 </div>
             </div>
         </form>
-
 
     </p-dialog>
