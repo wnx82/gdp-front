@@ -43,12 +43,12 @@ export class CategoriesComponent implements OnInit {
                 this.donnees.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie ajoutée' });
+                this.get();
             },
             (error: any) => {
                 this.handleError(error);
             }
         );
-        this.get();
 
     }
     // edit(donnee: any) {
@@ -103,8 +103,8 @@ export class CategoriesComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
                 this.donnees = this.donnees.filter(a => a.id !== id);
-                this.get();
                 this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Catégorie effacée' });
+                this.get();
             },
             error => {
                 console.log(error);
@@ -115,13 +115,11 @@ export class CategoriesComponent implements OnInit {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe(
             () => {
-                console.log(
-                    'Les données supprimées ont été supprimées définitivement.'
-                );
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complétement effacées' });
                 this.get(); // Met à jour la liste
             },
             error => {
-                console.log(error);
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
         );
     }

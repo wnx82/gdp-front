@@ -25,4 +25,4 @@ import { ToastModule } from 'primeng/toast';
         ToastModule
     ],
 })
-export class CategoriesModule {}
+export class CategoriesModule { }
