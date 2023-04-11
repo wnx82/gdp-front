@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
-
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-categories',
@@ -19,6 +19,12 @@ export class CategoriesComponent implements OnInit {
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDialog = false;
+
+
+    categoriesForm = new FormGroup({
+        title: new FormControl('', [Validators.required]),
+    });
+
 
     constructor(private http: HttpClient,
         private messageService: MessageService,) { }

@@ -22,6 +22,7 @@ import { SidenavComponent } from './main-page/sidenav/sidenav.component';
 import { SublevelMenuComponent } from './main-page/sidenav/sublevel-menu.component';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NoOpenDirective } from './no-open.directive';
+import { RegistrationComponent } from './services/registration/registration.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { NoOpenDirective } from './no-open.directive';
         SublevelMenuComponent,
         DashboardComponent,
         NoOpenDirective,
+        RegistrationComponent,
     ],
     imports: [
         BrowserModule,
