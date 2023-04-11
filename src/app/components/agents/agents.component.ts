@@ -16,7 +16,7 @@ export class AgentsComponent implements OnInit {
     selectedAgent: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-    constructor(private http: HttpClient,private localStorageService: LocalStorageService) {}
+    constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;

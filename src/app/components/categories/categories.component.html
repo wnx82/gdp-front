@@ -1,4 +1,14 @@
-<p>categories works!</p>
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
 <div class="container">
     <h1>Liste des catégories</h1>
     <p-toast></p-toast>
@@ -8,6 +18,7 @@
                 style="margin-top: 3px;" (click)="toggleAdd()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
                 class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+
 
         </div>
     </div>

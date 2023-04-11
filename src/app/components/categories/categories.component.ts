@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 
 @Component({
@@ -16,7 +17,9 @@ export class CategoriesComponent implements OnInit {
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-    constructor(private http: HttpClient, private messageService: MessageService) { }
+    displayConfirmationDialog = false;
+    constructor(private http: HttpClient,
+        private messageService: MessageService,) { }
     readonly API_URL = `${environment.apiUrl}/categories`;
     ngOnInit(): void {
         this.get();
@@ -51,21 +54,7 @@ export class CategoriesComponent implements OnInit {
         );
 
     }
-    // edit(donnee: any) {
-    //     const url = `${this.API_URL}/${donnee._id}`;
 
-    //     this.http.patch<any>(url, donnee).subscribe(
-    //         data => {
-    //             const index = this.donnees.findIndex(a => a._id === data._id);
-    //             this.donnees[index] = data;
-    //             this.selectedData = {};
-    //             this.isEditing = false;
-    //         },
-    //         error => {
-    //             console.log(error);
-    //         }
-    //     );
-    // }
     edit(id: number, donnee: any) {
         if (!donnee || !donnee.id) {
             console.error('Données invalides', donnee);
@@ -75,18 +64,20 @@ export class CategoriesComponent implements OnInit {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
         });
-        this.http.put<any>(url, donnee, { headers }).subscribe(
+        console.log('Envoi de la requête PATCH vers:', url);
+        console.log('Données de la requête:', donnee);
+        this.http.patch<any>(url, donnee, { headers }).subscribe(
             data => {
-                // console.log('Réponse de l\'API :', data);
+                console.log('Réponse de l\'API :', data);
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
-                this.get()
+                this.get();
             },
             error => {
-                console.error('Erreur de requête put', error);
+                console.error('Erreur de requête PATCH', error);
                 if (error.error && error.error.message) {
                     console.error('Message d\'erreur du serveur :', error.error.message);
                 }
@@ -94,10 +85,6 @@ export class CategoriesComponent implements OnInit {
             }
         );
     }
-
-
-
-
 
     deleteDonnee(id: number) {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
@@ -111,7 +98,13 @@ export class CategoriesComponent implements OnInit {
             }
         );
     }
-    deleteDeleted() {
+    deleteDeleted(): void {
+        this.displayConfirmationDialog = true;
+        //
+
+    }
+    confirmDeleteDeleted(): void {
+        // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe(
             () => {
@@ -122,6 +115,7 @@ export class CategoriesComponent implements OnInit {
                 this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
         );
+        this.displayConfirmationDialog = false;
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };

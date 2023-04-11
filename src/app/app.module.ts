@@ -53,4 +53,4 @@ import { NoOpenDirective } from './no-open.directive';
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
