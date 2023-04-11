@@ -22,6 +22,7 @@
                     </ng-template>
                     <p style="font-size: 16px;">Tél: {{agent.tel}}</p>
                     <p style="font-size: 16px; margin-bottom: 10px;">Email: {{agent.email}}</p>
+                    <p style="font-size: 16px; margin-bottom: 10px;">Date de naissance: {{agent.birthday}}</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
                         repudiandae
                         numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam
@@ -94,47 +95,56 @@
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="number" id="matricule" name="matricule" [(ngModel)]="selectedAgent.matricule"
-                                required="Veuillez saisir le matricule" pInputText>
+                                required="Veuillez saisir le matricule" pInputText
+                                [ngModelOptions]="{standalone: true}">
                             <label for="matricule">Matricule</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="lastname" name="lastname" [(ngModel)]="selectedAgent.lastname"
-                                required pInputText>
+                                required pInputText [ngModelOptions]="{standalone: true}">
                             <label for="lastname">Nom</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="firstname" name="firstname" [ngModelOptions]="{standalone: true}"
-                                [(ngModel)]="selectedAgent.firstname" required pInputText>
+                                [(ngModel)]="selectedAgent.firstname" required pInputText
+                                [ngModelOptions]="{standalone: true}">
                             <label for="firstname">Prénom</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText>
+                            <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText
+                                [ngModelOptions]="{standalone: true}">
                             <label for="tel">Téléphone</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-calendar [(ngModel)]="date" [showIcon]="true"></p-calendar>
-                            <label for="birthday">Date de naissance</label>
+                            <p-calendar id="birthday" name="birthday" [(ngModel)]="selectedAgent.birthday"
+                                [showIcon]="true" dateFormat="dd/mm/yyyy"></p-calendar>
+                            <label for="birthday">Date de naissance : {{ selectedAgent.birthday | date:'dd/MM/yyyy'
+                                }}</label>
                         </span>
                     </div>
+
+
+
+
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" required
-                                pInputText>
+                                pInputText [ngModelOptions]="{standalone: true}">
                             <label for="email">Email</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="password" name="password" [(ngModel)]="selectedAgent.password"
-                                required pInputText>
+                                required pInputText [ngModelOptions]="{standalone: true}">
                             <label for="password">password</label>
                         </span>
                     </div>
@@ -144,6 +154,14 @@
                                 [(ngModel)]="selectedAgent.userAccess" required pInputText min="0" max="10"
                                 title="Veuillez saisir un nombre entre 0 et 10">
                             <label for="userAccess">userAccess</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="iceContact" name="iceContact" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="selectedAgent.iceContact" required pInputText
+                                [ngModelOptions]="{standalone: true}">
+                            <label for="iceContact">Contact ICE</label>
                         </span>
                     </div>
                     <div class="p-field">
@@ -160,7 +178,8 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="numero" name="numero" [(ngModel)]="selectedAgent.numero" pInputText>
+                            <input type="text" id="numero" name="numero" [(ngModel)]="selectedAgent.numero" pInputText
+                                [ngModelOptions]="{standalone: true}">
                             <label for="numero">Numéro</label>
                         </span>
                     </div>

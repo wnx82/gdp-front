@@ -4,18 +4,23 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
+
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
     styleUrls: ['./agents.component.css'],
 })
 export class AgentsComponent implements OnInit {
+
     private apiUrl: string | undefined;
     agents: any[] = [];
     filteredRues: any[] = [];
-    selectedAgent: any = {};
+    selectedAgent: any = {
+        birthday: new Date(),
+    };
     isAdding: boolean = false;
     isEditing: boolean = false;
+
     constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
     storedValue: any;
     rues: any[] = [];

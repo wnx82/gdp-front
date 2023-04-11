@@ -12,12 +12,14 @@ import { ConfirmationService } from 'primeng/api';
     providers: [MessageService]
 })
 export class CategoriesComponent implements OnInit {
+
     private apiUrl: string = environment.apiUrl;
     donnees: any[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDialog = false;
+
     constructor(private http: HttpClient,
         private messageService: MessageService,) { }
     readonly API_URL = `${environment.apiUrl}/categories`;
