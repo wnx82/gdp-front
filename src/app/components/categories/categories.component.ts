@@ -64,19 +64,20 @@ export class CategoriesComponent implements OnInit {
     }
 
     edit(id: number, donnee: any) {
-        if (!donnee || !donnee.id) {
+        if (!donnee) {
             console.error('Données invalides', donnee);
             return;
         }
+        // console.log(donnee);
         const url = `${this.API_URL}/${id}`;
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
         });
-        console.log('Envoi de la requête PATCH vers:', url);
-        console.log('Données de la requête:', donnee);
+        // console.log('Envoi de la requête PATCH vers:', url);
+        // console.log('Données de la requête:', donnee);
         this.http.patch<any>(url, donnee, { headers }).subscribe(
             data => {
-                console.log('Réponse de l\'API :', data);
+                // console.log('Réponse de l\'API :', data);
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
                 this.selectedData = {};
