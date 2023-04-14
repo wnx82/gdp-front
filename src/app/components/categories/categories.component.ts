@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -19,13 +18,9 @@ export class CategoriesComponent implements OnInit {
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDialog = false;
-
-
-    categoriesForm = new FormGroup({
+    dataForm = new FormGroup({
         title: new FormControl('', [Validators.required]),
     });
-
-
     constructor(private http: HttpClient,
         private messageService: MessageService,) { }
     readonly API_URL = `${environment.apiUrl}/categories`;
@@ -37,8 +32,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     get() {
-        let url = `${this.API_URL}`;
-        this.http.get<any[]>(url).subscribe(
+        this.http.get<any[]>(this.API_URL).subscribe(
             data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
 
@@ -68,16 +62,10 @@ export class CategoriesComponent implements OnInit {
             console.error('Données invalides', donnee);
             return;
         }
-        // console.log(donnee);
         const url = `${this.API_URL}/${id}`;
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-        });
-        // console.log('Envoi de la requête PATCH vers:', url);
-        // console.log('Données de la requête:', donnee);
-        this.http.patch<any>(url, donnee, { headers }).subscribe(
+
+        this.http.patch<any>(url, donnee).subscribe(
             data => {
-                // console.log('Réponse de l\'API :', data);
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
                 this.selectedData = {};
@@ -94,7 +82,6 @@ export class CategoriesComponent implements OnInit {
             }
         );
     }
-
     deleteDonnee(id: number) {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
@@ -110,7 +97,6 @@ export class CategoriesComponent implements OnInit {
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
         //
-
     }
     confirmDeleteDeleted(): void {
         // Mettez ici le code pour supprimer définitivement les données supprimées
@@ -137,10 +123,12 @@ export class CategoriesComponent implements OnInit {
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedData = {};
+        this.dataForm?.get('title')?.setValue('');
     }
+
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedData);
+        // console.log(this.selectedData);
     }
 }

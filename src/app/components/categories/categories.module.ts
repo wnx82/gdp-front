@@ -10,8 +10,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-
 import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
     declarations: [CategoriesComponent],
     imports: [

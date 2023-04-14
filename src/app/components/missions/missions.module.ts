@@ -10,8 +10,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-
+import { ToastModule } from 'primeng/toast';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
     declarations: [MissionsComponent],
     imports: [
@@ -23,7 +23,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         InputTextModule,
         DialogModule,
         CheckboxModule,
-        InputTextareaModule,
+        ToastModule,
+        ReactiveFormsModule
     ],
 })
-export class MissionsModule {}
+export class MissionsModule { }

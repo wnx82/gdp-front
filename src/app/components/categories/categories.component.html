@@ -8,10 +8,9 @@
         <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
     </p-footer>
 </p-dialog>
-
+<p-toast></p-toast>
 <div class="container">
     <h1>Liste des catégories</h1>
-    <p-toast></p-toast>
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
@@ -51,10 +50,10 @@
         </div>
     </div>
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedData={}">
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
 
-        <form [formGroup]="categoriesForm"
-            (ngSubmit)="isAdding ? add(categoriesForm.value) : edit(selectedData._id, categoriesForm.value)">
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field">
@@ -69,8 +68,8 @@
                 <div class="p-d-flex p-jc-between">
 
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success"
-                        icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
 
                     <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                         icon="pi pi-times" (click)="cancel()"></button>

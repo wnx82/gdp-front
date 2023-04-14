@@ -1,11 +1,22 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
 <div class="container">
-    <h1>Missions</h1>
-
+    <h1>Liste des missions</h1>
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une mission" class="p-button-primary" icon="pi pi-plus"
                 style="margin-top: 3px;" (click)="toggleAdd()"></button>
-
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
     </div>
 
@@ -38,12 +49,6 @@
                                 icon="pi pi-pencil" style="margin-right: 5px;"
                                 (click)="selectMission(mission); toggleEdit()"></button>
 
-
-                            <!-- <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button> -->
-
-                            <!-- <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button> -->
                             <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
                                 icon="pi pi-trash" (click)="deleteMission(mission._id)"></button>
 
@@ -51,9 +56,10 @@
                     </tr>
                 </tbody>
             </table>
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary"
+                icon="pi pi-road" style="margin-top: 3px;" (click)="toggleAdd()"></button>
         </div>
     </div>
-
     <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
         [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
         [style]="{width: '50vw'}" (onHide)="cancel()">
@@ -68,7 +74,7 @@
             <div class="p-field">
                 <span class="p-float-label">
                     <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
-                        [(ngModel)]="selectedMission.description" [autoResize]="false"></textarea>
+                        [(ngModel)]="selectedMission.description"></textarea>
                     <label for="description">Description</label>
                 </span>
             </div>
@@ -124,3 +130,4 @@
         </div>
 
     </p-dialog>
+</div>
