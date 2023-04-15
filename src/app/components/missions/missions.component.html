@@ -8,6 +8,19 @@
         <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
     </p-footer>
 </p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteData(selectedData._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
 <p-toast></p-toast>
 <div class="container">
     <h1>Liste des missions</h1>
@@ -50,7 +63,8 @@
                                 (click)="selectData(mission); toggleEdit()"></button>
 
                             <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteData(mission._id)"></button>
+                                icon="pi pi-trash" (click)="selectData(mission); onConfirmDelete(mission)"></button>
+
 
                         </td>
                     </tr>
@@ -120,8 +134,10 @@
                                         </span>
                                     </div> -->
                     <div class="p-field-checkbox">
-                        <p-checkbox formControlName="visibility" id="visibility" name="visibility" checked></p-checkbox>
-                        <label for="visibility" class="p-checkbox-label">Visible</label>
+                        <input type="checkbox" id="visibility" name="visibility"
+                            [checked]="selectedData.visibility ? true : false">
+                        <label for="visibility">Visible</label>
+
                     </div>
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"

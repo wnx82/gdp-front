@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 
 import { MissionsRoutingModule } from './missions-routing.module';
 import { MissionsComponent } from './missions.component';
-
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
-import { ReactiveFormsModule } from '@angular/forms';
+
 import { InputTextareaModule } from 'primeng/inputtextarea';
+
+
 @NgModule({
     declarations: [MissionsComponent],
     imports: [
@@ -26,7 +29,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         CheckboxModule,
         ToastModule,
         ReactiveFormsModule,
-        InputTextareaModule
+        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
     ],
+    providers: []
 })
 export class MissionsModule { }

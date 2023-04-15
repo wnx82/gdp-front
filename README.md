@@ -45,15 +45,15 @@ Run `npm start` or `ng serve` for a dev server. Navigate to [http://localhost:42
 
 ## ✏️ Components
 
-- Agents
-- Categories
-- Missions
-- Rues
+-   Agents
+-   Categories
+-   Missions
+-   Rues
 
 ## 🔥 Features
 
-- Medias
-- Statistics
+-   Medias
+-   Statistics
 
 ## 🐿️ Consignes : Projet de développement SGBD
 
@@ -61,12 +61,12 @@ Pour ce projet, il vous est demandé de développer une **application Angular** 
 
 Le projet devra être réaliser seul et respecter au moins les contraintes suivantes :
 
-- Création d’au moins 2 formulaires gérés en **Reactive forms**
-- Création d’au moins 1 component utile à l’application (qui n’est pas une page)
-- Création d’au moins 2 services permettant d’interagir avec les données
-- Création d’au moins 1 pipe utile à l’application
-- Utilisation du routing **Angular**
-- Utilisation d’une librairie externe, utile à l’application
+-   Création d’au moins 2 formulaires gérés en **Reactive forms**
+-   Création d’au moins 1 component utile à l’application (qui n’est pas une page)
+-   Création d’au moins 2 services permettant d’interagir avec les données
+-   Création d’au moins 1 pipe utile à l’application
+-   Utilisation du routing **Angular**
+-   Utilisation d’une librairie externe, utile à l’application
 
 Le projet devra être versionné sous **Github** en mode privé et accessible par le chargé de cours. De plus, il est demandé de pousser vos changements en ligne à chaque fois que vous travaillerez sur le projet.
 
@@ -96,6 +96,9 @@ Une date de présentation de l’application reste à définir et comptera pour 
     </code>
 
 -   protéger tous les dossiers autres que users grace à JWT une fois la phase déploiement lancée
+-   ConfirmationService ne fonctionne pas
+-   visibility true or false
+-
 
 ## 🎨 Front-End Tutorial
 
@@ -153,7 +156,6 @@ Copyright (c) 2023-present,
 [winnux82](https://github.com/winnux82)
 
 [![Web](https://img.shields.io/badge/GitHub-winnux82-14a1f0?style=for-the-badge&logo=github&logoColor=white&labelColor=101010)](https://github.com/winnux82)
-
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 

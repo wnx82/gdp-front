@@ -3,33 +3,35 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-missions',
     templateUrl: './missions.component.html',
     styleUrls: ['./missions.component.css'],
-    providers: [MessageService]
+    providers: [MessageService, ConfirmationService]
 })
 export class MissionsComponent implements OnInit {
-    private apiUrl: string = environment.apiUrl;
     missions: any[] = [];
     selectedData: any = {};
     isAdding = false;
     isEditing = false;
+
+    displayConfirmationDelete = false;
     displayConfirmationDialog = false;
+
     dataForm = new FormGroup({
         title: new FormControl('', [Validators.required]),
         description: new FormControl(''),
         category: new FormControl(''),
         horaire: new FormControl(''),
         contact: new FormControl(''),
-        visibility: new FormControl(true, [Validators.pattern('true|false')]),
         priority: new FormControl(''),
+        visibility: new FormControl(true, [Validators.pattern('true|false')]),
         // annexes: new FormControl(''),
     });
     constructor(private http: HttpClient,
-        private messageService: MessageService,) { }
+        private messageService: MessageService, private confirmationService: ConfirmationService) { }
     readonly API_URL = `${environment.apiUrl}/missions`;
     ngOnInit(): void {
         this.get();
@@ -92,7 +94,17 @@ export class MissionsComponent implements OnInit {
             }
         );
     }
-
+    onConfirmDelete(mission: any) {
+        this.displayConfirmationDelete = true;
+        this.confirmationService.confirm({
+            message: 'Voulez-vous vraiment supprimer cette mission ?',
+            header: 'Confirmation de suppression',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteData(mission._id);
+            }
+        });
+    }
     deleteData(id: number) {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
