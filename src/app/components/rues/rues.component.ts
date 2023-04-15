@@ -81,29 +81,31 @@ export class RuesComponent implements OnInit {
         //         console.log(error);
         //     }
         // );
-        this.http.get<any[]>(url).subscribe(
-            data => {
+        this.http.get<any[]>(url).subscribe({
+            next: data => {
                 this.rues = data.filter(rue => !rue.deletedAt);
             },
-            error => {
+            error: error => {
                 console.log(error);
             }
-        );
+        });
+
     }
     addRue(rue: any) {
-        this.http.post<any>(`${this.API_URL}`, rue).subscribe(
-            data => {
+        this.http.post<any>(`${this.API_URL}`, rue).subscribe({
+            next: data => {
                 this.rues.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Rue ajoutée' });
                 this.dataForm.reset();
                 this.get();
             },
-            error => {
+            error: error => {
                 console.log(error);
             }
-        );
+        });
     }
+
 
     editRue(id: number, rue: any) {
         console.log(rue)
@@ -111,13 +113,22 @@ export class RuesComponent implements OnInit {
             console.error('Données invalides', rue);
             return;
         }
-
+        // Vérifier chaque champ de la rue et utiliser la valeur actuelle si le champ n'a pas été modifié
+        const updatedRue = {
+            nom: rue.nom !== null ? rue.nom : this.selectedData.nom,
+            denomination: rue.denomination !== null ? rue.denomination : this.selectedData.denomination,
+            nomComplet: rue.nomComplet !== null ? rue.nomComplet : this.selectedData.nomComplet,
+            cp: rue.cp !== null ? rue.cp : this.selectedData.cp,
+            localite: rue.localite !== null ? rue.localite : this.selectedData.localite,
+            quartier: rue.quartier !== null ? rue.quartier : this.selectedData.quartier,
+            codeRue: rue.codeRue !== null ? rue.codeRue : this.selectedData.codeRue,
+            traductionNl: rue.traductionNl !== null ? rue.traductionNl : this.selectedData.traductionNl,
+            // Ajouter les autres champs de la rue ici si nécessaire
+        };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, rue).subscribe(
-            data => {
-                const index = this.rues.findIndex(
-                    r => r._id === data._id
-                );
+        this.http.patch<any>(url, updatedRue).subscribe({
+            next: data => {
+                const index = this.rues.findIndex(r => r._id === data._id);
                 this.rues[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
@@ -125,14 +136,11 @@ export class RuesComponent implements OnInit {
                 this.dataForm.reset();
                 this.get();
             },
-            error => {
-                console.log(error);
-                if (error.error && error.error.message) {
-                    console.error('Message d\'erreur du serveur :', error.error.message);
-                }
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué' });
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
+
     }
     onConfirmDelete(mission: any) {
         this.displayConfirmationDelete = true;
@@ -146,17 +154,18 @@ export class RuesComponent implements OnInit {
         });
     }
     deleteRue(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
-            () => {
+        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+            next: () => {
                 this.rues = this.rues.filter(r => r.id !== id);
                 this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Rue effacée' });
                 this.get();
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
     }
+
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
         //
@@ -165,15 +174,16 @@ export class RuesComponent implements OnInit {
     confirmDeleteDeleted(): void {
         // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
-        this.http.post(url, {}).subscribe(
-            () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complétement effacées' });
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complètement effacées' });
                 this.get(); // Met à jour la liste
             },
-            error => {
+            error: error => {
                 this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
+
         this.displayConfirmationDialog = false;
     }
 

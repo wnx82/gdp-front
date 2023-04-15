@@ -56,7 +56,7 @@
                         <td>{{ mission.horaire }}</td>
                         <td>{{ mission.priority }}</td>
                         <td>{{ mission.contact }}</td>
-                        <td>{{ mission.visibility ? 'Oui' : 'Non' }}</td>
+                        <td>{{ mission.visibility}}</td>
                         <td>
                             <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
                                 icon="pi pi-pencil" style="margin-right: 5px;"
@@ -82,6 +82,7 @@
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
+
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="title" name="title" formControlName="title" required pInputText
@@ -92,8 +93,7 @@
                     <div class="p-field">
                         <span class="p-float-label">
                             <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
-                                formControlName="description" [value]="selectedData.description"
-                                [autoResize]="true"></textarea>
+                                formControlName="description" [value]="selectedData.description"></textarea>
                             <label for="description">Description</label>
                         </span>
                     </div>
@@ -141,8 +141,8 @@
                     </div>
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                            class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
-                            [disabled]="!dataForm.valid"></button>
+                            class="p-button-sm p-button-success"
+                            icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
 
                         <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                             icon="pi pi-times" (click)="cancel()"></button>

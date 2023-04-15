@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -21,7 +21,7 @@ export class MissionsComponent implements OnInit {
     displayConfirmationDialog = false;
 
     dataForm = new FormGroup({
-        title: new FormControl('', [Validators.required]),
+        title: new FormControl(''),
         description: new FormControl(''),
         category: new FormControl(''),
         horaire: new FormControl(''),
@@ -30,7 +30,7 @@ export class MissionsComponent implements OnInit {
         visibility: new FormControl(true, [Validators.pattern('true|false')]),
         // annexes: new FormControl(''),
     });
-    constructor(private http: HttpClient,
+    constructor(private http: HttpClient, private fb: FormBuilder,
         private messageService: MessageService, private confirmationService: ConfirmationService) { }
     readonly API_URL = `${environment.apiUrl}/missions`;
     ngOnInit(): void {
@@ -40,29 +40,29 @@ export class MissionsComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
     }
     get() {
-        this.http.get<any[]>(`${this.API_URL}`).subscribe(
-            data => {
+        this.http.get<any[]>(`${this.API_URL}`).subscribe({
+            next: data => {
                 this.missions = data.filter(mission => !mission.deletedAt);
             },
-            error => {
+            error: error => {
                 console.log(error);
             }
-        );
+        });
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe(
-            data => {
+        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+            next: data => {
                 this.missions.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Mission ajoutée' });
                 this.dataForm.reset();
                 this.get();
             },
-            error => {
+            error: error => {
                 this.handleError(error)
             }
-        );
+        });
     }
 
     edit(id: number, donnee: any) {
@@ -72,8 +72,9 @@ export class MissionsComponent implements OnInit {
             return;
         }
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, donnee).subscribe(
-            data => {
+
+        this.http.patch<any>(url, donnee).subscribe({
+            next: data => {
                 const index = this.missions.findIndex(
                     r => r._id === data._id
                 );
@@ -84,15 +85,12 @@ export class MissionsComponent implements OnInit {
                 this.dataForm.reset();
                 this.get();
             },
-            error => {
-                console.log(error);
-                if (error.error && error.error.message) {
-                    console.error('Message d\'erreur du serveur :', error.error.message);
-                }
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué' });
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
     }
+
     onConfirmDelete(mission: any) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
@@ -105,37 +103,40 @@ export class MissionsComponent implements OnInit {
         });
     }
     deleteData(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
-            () => {
+        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+            next: () => {
                 this.missions = this.missions.filter(m => m.id !== id);
                 this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Mission effacée' });
                 this.get();
             },
-            error => {
+            error: error => {
                 console.log(error);
             }
-        );
+        });
     }
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
         //
     }
     confirmDeleteDeleted(): void {
-        // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
-        this.http.post(url, {}).subscribe(
-            () => {
+        this.http.post(url, {}).subscribe({
+            next: () => {
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complétement effacées' });
                 this.get(); // Met à jour la liste
             },
-            error => {
+            error: error => {
                 this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
+            },
+            complete: () => {
+                this.displayConfirmationDialog = false;
             }
-        );
-        this.displayConfirmationDialog = false;
+        });
     }
 
+
     selectData(donnee: any) {
+        console.log(donnee);
         this.selectedData = { ...donnee };
     }
 
