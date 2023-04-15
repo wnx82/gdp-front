@@ -71,9 +71,20 @@ export class MissionsComponent implements OnInit {
             console.error('Données invalides', donnee);
             return;
         }
-        const url = `${this.API_URL}/${id}`;
+        const updateMission = {
 
-        this.http.patch<any>(url, donnee).subscribe({
+            title: donnee.title !== null ? donnee.title : this.selectedData.title,
+            description: donnee.description !== null ? donnee.description : this.selectedData.description,
+            category: donnee.category !== null ? donnee.category : this.selectedData.category,
+            horaire: donnee.horaire !== null ? donnee.horaire : this.selectedData.horaire,
+            contact: donnee.contact !== null ? donnee.contact : this.selectedData.contact,
+            priority: donnee.priority !== null ? donnee.priority : this.selectedData.priority,
+            visibility: donnee.visibility !== null ? false : true,
+
+            // Ajouter les autres champs de la rue ici si nécessaire
+        }; const url = `${this.API_URL}/${id}`;
+
+        this.http.patch<any>(url, updateMission).subscribe({
             next: data => {
                 const index = this.missions.findIndex(
                     r => r._id === data._id

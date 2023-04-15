@@ -14,6 +14,8 @@ import { CardModule } from 'primeng/card';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 
+// import { AgentDetailsComponent } from './agent-details/agent-details.component';
+
 @NgModule({
     declarations: [AgentsComponent],
     imports: [
@@ -29,4 +31,4 @@ import { CalendarModule } from 'primeng/calendar';
         CalendarModule
     ],
 })
-export class AgentsModule {}
+export class AgentsModule { }
