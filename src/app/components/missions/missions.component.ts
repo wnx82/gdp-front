@@ -48,14 +48,14 @@ export class MissionsComponent implements OnInit {
         );
     }
 
-    add(mission: any) {
-
-        console.log(mission);
-        this.http.post<any>(`${this.API_URL}`, mission).subscribe(
+    add(donnee: any) {
+        console.log(donnee);
+        this.http.post<any>(`${this.API_URL}`, donnee).subscribe(
             data => {
                 this.missions.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Mission ajoutée' });
+                this.dataForm.reset();
                 this.get();
             },
             error => {
@@ -65,6 +65,7 @@ export class MissionsComponent implements OnInit {
     }
 
     edit(id: number, donnee: any) {
+        console.log(donnee);
         if (!donnee) {
             console.error('Données invalides', donnee);
             return;
@@ -79,6 +80,7 @@ export class MissionsComponent implements OnInit {
                 this.selectedData = {};
                 this.isEditing = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.dataForm.reset();
                 this.get();
             },
             error => {

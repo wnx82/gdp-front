@@ -48,6 +48,7 @@ export class CategoriesComponent implements OnInit {
                 this.donnees.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie ajoutée' });
+                this.dataForm.reset();
                 this.get();
             },
             (error: any) => {
@@ -71,6 +72,7 @@ export class CategoriesComponent implements OnInit {
                 this.selectedData = {};
                 this.isEditing = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.dataForm.reset();
                 this.get();
             },
             error => {
