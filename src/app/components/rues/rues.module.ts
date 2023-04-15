@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { RuesRoutingModule } from './rues-routing.module';
 import { RuesComponent } from './rues.component';
 
-import { FormsModule } from '@angular/forms';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
 import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
     declarations: [RuesComponent],
@@ -19,6 +26,10 @@ import { DialogModule } from 'primeng/dialog';
         PaginatorModule,
         InputTextModule,
         DialogModule,
+        CheckboxModule,
+        ToastModule,
+        ReactiveFormsModule,
+        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
     ],
 })
-export class RuesModule {}
+export class RuesModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -51,7 +51,6 @@ export class MissionsComponent implements OnInit {
     }
 
     add(donnee: any) {
-        console.log(donnee);
         this.http.post<any>(`${this.API_URL}`, donnee).subscribe(
             data => {
                 this.missions.push(data);
@@ -109,7 +108,7 @@ export class MissionsComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
                 this.missions = this.missions.filter(m => m.id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Missions effacée' });
+                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Mission effacée' });
                 this.get();
             },
             error => {
@@ -150,7 +149,7 @@ export class MissionsComponent implements OnInit {
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedData = {};
-        this.dataForm?.get('title')?.setValue('');
+        this.dataForm.reset();
     }
 
     toggleEdit() {

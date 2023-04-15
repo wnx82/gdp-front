@@ -1,13 +1,35 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteRue(selectedData._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
 <div class="container">
     <h1>Liste des rues</h1>
-
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une rue" class="p-button-primary" icon="pi pi-plus"
                 style="margin-top: 3px;" (click)="toggleAdd()"></button>
-            <button pButton pRipple type="button" label="Supprimer définitivement les rues supprimées"
-                class="p-button-danger" icon="pi pi-trash" (click)="deleteDeletedRues()"></button>
-
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
     </div>
     <div class="row">
@@ -15,7 +37,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>id</th>
+                        <!-- <th>id</th> -->
                         <th>Nom</th>
                         <th>Quartier</th>
                         <th>Code Postal</th>
@@ -25,15 +47,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let rue of rues | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage">
-                        <td>{{rue._id}}</td>
-                        <td>{{rue.nomComplet}}</td>
+                        <!-- <td>{{rue._id}}</td> -->
+                        <td>{{rue.nom}}</td>
                         <td>{{rue.quartier}}</td>
                         <td>{{rue.cp}}</td>
                         <td>{{rue.localite}}</td>
                         <td>
                             <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
                                 icon="pi pi-pencil" style="margin-right: 5px;"
-                                (click)="selectRue(rue); toggleEdit()"></button>
+                                (click)="selectData(rue); toggleEdit()"></button>
                             <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
                                 icon="pi pi-trash" (click)="deleteRue(rue._id)"></button>
                         </td>
@@ -53,64 +75,66 @@
     </div>
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedRue={}">
-        <!-- <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" [style]="{width: '15vw'}"
-        (onHide)="selectedRue = {}"> -->
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
 
-        <form #rueForm="ngForm" (ngSubmit)="isAdding ? addRue(rueForm.value) : editRue(rueForm.value)">
+
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addRue(dataForm.value) : editRue(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <input type="text" id="nom" name="nom" [(ngModel)]="selectedRue.nom" required pInputText>
+                            <input type="text" id="nom" name="nom" formControlName="nom" [value]="selectedData.nom"
+                                required pInputText>
                             <label for="nom">Nom de la rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="denomination" name="denomination"
-                                [(ngModel)]="selectedRue.denomination" pInputText>
+                            <input type="text" id="denomination" name="denomination" formControlName="denomination"
+                                [value]="selectedData.denomination" pInputText>
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="nomComplet" name="nomComplet" [(ngModel)]="selectedRue.nomComplet"
-                                pInputText>
+                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
+                                [value]="selectedData.nomComplet" pInputText>
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <p-inputNumber id="cp" name="cp" [(ngModel)]="selectedRue.cp"></p-inputNumber>
+                            <input type="number" id="cp" name="cp" formControlName="cp" [value]="selectedData.cp"
+                                pInputText>
                             <label for="cp">Code postal</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="localite" name="localite" [(ngModel)]="selectedRue.localite"
-                                pInputText>
+                            <input type="text" id="localite" name="localite" formControlName="localite"
+                                [value]="selectedData.localite" pInputText>
                             <label for="localite">Localite</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="quartier" name="quartier" [(ngModel)]="selectedRue.quartier"
-                                pInputText>
+                            <input type="text" id="quartier" name="quartier" formControlName="quartier"
+                                [value]="selectedData.quartier" pInputText>
                             <label for="quartier">Quartier</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="codeRue" name="codeRue" [(ngModel)]="selectedRue.codeRue" pInputText>
+                            <input type="text" id="codeRue" name="codeRue" formControlName="codeRue"
+                                [value]="selectedData.codeRue" pInputText>
                             <label for="codeRue">Code rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="traductionNl" name="traductionNl"
-                                [(ngModel)]="selectedRue.traductionNl" pInputText>
+                            <input type="text" id="traductionNl" name="traductionNl" formControlName="traductionNl"
+                                [value]="selectedData.traductionNl" pInputText>
                             <label for="traductionNl">Traduction NL</label>
                         </span>
                     </div>
@@ -118,26 +142,30 @@
                 <!-- <div class="p-col-6">
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="xMin" name="xMin" [(ngModel)]="selectedRue.xMin" required pInputText>
+                            <input type="text" id="xMin" name="xMin" formControlName="xMin"
+                                [value]="selectedData.xMin" required pInputText>
                             <label for="xMin">X min</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="xMax" name="xMax" [(ngModel)]="selectedRue.xMax" required pInputText>
+                            <input type="text" id="xMax" name="xMax" formControlName="xMax"
+                                [value]="selectedData.xMax" required pInputText>
                             <label for="xMax">X max</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="yMin" name="yMin" [(ngModel)]="selectedRue.yMin" required pInputText>
+                            <input type="text" id="yMin" name="yMin" formControlName="yMin"
+                                [value]="selectedData.yMin" required pInputText>
                             <label for="yMin">Y min</label>
                         </span>
                     </div>
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="yMax" name="yMax" [(ngModel)]="selectedRue.yMax" required pInputText>
+                            <input type="text" id="yMax" name="yMax" formControlName="yMax"
+                                [value]="selectedData.yMax" required pInputText>
                             <label for="yMax">Y max</label>
                         </span>
                     </div>
@@ -145,20 +173,23 @@
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="idTronconCentral" name="idTronconCentral"
-                                [(ngModel)]="selectedRue.idTronconCentral" required pInputText>
+                                formControlName="idTronconCentral"
+                                [value]="selectedData.idTronconCentral" required pInputText>
                             <label for="idTronconCentral">ID troncon central</label>
                         </span>
                     </div> -->
 
                 <!-- </div> -->
-            </div>
 
-            <div class="p-d-flex p-jc-between">
-                <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
 
-                <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                    icon="pi pi-times" (click)="cancel()"></button>
+                <div class="p-d-flex p-jc-between">
+                    <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
+
+                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                        icon="pi pi-times" (click)="cancel()"></button>
+                </div>
             </div>
         </form>
 
