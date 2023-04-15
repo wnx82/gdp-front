@@ -14,29 +14,30 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class MissionsComponent implements OnInit {
     private apiUrl: string = environment.apiUrl;
     missions: any[] = [];
-    selectedMission: any = {};
+    selectedData: any = {};
     isAdding = false;
     isEditing = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
         title: new FormControl('', [Validators.required]),
-        description: new FormControl('', [Validators.required]),
-        category: new FormControl('', [Validators.required]),
-        horaire: new FormControl('', [Validators.required]),
-        contact: new FormControl('', [Validators.required]),
-        visibility: new FormControl('', [Validators.required]),
-        annexes: new FormControl('', [Validators.required]),
+        description: new FormControl(''),
+        category: new FormControl(''),
+        horaire: new FormControl(''),
+        contact: new FormControl(''),
+        visibility: new FormControl(true, [Validators.pattern('true|false')]),
+        priority: new FormControl(''),
+        // annexes: new FormControl(''),
     });
     constructor(private http: HttpClient,
         private messageService: MessageService,) { }
     readonly API_URL = `${environment.apiUrl}/missions`;
     ngOnInit(): void {
-        this.getMissions();
+        this.get();
     }
     private handleError(error: any): void {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
     }
-    getMissions() {
+    get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe(
             data => {
                 this.missions = data.filter(mission => !mission.deletedAt);
@@ -47,13 +48,15 @@ export class MissionsComponent implements OnInit {
         );
     }
 
-    addMission(mission: any) {
+    add(mission: any) {
+
+        console.log(mission);
         this.http.post<any>(`${this.API_URL}`, mission).subscribe(
             data => {
                 this.missions.push(data);
                 this.isAdding = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Mission ajoutée' });
-                this.getMissions();
+                this.get();
             },
             error => {
                 this.handleError(error)
@@ -61,7 +64,7 @@ export class MissionsComponent implements OnInit {
         );
     }
 
-    editMission(id: number, donnee: any) {
+    edit(id: number, donnee: any) {
         if (!donnee) {
             console.error('Données invalides', donnee);
             return;
@@ -73,10 +76,10 @@ export class MissionsComponent implements OnInit {
                     r => r._id === data._id
                 );
                 this.missions[index] = data;
-                this.selectedMission = {};
+                this.selectedData = {};
                 this.isEditing = false;
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
-                this.getMissions();
+                this.get();
             },
             error => {
                 console.log(error);
@@ -88,12 +91,12 @@ export class MissionsComponent implements OnInit {
         );
     }
 
-    deleteMission(id: number) {
+    deleteData(id: number) {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
             () => {
                 this.missions = this.missions.filter(m => m.id !== id);
                 this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Missions effacée' });
-                this.getMissions();
+                this.get();
             },
             error => {
                 console.log(error);
@@ -110,7 +113,7 @@ export class MissionsComponent implements OnInit {
         this.http.post(url, {}).subscribe(
             () => {
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complétement effacées' });
-                this.getMissions(); // Met à jour la liste
+                this.get(); // Met à jour la liste
             },
             error => {
                 this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
@@ -119,20 +122,20 @@ export class MissionsComponent implements OnInit {
         this.displayConfirmationDialog = false;
     }
 
-    selectMission(mission: any) {
-        this.selectedMission = { ...mission };
+    selectData(donnee: any) {
+        this.selectedData = { ...donnee };
     }
 
 
     cancel() {
-        this.selectedMission = {};
+        this.selectedData = {};
         this.isAdding = false;
         this.isEditing = false;
     }
 
     toggleAdd() {
         this.isAdding = !this.isAdding;
-        this.selectedMission = {};
+        this.selectedData = {};
         this.dataForm?.get('title')?.setValue('');
     }
 

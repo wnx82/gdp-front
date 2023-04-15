@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 @NgModule({
     declarations: [MissionsComponent],
     imports: [
@@ -24,7 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         DialogModule,
         CheckboxModule,
         ToastModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        InputTextareaModule
     ],
 })
 export class MissionsModule { }

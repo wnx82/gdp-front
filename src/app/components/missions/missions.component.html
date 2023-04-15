@@ -47,10 +47,10 @@
                         <td>
                             <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
                                 icon="pi pi-pencil" style="margin-right: 5px;"
-                                (click)="selectMission(mission); toggleEdit()"></button>
+                                (click)="selectData(mission); toggleEdit()"></button>
 
                             <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteMission(mission._id)"></button>
+                                icon="pi pi-trash" (click)="deleteData(mission._id)"></button>
 
                         </td>
                     </tr>
@@ -64,70 +64,75 @@
         [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
         [style]="{width: '50vw'}" (onHide)="cancel()">
 
-        <form class="p-fluid">
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="title" name="title" [(ngModel)]="selectedMission.title" required pInputText>
-                    <label for="title">Titre</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
-                        [(ngModel)]="selectedMission.description"></textarea>
-                    <label for="description">Description</label>
-                </span>
-            </div>
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="title" name="title" formControlName="title" required pInputText
+                                [value]="selectedData.title">
+                            <label for="title">Titre</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
+                                formControlName="description" [value]="selectedData.description"
+                                [autoResize]="true"></textarea>
+                            <label for="description">Description</label>
+                        </span>
+                    </div>
 
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="category" name="category" [(ngModel)]="selectedMission.category" required
-                        pInputText>
-                    <label for="category">Catégorie</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="horaire" name="horaire" [(ngModel)]="selectedMission.horaire" required
-                        pInputText>
-                    <label for="horaire">Horaire</label>
-                </span>
-            </div>
-            <!-- <div class="p-field">
-                <span class="p-float-label">
-                    <p-inputNumber id="priority" name="priority" [(ngModel)]="selectedMission.priority"></p-inputNumber>
-                    <label for="priority">Priorité</label>
-                </span>
-            </div> -->
-            <div class="p-field">
-                <span class="p-float-label">
-                    <p-inputNumber [(ngModel)]="selectedMission.priority" [showButtons]="true" inputId="stacked"
-                        id="priority" name="priority">
-                    </p-inputNumber>
-                    <label for="priority">Priorité</label>
-                </span>
-            </div>
-            <div class="p-field">
-                <span class="p-float-label">
-                    <input type="text" id="contact" name="contact" [(ngModel)]="selectedMission.contact" pInputText>
-                    <label for="contact">Contact</label>
-                </span>
-            </div>
-            <div class="p-field-checkbox">
-                <p-checkbox [(ngModel)]="selectedMission.visibility" id="visibility" name="visibility"
-                    [binary]="true"></p-checkbox>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="category" name="category" formControlName="category"
+                                [value]="selectedData.category" required pInputText>
+                            <label for="category">Catégorie</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="horaire" name="horaire" formControlName="horaire"
+                                [value]="selectedData.horaire" required pInputText>
+                            <label for="horaire">Horaire</label>
+                        </span>
+                    </div>
 
-                <label for="visibility" class="p-checkbox-label">Visible</label>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="number" id="priority" name="priority" formControlName="priority"
+                                [value]="selectedData.priority" pInputText>
+                            <label for="priority">Priorité</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="contact" name="contact" formControlName="contact"
+                                [value]="selectedData.contact" pInputText>
+                            <label for="contact">Contact</label>
+                        </span>
+                    </div><!-- <div class="p-field">
+                                        <span class="p-float-label">
+                                            <input type="text" id="annexes" name="annexes" formControlName="annexes"
+                                                [value]="selectedData.annexes" pInputText>
+                                            <label for="annexes">Annexes</label>
+                                        </span>
+                                    </div> -->
+                    <div class="p-field-checkbox">
+                        <p-checkbox formControlName="visibility" id="visibility" name="visibility" checked></p-checkbox>
+                        <label for="visibility" class="p-checkbox-label">Visible</label>
+                    </div>
+                    <div class="p-d-flex p-jc-between">
+                        <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                            class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                            [disabled]="!dataForm.valid"></button>
+
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                    </div>
+                </div>
             </div>
-
-
         </form>
 
-        <div class="p-dialog-footer">
-            <button type="button" class="p-button p-button-secondary" (click)="cancel()">Annuler</button>
-            <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
-        </div>
-
     </p-dialog>
-</div>
