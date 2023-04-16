@@ -52,6 +52,12 @@ const routes: Routes = [
                 m => m.CategoriesModule
             ),
     },
+    {
+        path: 'constats',
+        loadChildren: () =>
+            import('./components/constats/constats.module').then(
+                m => m.ConstatsModule)
+    },
 ];
 
 @NgModule({

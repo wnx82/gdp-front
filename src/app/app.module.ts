@@ -24,7 +24,6 @@ import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 
-
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,6 +36,7 @@ import { RegistrationComponent } from './services/registration/registration.comp
         DashboardComponent,
         NoOpenDirective,
         RegistrationComponent,
+
     ],
     imports: [
         BrowserModule,
