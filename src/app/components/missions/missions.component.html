@@ -89,6 +89,9 @@
                                 [value]="selectedData.title">
                             <label for="title">Titre</label>
                         </span>
+                        <small
+                            *ngIf="dataForm.controls['title'].invalid && (dataForm.controls['title'].dirty || dataForm.controls['title'].touched)"
+                            class="p-error">Le champ "Titre" est obligatoire.</small>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">

@@ -12,7 +12,7 @@
 <p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
     [responsive]="true">
     <div class="confirmation-dialog-content">
-        <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
+        <p>Êtes-vous sûr de vouloir supprimer cette rue ?</p>
     </div>
     <p-footer>
         <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
@@ -78,8 +78,6 @@
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
-
-
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addRue(dataForm.value) : editRue(selectedData._id, dataForm.value)">
             <div class="p-grid">

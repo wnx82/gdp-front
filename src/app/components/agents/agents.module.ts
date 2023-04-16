@@ -4,7 +4,9 @@ import { CommonModule } from '@angular/common';
 import { AgentsRoutingModule } from './agents-routing.module';
 import { AgentsComponent } from './agents.component';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
@@ -14,6 +16,9 @@ import { CardModule } from 'primeng/card';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 // import { AgentDetailsComponent } from './agent-details/agent-details.component';
 
 @NgModule({
@@ -28,7 +33,11 @@ import { CalendarModule } from 'primeng/calendar';
         DialogModule,
         CardModule,
         AutoCompleteModule,
-        CalendarModule
+        CalendarModule,
+        CheckboxModule,
+        ToastModule,
+        ReactiveFormsModule,
+        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
     ],
 })
 export class AgentsModule { }

@@ -13,7 +13,6 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
-
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({

@@ -86,7 +86,7 @@ export class RuesComponent implements OnInit {
                 this.rues = data.filter(rue => !rue.deletedAt);
             },
             error: error => {
-                console.log(error);
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
         });
 
@@ -101,7 +101,7 @@ export class RuesComponent implements OnInit {
                 this.get();
             },
             error: error => {
-                console.log(error);
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
         });
     }
@@ -165,7 +165,6 @@ export class RuesComponent implements OnInit {
             }
         });
     }
-
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
         //

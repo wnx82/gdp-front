@@ -4,11 +4,15 @@ import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { MessageService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
     styleUrls: ['./agents.component.css'],
+    providers: [MessageService, ConfirmationService]
 })
 export class AgentsComponent implements OnInit {
 
@@ -20,8 +24,27 @@ export class AgentsComponent implements OnInit {
     };
     isAdding: boolean = false;
     isEditing: boolean = false;
+    displayConfirmationDelete = false;
+    displayConfirmationDialog = false;
+    dataForm = new FormGroup({
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+        userAccess: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/)]),
+        matricule: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/)]),
+        firstname: new FormControl(''),
+        lastname: new FormControl(''),
+        birthday: new FormControl(''),
+        tel: new FormControl(''),
+        iceContact: new FormControl(''),
+        adresse: new FormGroup({
+            rue: new FormControl(''),
+            numero: new FormControl('')
+        }),
+        picture: new FormControl(''),
+        formations: new FormControl('')
+    });
 
-    constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
+    constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;
@@ -49,73 +72,125 @@ export class AgentsComponent implements OnInit {
             this.rues = JSON.parse(ruesLocalStorage);
             console.log('Rues déjà chargées');
         }
+
+    }
+    private handleError(error: any): void {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
     }
 
     getAgents() {
         let url = `${this.API_URL}`;
-        this.http.get<any[]>(url).subscribe(
-            data => {
+        this.http.get<any[]>(url).subscribe({
+            next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
     }
 
     addAgent(agent: any) {
-        this.http.post<any>(`${this.API_URL}`, agent).subscribe(
-            data => {
+        let url = `${this.API_URL}/agents`;
+        this.http.post<any>(url, agent).subscribe({
+            next: data => {
                 this.agents.push(data);
                 this.isAdding = false;
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Agent ajouté' });
+                this.dataForm.reset();
+                this.getAgents();
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
     }
 
-    editAgent(agent: any) {
-        const url = `${this.API_URL}/${agent.id}`;
 
-        this.http.patch<any>(url, agent).subscribe(
-            data => {
+    editAgent(id: number, agent: any) {
+        if (!agent) {
+            console.error('Données invalides', agent);
+            return;
+        }
+
+        const updatedAgent = {
+            email: agent.email !== null ? agent.email : this.selectedAgent.email,
+            password: agent.password !== null ? agent.password : this.selectedAgent.password,
+            userAccess: agent.userAccess !== null ? agent.userAccess : this.selectedAgent.userAccess,
+            matricule: agent.matricule !== null ? agent.matricule : this.selectedAgent.matricule,
+            firstname: agent.firstname !== null ? agent.firstname : this.selectedAgent.firstname,
+            lastname: agent.lastname !== null ? agent.lastname : this.selectedAgent.lastname,
+            birthday: agent.birthday !== null ? agent.birthday : this.selectedAgent.birthday,
+            tel: agent.tel !== null ? agent.tel : this.selectedAgent.tel,
+            iceContact: agent.iceContact !== null ? agent.iceContact : this.selectedAgent.iceContact,
+            adresse: agent.adresse !== null ? agent.adresse : this.selectedAgent.adresse,
+            picture: agent.picture !== null ? agent.picture : this.selectedAgent.picture,
+            formations: agent.formations !== null ? agent.formations : this.selectedAgent.formations,
+            // Ajouter les autres champs de l'agent ici si nécessaire
+        };
+
+        const url = `${this.API_URL}/agents/${this.selectedAgent._id}`;
+
+        this.http.patch<any>(url, updatedAgent).subscribe({
+            next: data => {
                 const index = this.agents.findIndex(a => a._id === data._id);
                 this.agents[index] = data;
                 this.selectedAgent = {};
                 this.isEditing = false;
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.dataForm.reset();
+                this.getAgents();
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
+    }
+
+    onConfirmDelete(agent: any) {
+        this.displayConfirmationDelete = true;
+        this.confirmationService.confirm({
+            message: 'Voulez-vous vraiment supprimer cet agent ?',
+            header: 'Confirmation de suppression',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.deleteAgent(agent._id);
+            }
+        });
     }
 
     deleteAgent(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe(
-            () => {
-                this.agents = this.agents.filter(a => a.id !== id);
+        this.http.delete<any>(`${this.API_URL}/agents/${id}`).subscribe({
+            next: () => {
+                this.agents = this.agents.filter(a => a._id !== id);
+                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Agent effacé' });
                 this.getAgents();
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
     }
 
-    deleteDeletedAgents() {
+
+    deleteDeleted(): void {
+        this.displayConfirmationDialog = true;
+        //
+    }
+    confirmDeleteDeleted(): void {
+        // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
-        this.http.post(url, {}).subscribe(
-            () => {
-                console.log(
-                    'Les agents supprimés ont été supprimés définitivement.'
-                );
-                this.getAgents(); // Met à jour la liste des agents affichés
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complètement effacées' });
+                this.getAgents(); // Met à jour la liste
             },
-            error => {
-                console.log(error);
+            error: error => {
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
             }
-        );
+        });
+
+        this.displayConfirmationDialog = false;
     }
 
     selectAgent(agent: any) {
@@ -123,6 +198,7 @@ export class AgentsComponent implements OnInit {
     }
 
     cancel() {
+        this.selectedAgent = {};
         this.isAdding = false;
         this.isEditing = false;
     }
@@ -130,6 +206,7 @@ export class AgentsComponent implements OnInit {
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedAgent = {};
+        this.dataForm.reset();
     }
 
     toggleEdit() {
@@ -163,4 +240,5 @@ export class AgentsComponent implements OnInit {
             .slice(0, 10)
             .map(rue => rue.nomComplet);
     }
+
 }

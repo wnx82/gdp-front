@@ -1,3 +1,26 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cet agent ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteAgent(selectedAgent._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
 <div class="container">
     <h1>Liste des agents</h1>
 
@@ -6,12 +29,9 @@
             <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-primary" icon="pi pi-plus"
                 style="margin-top: 3px;" (click)="toggleAdd()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les agents supprimés"
-                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;"
-                (click)="deleteDeletedAgents()"></button>
-
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
     </div>
-
     <ng-container *ngFor="let agent of agents">
         <div class="card-deck">
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -41,133 +61,84 @@
             </div>
         </div>
     </ng-container>
-
     <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
         style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
-    <!-- <div class="row">
-                <div class="col-md-12">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Matricule</th>
-                                <th>Nom</th>
-                                <th>Prénom</th>
-                                <th>Téléphone</th>
-                                <th>Email</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let agent of agents">
-                                <td>{{agent.id}}</td>
-        
-                                <td>{{agent.matricule}}</td>
-                                <td>{{agent.lastname}}</td>
-                                <td>{{agent.firstname}}</td>
-                                <td>{{agent.tel}}</td>
-                                <td>{{agent.email}}</td>
-                                <td>
-                                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                                        icon="pi pi-pencil" style="margin-right: 5px;"
-                                        (click)="selectAgent(agent); toggleEdit()"></button>
-                                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                        icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-        
-        
-                    <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary"
-                        icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button>
-                </div>
-            </div> -->
-
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)=" selectedAgent={}">
-
-        <form #agentForm="ngForm" (ngSubmit)="isAdding ? addAgent(agentForm.value) : editAgent(agentForm.value)"
-            ngNativeValidate>
-
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="number" id="matricule" name="matricule" [(ngModel)]="selectedAgent.matricule"
-                                required="Veuillez saisir le matricule" pInputText
-                                [ngModelOptions]="{standalone: true}">
+                            <input type="number" id="matricule" name="matricule" formControlName="matricule"
+                                [value]="selectedAgent.matricule" required="Veuillez saisir le matricule" pInputText>
                             <label for="matricule">Matricule</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="lastname" name="lastname" [(ngModel)]="selectedAgent.lastname"
-                                required pInputText [ngModelOptions]="{standalone: true}">
+                            <input type="text" id="lastname" name="lastname" formControlName="lastname"
+                                [value]="selectedAgent.lastname" pInputText>
                             <label for="lastname">Nom</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="firstname" name="firstname" [ngModelOptions]="{standalone: true}"
-                                [(ngModel)]="selectedAgent.firstname" required pInputText
-                                [ngModelOptions]="{standalone: true}">
+                            <input type="text" id="firstname" name="firstname" formControlName="firstname"
+                                [value]="selectedAgent.firstname" pInputText>
                             <label for="firstname">Prénom</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="tel" name="tel" [(ngModel)]="selectedAgent.tel" pInputText
-                                [ngModelOptions]="{standalone: true}">
+                            <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
+                                pInputText>
                             <label for="tel">Téléphone</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-calendar id="birthday" name="birthday" [(ngModel)]="selectedAgent.birthday"
-                                [showIcon]="true" dateFormat="dd/mm/yyyy"></p-calendar>
-                            <label for="birthday">Date de naissance : {{ selectedAgent.birthday | date:'dd/MM/yyyy'
-                                }}</label>
+                            <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
+                                dateFormat="dd/mm/yyyy"></p-calendar>
+                            <label for="birthday">Date de naissance</label>
                         </span>
                     </div>
-
-
-
-
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="email" name="email" [(ngModel)]="selectedAgent.email" required
-                                pInputText [ngModelOptions]="{standalone: true}">
+                            <input type="text" id="email" name="email" formControlName="email" required
+                                [value]="selectedAgent.email" pInputText>
                             <label for="email">Email</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="password" name="password" [(ngModel)]="selectedAgent.password"
-                                required pInputText [ngModelOptions]="{standalone: true}">
-                            <label for="password">password</label>
+                            <input type="password" id="password" name="password" formControlName="password" required
+                                [value]="selectedAgent.password" pInputText>
+                            <label for="password">Mot de passe</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="number" id="userAccess" name="userAccess"
-                                [(ngModel)]="selectedAgent.userAccess" required pInputText min="0" max="10"
+                            <input type="number" id="userAccess" name="userAccess" formControlName="userAccess" required
+                                [value]="selectedAgent.userAccess" pInputText min="0" max="10"
                                 title="Veuillez saisir un nombre entre 0 et 10">
-                            <label for="userAccess">userAccess</label>
+                            <label for="userAccess">Niveau d'accès utilisateur</label>
                         </span>
                     </div>
+
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="iceContact" name="iceContact" [ngModelOptions]="{standalone: true}"
-                                [(ngModel)]="selectedAgent.iceContact" required pInputText
-                                [ngModelOptions]="{standalone: true}">
-                            <label for="iceContact">Contact ICE</label>
+                            <input type="text" id="iceContact" name="iceContact" formControlName="iceContact" required
+                                [value]="selectedAgent.iceContact" pInputText>
+                            <label for="iceContact">Contact en cas d'urgence</label>
                         </span>
                     </div>
+
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-autoComplete [(ngModel)]="selectedAgent.rue" [dropdown]="true"
+                            <p-autoComplete [(ngModel)]="selectedAgent.adresse" [dropdown]="true"
                                 [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
                                 (onSelect)="selectedAgent.rue = $event" placeholder="Rue"
                                 [ngModelOptions]="{standalone: true}">
@@ -179,11 +150,14 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="numero" name="numero" [(ngModel)]="selectedAgent.numero" pInputText
-                                [ngModelOptions]="{standalone: true}">
+                            <input type="text" id="numero" name="numero"
+                                [value]="selectedAgent?.adresse?.[0]?.numero || null" pInputText>
                             <label for="numero">Numéro</label>
                         </span>
                     </div>
+
+
+
 
                 </div>
             </div>
