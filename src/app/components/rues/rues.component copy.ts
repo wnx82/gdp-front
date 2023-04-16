@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { MessageService, SelectItem } from 'primeng/api';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/local-storage.service';
+
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -16,28 +17,9 @@ export class RuesComponent implements OnInit {
     private apiUrl: string | undefined;
     rues: any[] = [];
     quartiers: any[] = [];
-
-    localiteToCodePostal = {
-        'Mouscron': '7700',
-        'Luingne': '7700',
-        'Herseaux': '7712',
-        'Dottignies': '7711'
-    };
-
-    codePostalToLocalite = {
-        '7700': 'Mouscron',
-        '7711': 'Dottignies',
-        '7712': 'Herseaux',
-    };
-    localiteOptions: SelectItem[] = Object.keys(this.localiteToCodePostal).map(localite => ({ label: localite, value: localite }));
-    cpOptions = Object.values(this.localiteToCodePostal).map(cp => ({ label: cp, value: cp }));
-
-
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-
-    itemsPerPage: number = 50;
 
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
@@ -56,10 +38,9 @@ export class RuesComponent implements OnInit {
         yMax: new FormControl(''),
         idTronconCentral: new FormControl(''),
 
-    });
-    formulaire: FormGroup | undefined;
 
-    constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService, private formBuilder: FormBuilder) { }
+    });
+    constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
 
     storedValue: any;
 
@@ -67,9 +48,6 @@ export class RuesComponent implements OnInit {
 
     ngOnInit(): void {
         this.get();
-        this.formulaire = this.formBuilder.group({
-            quartier: ['', Validators.required],
-        });
 
         const quartiersLocalStorage = localStorage.getItem('quartiers');
         if (quartiersLocalStorage === null) {
@@ -90,9 +68,7 @@ export class RuesComponent implements OnInit {
             console.log('Quartiers déjà chargés');
         }
 
-
     }
-
 
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
@@ -105,12 +81,14 @@ export class RuesComponent implements OnInit {
         });
 
     }
+
     clear(table: Table) {
         table.clear();
     }
     private handleError(error: any): void {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
     }
+
 
     addRue(rue: any) {
         this.http.post<any>(`${this.API_URL}`, rue).subscribe({

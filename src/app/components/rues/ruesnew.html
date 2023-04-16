@@ -32,7 +32,7 @@
                 class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
     </div>
-    <p-table #dataTableRues [value]="rues" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
+    <p-table #dataTableRues [value]="rues" [paginator]="true" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nom', 'quartier']">
@@ -54,7 +54,7 @@
                 <th style="width:10%">Nom</th>
                 <th style="width:10%">Quartier</th>
                 <th style="width:10%">Code Postal</th>
-                <th style="width:10%">Localité</th>
+                <th style="width:10%">Localite</th>
                 <th style="width:10%"></th>
 
             </tr>
@@ -125,44 +125,32 @@
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <p-dropdown formControlName="localite" [options]="localiteOptions" optionLabel="label"
-                                optionValue="value" placeholder="Sélectionner une localité"
-                                [(ngModel)]="selectedData.localite"></p-dropdown>
-                            <label for="localite">Localité</label>
-                        </span>
-                    </div>
-
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <p-dropdown formControlName="cp" [options]="cpOptions" optionLabel="value"
-                                optionValue="value" placeholder="Sélectionner un code postal"
-                                [(ngModel)]="selectedData.cp"></p-dropdown>
-                            <label for="cp">Code Postal</label>
+                            <input type="number" id="cp" name="cp" formControlName="cp" [value]="selectedData.cp"
+                                pInputText>
+                            <label for="cp">Code postal</label>
                         </span>
                     </div>
-
-
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="localite" name="localite" formControlName="localite"
+                                [value]="selectedData.localite" pInputText>
+                            <label for="localite">Localite</label>
+                        </span>
+                    </div>
 
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-dropdown formControlName="quartier" [options]="quartiers" optionLabel="title"
-                                optionValue="title" display="chip" [(ngModel)]="selectedData.quartier"></p-dropdown>
-                            <label for="quartier">Quartier</label>
+                                display="chip"></p-dropdown>
+                            <label for="quartier">Quartiers</label>
                         </span>
                     </div>
 
 
 
 
-                    <!-- <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="quartier" name="quartier" formControlName="quartier"
-                                [value]="selectedData.quartier" pInputText>
-                            <label for="quartier">quartier</label>
-                        </span>
-                    </div> -->
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="codeRue" name="codeRue" formControlName="codeRue"
