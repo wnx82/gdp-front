@@ -1,1 +1,122 @@
-<p>constats works!</p>
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer ce constat ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteConstat(selectedConstat._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des constats</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un constat" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Agents</th>
+                        <th>Pv</th>
+                        <th>Lieu</th>
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let constat of constats">
+                        <td>{{ constat.date | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{ constat.agents }}</td>
+                        <td>{{ constat.pv }}</td>
+                        <td>{{ constat.adresse[0].nomComplet }}</td>
+                        <td>
+                            <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                                icon="pi pi-pencil" style="margin-right: 5px;"
+                                (click)="selectConstat(constat); toggleEdit()"></button>
+
+                            <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                                icon="pi pi-trash" (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary"
+                icon="pi pi-road" style="margin-top: 3px;" (click)="toggleAdd()"></button>
+        </div>
+    </div>
+    <p-dialog header="{{ isAdding ? 'Ajouter un constat' : 'Modifier un constat' }}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" [style]="{width: '50vw'}"
+        (onHide)="cancel()">
+
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addConstat(dataForm.value) : editConstat(selectedConstat._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="date" name="date" formControlName="date" pInputText
+                                [value]="selectedConstat.date">
+                            <label for="date">date</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="agents" name="agents" formControlName="agents" pInputText
+                                [value]="selectedConstat.agents">
+                            <label for="agents">Agents</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="pv" name="pv" formControlName="pv" pInputText
+                                [value]="selectedConstat.pv">
+                            <label for="pv">pv</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="Lieu" name="Lieu" pInputText [value]="">
+                            <label for="Lieu">Lieu</label>
+                        </span>
+                    </div>
+
+                    <div class="p-d-flex p-jc-between">
+                        <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                            class="p-button-sm p-button-success"
+                            icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </p-dialog>
