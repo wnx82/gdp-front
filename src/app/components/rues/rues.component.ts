@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -45,6 +46,9 @@ export class RuesComponent implements OnInit {
 
     ngOnInit(): void {
         this.get();
+    }
+    clear(table: Table) {
+        table.clear();
     }
     private handleError(error: any): void {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
