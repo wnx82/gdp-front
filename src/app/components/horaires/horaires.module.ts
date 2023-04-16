@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
 
 
 @NgModule({
@@ -26,7 +27,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextModule,
     DialogModule,
     ToastModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TableModule
+
   ]
 })
 export class HorairesModule { }

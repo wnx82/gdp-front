@@ -20,33 +20,29 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Horaire</th>
+    <p-table [value]="donnees" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Horaire</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-donnee>
+            <tr>
+                <td>{{ donnee.horaire }}</td>
+                <td>
+                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                        icon="pi pi-pencil" style="margin-right: 5px;"
+                        (click)="selectData(donnee); toggleEdit()"></button>
+                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                        icon="pi pi-trash" (click)="deleteDonnee(donnee._id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary" icon="pi pi-road"
+        style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let donnee of donnees">
-                        <td>{{donnee.horaire}}</td>
-
-                        <td>
-                            <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                                icon="pi pi-pencil" style="margin-right: 5px;"
-                                (click)="selectData(donnee); toggleEdit()"></button>
-                            <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                                icon="pi pi-trash" (click)="deleteDonnee(donnee._id)"></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary"
-                icon="pi pi-road" style="margin-top: 3px;" (click)="toggleAdd()"></button>
-        </div>
-    </div>
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
 

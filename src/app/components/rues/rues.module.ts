@@ -14,6 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
     declarations: [RuesComponent],
@@ -28,7 +29,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         CheckboxModule,
         ToastModule,
         ReactiveFormsModule,
-        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
+        HttpClientModule,
+        TableModule
     ],
 })
 export class RuesModule { }

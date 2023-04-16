@@ -14,6 +14,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableModule } from 'primeng/table';
 
 
 @NgModule({
@@ -29,7 +30,11 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         CheckboxModule,
         ToastModule,
         ReactiveFormsModule,
-        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
+        HttpClientModule,
+        TableModule
+
     ],
     providers: []
 })

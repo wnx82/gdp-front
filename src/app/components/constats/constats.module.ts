@@ -18,6 +18,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ToastModule,
     ReactiveFormsModule,
     InputTextareaModule, ConfirmDialogModule, HttpClientModule,
+    TableModule,
   ]
 })
 export class ConstatsModule { }
