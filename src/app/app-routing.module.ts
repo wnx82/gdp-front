@@ -60,6 +60,7 @@ const routes: Routes = [
     },
     { path: 'horaires', loadChildren: () => import('./components/horaires/horaires.module').then(m => m.HorairesModule) },
     { path: 'infractions', loadChildren: () => import('./components/infractions/infractions.module').then(m => m.InfractionsModule) },
+    { path: 'quartiers', loadChildren: () => import('./components/quartiers/quartiers.module').then(m => m.QuartiersModule) },
 ];
 
 @NgModule({
