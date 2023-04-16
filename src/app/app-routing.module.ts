@@ -59,6 +59,7 @@ const routes: Routes = [
                 m => m.ConstatsModule)
     },
     { path: 'horaires', loadChildren: () => import('./components/horaires/horaires.module').then(m => m.HorairesModule) },
+    { path: 'infractions', loadChildren: () => import('./components/infractions/infractions.module').then(m => m.InfractionsModule) },
 ];
 
 @NgModule({

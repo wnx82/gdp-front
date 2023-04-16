@@ -1,0 +1,107 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
+    [responsive]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des infractions</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="table-responsive">
+                <p-table [value]="donnees">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Category</th>
+                            <th>Priorité</th>
+                            <th>Liste</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-donnee>
+                        <tr>
+                            <td>{{ donnee.category }}</td>
+                            <td>{{ donnee.priority }}</td>
+                            <td>
+                                <table class="table table-bordered">
+                                    <tr *ngFor="let item of donnee.list">
+                                        <td>{{ item[0] }}</td>
+                                        <td>{{ item[1] }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <button pButton pRipple type="button" label="Modifier"
+                                    class="p-button-primary p-button-sm" icon="pi pi-pencil" style="margin-right: 5px;"
+                                    (click)="selectData(donnee); toggleEdit()"></button>
+                                <button pButton pRipple type="button" label="Supprimer"
+                                    class="p-button-danger p-button-sm" icon="pi pi-trash"
+                                    (click)="deleteDonnee(donnee._id)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary"
+                icon="pi pi-road" style="margin-top: 3px;" (click)="toggleAdd()"></button>
+        </div>
+    </div>
+
+    <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
+
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="category" name="category" formControlName="category" required
+                                pInputText [value]="selectedData.category">
+                            <label for="category">category</label>
+                        </span>
+                        <span class="p-float-label">
+                            <input type="text" id="priority" name="priority" formControlName="priority" pInputText
+                                [value]="selectedData.priority">
+                            <label for="priority">Priorité</label>
+                        </span>
+
+                        <span class="p-float-label">
+                            <input type="text" id="list" name="list" formControlName="list" pInputText
+                                [value]="selectedData.list">
+                            <label for="list">Liste</label>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="p-d-flex p-jc-between">
+
+                    <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
+
+                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                        icon="pi pi-times" (click)="cancel()"></button>
+                </div>
+            </div>
+        </form>
+
+    </p-dialog>
+</div>

@@ -1,3 +1,7 @@
+body {
+    color: #333
+}
+
 .p-field {
     display: flex;
     flex-direction: column;

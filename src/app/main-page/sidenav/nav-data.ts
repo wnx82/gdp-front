@@ -109,13 +109,18 @@ export const navbarData: INavbarData[] = [
                 label: 'Liste des horaires',
             },
             {
-                routeLink: 'rues',
-                label: 'Liste des rues',
+                routeLink: 'infractions',
+                label: 'Liste des infractions',
             },
             {
                 routeLink: 'missions',
                 label: 'Liste des missions',
             },
+            {
+                routeLink: 'rues',
+                label: 'Liste des rues',
+            },
+
         ],
     },
 ];

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { HorairesRoutingModule } from './horaires-routing.module';
-import { HorairesComponent } from './horaires.component';
+import { InfractionsRoutingModule } from './infractions-routing.module';
+import { InfractionsComponent } from './infractions.component';
 
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -11,22 +11,23 @@ import { InputTextModule } from 'primeng/inputtext'; // Importez le module Input
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
-    HorairesComponent
+    InfractionsComponent
   ],
   imports: [
     CommonModule,
-    HorairesRoutingModule,
+    InfractionsRoutingModule,
     FormsModule,
     ButtonModule,
     PaginatorModule,
     InputTextModule,
     DialogModule,
     ToastModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TableModule
   ]
 })
-export class HorairesModule { }
+export class InfractionsModule { }
