@@ -31,7 +31,17 @@
         <ng-template pTemplate="body" let-donnee>
             <tr>
                 <td>{{ donnee.title }}</td>
-                <td>{{ donnee.missions }}</td>
+                <td>
+                    <table class="table table-bordered">
+                        <tr *ngFor="let item of donnee.missions">
+                            <ng-container *ngIf="findMissionById(item)">
+                                <td>{{ findMissionById(item) }}</td>
+                            </ng-container>
+                        </tr>
+                    </table>
+                </td>
+
+
                 <td>
                     <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
                         icon="pi pi-pencil" style="margin-right: 5px;"

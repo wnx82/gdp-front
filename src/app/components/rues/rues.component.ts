@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { LocalStorageService } from '../../services/local-storage.service';
+
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -14,15 +16,11 @@ import { Table } from 'primeng/table';
 export class RuesComponent implements OnInit {
     private apiUrl: string | undefined;
     rues: any[] = [];
+    quartiers: any[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-    currentPage: number = 1;
-    itemsPerPage: number = 50;
-    localite: string = '';
-    cp: string = '';
-    nom: string = '';
-    quartier: string = '';
+
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
@@ -40,52 +38,40 @@ export class RuesComponent implements OnInit {
         yMax: new FormControl(''),
         idTronconCentral: new FormControl(''),
 
+
     });
-    constructor(private http: HttpClient, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+    constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
+
+    storedValue: any;
+
     readonly API_URL = `${environment.apiUrl}/rues`;
 
     ngOnInit(): void {
         this.get();
-    }
-    clear(table: Table) {
-        table.clear();
-    }
-    private handleError(error: any): void {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
-    }
-    onPageChange(event: { page: number }) {
-        this.currentPage = event.page + 1;
-        this.get();
+
+        const quartiersLocalStorage = localStorage.getItem('quartiers');
+        if (quartiersLocalStorage === null) {
+            // Si les quartiers n'existent pas encore dans le local storage
+            this.http.get<any[]>('http://localhost:3003/quartiers').subscribe(
+                data => {
+                    this.quartiers = data;
+                    localStorage.setItem('quartiers', JSON.stringify(this.quartiers));
+                    console.log('Sauvegarde des quartiers dans le local storage');
+                },
+                error => {
+                    console.error(error);
+                }
+            );
+        } else {
+            // Les quartiers existent dans le local storage
+            this.quartiers = JSON.parse(quartiersLocalStorage);
+            console.log('Quartiers déjà chargés');
+        }
+
     }
 
     get() {
-        let url = `${this.API_URL}/?page=${this.currentPage}&pageSize=${this.itemsPerPage}`;
-
-        if (this.localite) {
-            url += `&localite=${this.localite}`;
-        }
-
-        if (this.cp) {
-            url += `&cp=${this.cp}`;
-        }
-
-        if (this.nom) {
-            url += `&nom=${this.nom}`;
-        }
-
-        if (this.quartier) {
-            url += `&quartier=${this.quartier}`;
-        }
-
-        // this.http.get<any[]>(url).subscribe(
-        //     data => {
-        //         this.rues = data;
-        //     },
-        //     error => {
-        //         console.log(error);
-        //     }
-        // );
-        this.http.get<any[]>(url).subscribe({
+        this.http.get<any[]>(`${this.API_URL}`).subscribe({
             next: data => {
                 this.rues = data.filter(rue => !rue.deletedAt);
             },
@@ -95,6 +81,15 @@ export class RuesComponent implements OnInit {
         });
 
     }
+
+    clear(table: Table) {
+        table.clear();
+    }
+    private handleError(error: any): void {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+    }
+
+
     addRue(rue: any) {
         this.http.post<any>(`${this.API_URL}`, rue).subscribe({
             next: data => {
@@ -214,7 +209,7 @@ export class RuesComponent implements OnInit {
     }
 
     search() {
-        this.currentPage = 1;
+
         this.get();
     }
 }

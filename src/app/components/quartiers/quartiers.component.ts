@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { LocalStorageService } from '../../services/local-storage.service';
+
 @Component({
   selector: 'app-quartiers',
   templateUrl: './quartiers.component.html',
@@ -28,11 +30,33 @@ export class QuartiersComponent implements OnInit {
 
 
   });
-  constructor(private http: HttpClient, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
+
+  storedValue: any;
+  missions: any[] = [];
   readonly API_URL = `${environment.apiUrl}/quartiers`;
 
   ngOnInit(): void {
     this.get();
+    const missionsLocalStorage = localStorage.getItem('missions');
+    if (missionsLocalStorage === null) {
+      // Si les missions n'existent pas encore dans le local storage
+      this.http.get<any[]>('http://localhost:3003/missions').subscribe(
+        data => {
+          this.missions = data;
+          localStorage.setItem('missions', JSON.stringify(this.missions));
+          console.log('Sauvegarde des missions dans le local storage');
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    } else {
+      // Les missions existent dans le local storage
+      this.missions = JSON.parse(missionsLocalStorage);
+      console.log('Missions déjà chargées');
+    }
+
   }
   clear(table: Table) {
     table.clear();
@@ -40,7 +64,10 @@ export class QuartiersComponent implements OnInit {
   private handleError(error: any): void {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
   }
-
+  findMissionById(missionId: string): string {
+    const mission = this.missions.find(m => m._id === missionId);
+    return mission ? mission.title : '';
+  }
 
   get() {
     this.http.get<any[]>(`${this.API_URL}`).subscribe({
