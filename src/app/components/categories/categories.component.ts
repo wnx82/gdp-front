@@ -47,7 +47,7 @@ export class CategoriesComponent implements OnInit {
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Catégorie ajoutée' });
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Donnée ajoutée' });
                 this.dataForm.reset();
                 this.get();
             },
@@ -89,7 +89,7 @@ export class CategoriesComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.donnees = this.donnees.filter(a => a.id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Catégorie effacée' });
+                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Donnée effacée' });
                 this.get();
             },
             error: error => {
@@ -129,7 +129,7 @@ export class CategoriesComponent implements OnInit {
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedData = {};
-        this.dataForm?.get('title')?.setValue('');
+        this.dataForm.reset();
     }
 
 
