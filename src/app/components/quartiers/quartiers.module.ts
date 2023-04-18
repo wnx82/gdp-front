@@ -15,6 +15,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TableModule } from 'primeng/table';
     InputTextareaModule,
     ConfirmDialogModule,
     HttpClientModule,
-    TableModule
+    TableModule,
+    MultiSelectModule
   ]
 })
 export class QuartiersModule { }

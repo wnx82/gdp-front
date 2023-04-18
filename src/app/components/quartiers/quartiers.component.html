@@ -32,15 +32,16 @@
             <tr>
                 <td>{{ donnee.title }}</td>
                 <td>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
                         <tr *ngFor="let item of donnee.missions">
+                            <script>console.log(item);</script>
                             <ng-container *ngIf="findMissionById(item)">
-                                <td>{{ findMissionById(item) }}</td>
+                                <td>{{ findMissionById(item.toString()) }}</td>
+
                             </ng-container>
                         </tr>
                     </table>
                 </td>
-
 
                 <td>
                     <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
@@ -69,8 +70,21 @@
                             <label for="title">Titre</label>
                         </span>
                     </div>
+                    <div class="p-field">
+                        <label for="missions">Missions</label>
+                        <select id="missions" name="missions" formControlName="missions" multiple>
+                            <option *ngFor="let mission of missions" [ngValue]="mission._id">{{mission.title}}</option>
+                        </select>
+                    </div>
+
+                    <!-- <div class="p-field">
+                        <label for="missions">Missions</label>
+                        <p-multiSelect [options]="missions" [defaultLabel]="'Sélectionner les missions...'"
+                            optionLabel="title" formControlName="missions"></p-multiSelect>
+                    </div> -->
 
                 </div>
+
                 <div class="p-d-flex p-jc-between">
 
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"

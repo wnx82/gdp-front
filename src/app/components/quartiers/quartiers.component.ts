@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/local-storage.service';
+
 
 @Component({
   selector: 'app-quartiers',
@@ -28,9 +29,9 @@ export class QuartiersComponent implements OnInit {
     title: new FormControl(''),
     missions: new FormControl(''),
 
-
   });
-  constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
+
+  constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService, private fb: FormBuilder) { }
 
   storedValue: any;
   missions: any[] = [];
@@ -72,6 +73,7 @@ export class QuartiersComponent implements OnInit {
   get() {
     this.http.get<any[]>(`${this.API_URL}`).subscribe({
       next: data => {
+        console.log(data);
         this.quartiers = data.filter(quartier => !quartier.deletedAt);
       },
       error: error => {
