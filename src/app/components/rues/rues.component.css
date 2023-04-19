@@ -26,3 +26,6 @@
     border-color: #007ad9;
     box-shadow: 0 0 5px #007ad9;
 }
+.col-md-12 button {
+    margin-right: 10px;
+}

@@ -41,3 +41,7 @@ p-tag {
   background-color: #EF5350; /* Couleur de fond pour danger */
   color: #FFFFFF; /* Couleur du texte pour danger */
 }
+
+.col-md-12 button {
+    margin-right: 10px;
+}

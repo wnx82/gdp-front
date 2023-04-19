@@ -37,7 +37,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         CheckboxModule,
         ToastModule,
         ReactiveFormsModule,
-        InputTextareaModule, ConfirmDialogModule, HttpClientModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
+        HttpClientModule,
     ],
 })
-export class AgentsModule { }
+export class AgentsModule {}

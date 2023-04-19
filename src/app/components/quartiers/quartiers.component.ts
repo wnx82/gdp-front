@@ -238,7 +238,27 @@ export class QuartiersComponent implements OnInit {
 
         this.displayConfirmationDialog = false;
     }
-
+    confirmRestoreDeleted(): void {
+        // Mettez ici le code pour restaurer les données supprimées
+        const url = `${this.API_URL}/restore`;
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été restaurées avec succès',
+                });
+                this.get(); // Met à jour la liste
+            },
+            error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
+        });
+    }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
     }

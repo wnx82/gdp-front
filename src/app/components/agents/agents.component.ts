@@ -227,7 +227,7 @@ export class AgentsComponent implements OnInit {
     }
 
     deleteAgent(id: number) {
-        this.http.delete<any>(`${this.API_URL}/agents/${id}`).subscribe({
+        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.agents = this.agents.filter(a => a._id !== id);
                 this.messageService.add({
@@ -274,7 +274,27 @@ export class AgentsComponent implements OnInit {
 
         this.displayConfirmationDialog = false;
     }
-
+    confirmRestoreDeleted(): void {
+        // Mettez ici le code pour restaurer les données supprimées
+        const url = `${this.API_URL}/restore`;
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été restaurées avec succès',
+                });
+                this.getAgents(); // Met à jour la liste
+            },
+            error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
+        });
+    }
     selectAgent(agent: any) {
         this.selectedAgent = { ...agent };
     }

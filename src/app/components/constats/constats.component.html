@@ -28,6 +28,8 @@
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter un constat" class="p-button-primary" icon="pi pi-plus"
                 style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
                 class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
@@ -65,6 +67,7 @@
                     <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
                         icon="pi pi-pencil" style="margin-right: 5px;"
                         (click)="selectConstat(constat); toggleEdit()"></button>
+
                     <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
                         icon="pi pi-trash" (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
                 </td>

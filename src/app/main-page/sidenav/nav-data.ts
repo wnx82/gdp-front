@@ -105,6 +105,14 @@ export const navbarData: INavbarData[] = [
                 label: 'Liste des constats',
             },
             {
+                routeLink: 'dailies',
+                label: 'Liste des dailies',
+            },
+            {
+                routeLink: 'habitations',
+                label: 'Liste des habitations',
+            },
+            {
                 routeLink: 'horaires',
                 label: 'Liste des horaires',
             },

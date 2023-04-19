@@ -2,14 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-missions',
     templateUrl: './missions.component.html',
     styleUrls: ['./missions.component.css'],
-    providers: [MessageService, ConfirmationService]
+    providers: [MessageService, ConfirmationService],
 })
 export class MissionsComponent implements OnInit {
     missions: any[] = [];
@@ -30,14 +35,22 @@ export class MissionsComponent implements OnInit {
         visibility: new FormControl(true, [Validators.pattern('true|false')]),
         // annexes: new FormControl(''),
     });
-    constructor(private http: HttpClient, private fb: FormBuilder,
-        private messageService: MessageService, private confirmationService: ConfirmationService) { }
+    constructor(
+        private http: HttpClient,
+        private fb: FormBuilder,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) {}
     readonly API_URL = `${environment.apiUrl}/missions`;
     ngOnInit(): void {
         this.get();
     }
     private handleError(error: any): void {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+        });
     }
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
@@ -46,7 +59,7 @@ export class MissionsComponent implements OnInit {
             },
             error: error => {
                 console.log(error);
-            }
+            },
         });
     }
 
@@ -55,13 +68,17 @@ export class MissionsComponent implements OnInit {
             next: data => {
                 this.missions.push(data);
                 this.isAdding = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Mission ajoutée' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Mission ajoutée',
+                });
                 this.dataForm.reset();
                 this.get();
             },
             error: error => {
-                this.handleError(error)
-            }
+                this.handleError(error);
+            },
         });
     }
 
@@ -72,33 +89,55 @@ export class MissionsComponent implements OnInit {
             return;
         }
         const updateMission = {
-
-            title: donnee.title !== null ? donnee.title : this.selectedData.title,
-            description: donnee.description !== null ? donnee.description : this.selectedData.description,
-            category: donnee.category !== null ? donnee.category : this.selectedData.category,
-            horaire: donnee.horaire !== null ? donnee.horaire : this.selectedData.horaire,
-            contact: donnee.contact !== null ? donnee.contact : this.selectedData.contact,
-            priority: donnee.priority !== null ? donnee.priority : this.selectedData.priority,
+            title:
+                donnee.title !== null ? donnee.title : this.selectedData.title,
+            description:
+                donnee.description !== null
+                    ? donnee.description
+                    : this.selectedData.description,
+            category:
+                donnee.category !== null
+                    ? donnee.category
+                    : this.selectedData.category,
+            horaire:
+                donnee.horaire !== null
+                    ? donnee.horaire
+                    : this.selectedData.horaire,
+            contact:
+                donnee.contact !== null
+                    ? donnee.contact
+                    : this.selectedData.contact,
+            priority:
+                donnee.priority !== null
+                    ? donnee.priority
+                    : this.selectedData.priority,
             visibility: donnee.visibility !== null ? false : true,
 
             // Ajouter les autres champs de la rue ici si nécessaire
-        }; const url = `${this.API_URL}/${id}`;
+        };
+        const url = `${this.API_URL}/${id}`;
 
         this.http.patch<any>(url, updateMission).subscribe({
             next: data => {
-                const index = this.missions.findIndex(
-                    r => r._id === data._id
-                );
+                const index = this.missions.findIndex(r => r._id === data._id);
                 this.missions[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Modification effectuée',
+                });
                 this.dataForm.reset();
                 this.get();
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
     }
 
@@ -110,19 +149,23 @@ export class MissionsComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.deleteData(mission._id);
-            }
+            },
         });
     }
     deleteData(id: number) {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.missions = this.missions.filter(m => m.id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Mission effacée' });
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Suppression',
+                    detail: 'Mission effacée',
+                });
                 this.get();
             },
             error: error => {
                 console.log(error);
-            }
+            },
         });
     }
     deleteDeleted(): void {
@@ -133,24 +176,51 @@ export class MissionsComponent implements OnInit {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complétement effacées' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été complétement effacées',
+                });
                 this.get(); // Met à jour la liste
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
             },
             complete: () => {
                 this.displayConfirmationDialog = false;
-            }
+            },
         });
     }
 
-
+    confirmRestoreDeleted(): void {
+        // Mettez ici le code pour restaurer les données supprimées
+        const url = `${this.API_URL}/restore`;
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été restaurées avec succès',
+                });
+                this.get(); // Met à jour la liste
+            },
+            error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
+        });
+    }
     selectData(donnee: any) {
         console.log(donnee);
         this.selectedData = { ...donnee };
     }
-
 
     cancel() {
         this.selectedData = {};

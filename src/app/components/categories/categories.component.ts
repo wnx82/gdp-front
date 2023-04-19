@@ -8,10 +8,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
     selector: 'app-categories',
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.css'],
-    providers: [MessageService]
+    providers: [MessageService],
 })
 export class CategoriesComponent implements OnInit {
-
     private apiUrl: string = environment.apiUrl;
     donnees: any[] = [];
     selectedData: any = {};
@@ -21,14 +20,20 @@ export class CategoriesComponent implements OnInit {
     dataForm = new FormGroup({
         title: new FormControl('', [Validators.required]),
     });
-    constructor(private http: HttpClient,
-        private messageService: MessageService,) { }
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService
+    ) {}
     readonly API_URL = `${environment.apiUrl}/categories`;
     ngOnInit(): void {
         this.get();
     }
     private handleError(error: any): void {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+        });
     }
 
     get() {
@@ -38,7 +43,7 @@ export class CategoriesComponent implements OnInit {
             },
             error: error => {
                 console.log(error);
-            }
+            },
         });
     }
 
@@ -47,16 +52,19 @@ export class CategoriesComponent implements OnInit {
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Donnée ajoutée' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Donnée ajoutée',
+                });
                 this.dataForm.reset();
                 this.get();
             },
             error: error => {
                 this.handleError(error);
-            }
+            },
         });
     }
-
 
     edit(id: number, donnee: any) {
         if (!donnee) {
@@ -71,17 +79,28 @@ export class CategoriesComponent implements OnInit {
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Modification effectuée',
+                });
                 this.dataForm.reset();
                 this.get();
             },
             error: error => {
                 console.error('Erreur de requête PATCH', error);
                 if (error.error && error.error.message) {
-                    console.error('Message d\'erreur du serveur :', error.error.message);
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
                 }
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué' });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'La modification a échoué',
+                });
+            },
         });
     }
 
@@ -89,12 +108,16 @@ export class CategoriesComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.donnees = this.donnees.filter(a => a.id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Donnée effacée' });
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Suppression',
+                    detail: 'Donnée effacée',
+                });
                 this.get();
             },
             error: error => {
                 console.log(error);
-            }
+            },
         });
     }
 
@@ -106,18 +129,46 @@ export class CategoriesComponent implements OnInit {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complètement effacées' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été complètement effacées',
+                });
                 this.get(); // Met à jour la liste
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
             },
             complete: () => {
                 this.displayConfirmationDialog = false;
-            }
+            },
         });
     }
-
+    confirmRestoreDeleted(): void {
+        // Mettez ici le code pour restaurer les données supprimées
+        const url = `${this.API_URL}/restore`;
+        this.http.post(url, {}).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été restaurées avec succès',
+                });
+                this.get(); // Met à jour la liste
+            },
+            error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
+        });
+    }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
     }
@@ -131,7 +182,6 @@ export class CategoriesComponent implements OnInit {
         this.selectedData = {};
         this.dataForm.reset();
     }
-
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
