@@ -7,14 +7,15 @@ import { HttpClient } from '@angular/common/http';
 })
 export class StatisticsComponent {
     agentCount = 0; // Initialise la propriété agentCount à zéro
-    categoriesCount = 0; // Initialise la propriété agentCount à zéro
-    constatsCount = 0; // Initialise la propriété agentCount à zéro
-    horairesCount = 0; // Initialise la propriété agentCount à zéro
-    infractionsCount = 0; // Initialise la propriété agentCount à zéro
-    missionsCount = 0; // Initialise la propriété agentCount à zéro
-    quartiersCount = 0; // Initialise la propriété agentCount à zéro
-    ruesCount = 0; // Initialise la propriété agentCount à zéro
-    lastUpdate: Date = new Date(); // initialisation de la propriété
+    categoriesCount = 0; // Initialise la propriété categoriesCount à zéro
+    constatsCount = 0; // Initialise la propriété constatsCount à zéro
+    horairesCount = 0; // Initialise la propriété horairesCount à zéro
+    infractionsCount = 0; // Initialise la propriété infractionsCount à zéro
+    missionsCount = 0; // Initialise la propriété missionsCount à zéro
+    quartiersCount = 0; // Initialise la propriété quartiersCount à zéro
+    ruesCount = 0; // Initialise la propriété ruesCount à zéro
+    vehiculesCount = 0; // Initialise la propriété vehiculesCount à zéro
+    lastUpdate: Date = new Date(); // Initialise la propriété lastUpdate avec la date et l'heure actuelles.
 
     constructor(private http: HttpClient) {}
 
@@ -59,5 +60,10 @@ export class StatisticsComponent {
         this.http.get<any[]>('http://localhost:3003/rues').subscribe(rues => {
             this.ruesCount = rues.length;
         });
+        this.http
+            .get<any[]>('http://localhost:3003/vehicules')
+            .subscribe(vehicules => {
+                this.vehiculesCount = vehicules.length;
+            });
     }
 }
