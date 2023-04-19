@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { HorairesRoutingModule } from './horaires-routing.module';
-import { HorairesComponent } from './horaires.component';
-
+import { VehiculesRoutingModule } from './vehicules-routing.module';
+import { VehiculesComponent } from './vehicules.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
@@ -14,10 +13,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 
 @NgModule({
-    declarations: [HorairesComponent],
+    declarations: [VehiculesComponent],
     imports: [
         CommonModule,
-        HorairesRoutingModule,
+        VehiculesRoutingModule,
         FormsModule,
         ButtonModule,
         PaginatorModule,
@@ -28,4 +27,4 @@ import { TableModule } from 'primeng/table';
         TableModule,
     ],
 })
-export class HorairesModule {}
+export class VehiculesModule {}

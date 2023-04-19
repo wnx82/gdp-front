@@ -36,7 +36,6 @@ import { RegistrationComponent } from './services/registration/registration.comp
         DashboardComponent,
         NoOpenDirective,
         RegistrationComponent,
-
     ],
     imports: [
         BrowserModule,
@@ -56,4 +55,4 @@ import { RegistrationComponent } from './services/registration/registration.comp
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

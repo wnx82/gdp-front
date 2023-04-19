@@ -5,12 +5,12 @@ import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    selector: 'app-horaires',
-    templateUrl: './horaires.component.html',
-    styleUrls: ['./horaires.component.css'],
+    selector: 'app-vehicules',
+    templateUrl: './vehicules.component.html',
+    styleUrls: ['./vehicules.component.css'],
     providers: [MessageService],
 })
-export class HorairesComponent implements OnInit {
+export class VehiculesComponent {
     private apiUrl: string = environment.apiUrl;
     donnees: any[] = [];
     selectedData: any = {};
@@ -18,13 +18,15 @@ export class HorairesComponent implements OnInit {
     isEditing: boolean = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
-        horaire: new FormControl('', [Validators.required]),
+        marque: new FormControl(''),
+        modele: new FormControl(''),
+        immatriculation: new FormControl(''),
     });
     constructor(
         private http: HttpClient,
         private messageService: MessageService
     ) {}
-    readonly API_URL = `${environment.apiUrl}/horaires`;
+    readonly API_URL = `${environment.apiUrl}/vehicules`;
     ngOnInit(): void {
         this.get();
     }

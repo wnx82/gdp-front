@@ -56,16 +56,41 @@ const routes: Routes = [
         path: 'constats',
         loadChildren: () =>
             import('./components/constats/constats.module').then(
-                m => m.ConstatsModule)
+                m => m.ConstatsModule
+            ),
     },
-    { path: 'horaires', loadChildren: () => import('./components/horaires/horaires.module').then(m => m.HorairesModule) },
-    { path: 'infractions', loadChildren: () => import('./components/infractions/infractions.module').then(m => m.InfractionsModule) },
-    { path: 'quartiers', loadChildren: () => import('./components/quartiers/quartiers.module').then(m => m.QuartiersModule) },
+    {
+        path: 'horaires',
+        loadChildren: () =>
+            import('./components/horaires/horaires.module').then(
+                m => m.HorairesModule
+            ),
+    },
+    {
+        path: 'infractions',
+        loadChildren: () =>
+            import('./components/infractions/infractions.module').then(
+                m => m.InfractionsModule
+            ),
+    },
+    {
+        path: 'quartiers',
+        loadChildren: () =>
+            import('./components/quartiers/quartiers.module').then(
+                m => m.QuartiersModule
+            ),
+    },
+    {
+        path: 'vehicules',
+        loadChildren: () =>
+            import('./components/vehicules/vehicules.module').then(
+                m => m.VehiculesModule
+            ),
+    },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes),
-        ReactiveFormsModule],
+    imports: [RouterModule.forRoot(routes), ReactiveFormsModule],
     exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

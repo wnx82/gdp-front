@@ -11,7 +11,7 @@ export class DashboardComponent implements OnInit {
     ruesCount = 0; // Initialise la propriété agentCount à zéro
     missionsCount = 0; // Initialise la propriété agentCount à zéro
     lastUpdate: Date = new Date(); // initialisation de la propriété
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     ngOnInit() {
         this.lastUpdate = new Date();
