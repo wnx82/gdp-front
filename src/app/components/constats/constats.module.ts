@@ -19,26 +19,29 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
-  declarations: [
-    ConstatsComponent
-  ],
-  imports: [
-    CommonModule,
-    ConstatsRoutingModule, FormsModule,
-    ButtonModule,
-    PaginatorModule,
-    InputTextModule,
-    DialogModule,
-    CardModule,
-    AutoCompleteModule,
-    CalendarModule,
-    CheckboxModule,
-    ToastModule,
-    ReactiveFormsModule,
-    InputTextareaModule, ConfirmDialogModule, HttpClientModule,
-    TableModule,
-  ]
+    declarations: [ConstatsComponent],
+    imports: [
+        CommonModule,
+        ConstatsRoutingModule,
+        FormsModule,
+        ButtonModule,
+        PaginatorModule,
+        InputTextModule,
+        DialogModule,
+        CardModule,
+        AutoCompleteModule,
+        CalendarModule,
+        CheckboxModule,
+        ToastModule,
+        ReactiveFormsModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
+        HttpClientModule,
+        TableModule,
+        TagModule,
+    ],
 })
-export class ConstatsModule { }
+export class ConstatsModule {}

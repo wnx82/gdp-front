@@ -16,27 +16,27 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
-  declarations: [
-    QuartiersComponent
-  ],
-  imports: [
-    CommonModule,
-    QuartiersRoutingModule,
-    FormsModule,
-    ButtonModule,
-    PaginatorModule,
-    InputTextModule,
-    DialogModule,
-    CheckboxModule,
-    ToastModule,
-    ReactiveFormsModule,
-    InputTextareaModule,
-    ConfirmDialogModule,
-    HttpClientModule,
-    TableModule,
-    MultiSelectModule
-  ]
+    declarations: [QuartiersComponent],
+    imports: [
+        CommonModule,
+        QuartiersRoutingModule,
+        FormsModule,
+        ButtonModule,
+        PaginatorModule,
+        InputTextModule,
+        DialogModule,
+        CheckboxModule,
+        ToastModule,
+        ReactiveFormsModule,
+        InputTextareaModule,
+        ConfirmDialogModule,
+        HttpClientModule,
+        TableModule,
+        MultiSelectModule,
+        DropdownModule,
+    ],
 })
-export class QuartiersModule { }
+export class QuartiersModule {}

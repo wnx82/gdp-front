@@ -26,3 +26,18 @@
     border-color: #007ad9;
     box-shadow: 0 0 5px #007ad9;
 }
+
+p-tag {
+  margin-right: 10px;
+}
+
+
+.ui-tag-success {
+  background-color: #66BB6A; /* Couleur de fond pour success */
+  color: #FFFFFF; /* Couleur du texte pour success */
+}
+
+.ui-tag-danger {
+  background-color: #EF5350; /* Couleur de fond pour danger */
+  color: #FFFFFF; /* Couleur du texte pour danger */
+}

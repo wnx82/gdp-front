@@ -46,8 +46,20 @@
         <ng-template pTemplate="body" let-constat>
             <tr>
                 <td>{{ constat.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
-                <td>{{ constat.agents }}</td>
-                <td>{{ constat.pv }}</td>
+                <!-- <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)"></p-tag> -->
+                <td>
+                    <ng-container *ngFor="let agent of constat.agents">
+                        <p-tag [value]="agent"></p-tag>
+                    </ng-container>
+                </td>
+
+
+                <!-- <td>{{ constat.agents }}</td> -->
+                <td>
+
+                    <p-tag [value]="constat.pv ? 'Oui' : 'Non'" [severity]="constat.pv ? 'success' : 'danger'"></p-tag>
+                </td>
+
                 <td>{{ constat.adresse[0].nomComplet }}</td>
                 <td>
                     <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"

@@ -12,10 +12,9 @@ import { ConfirmationService } from 'primeng/api';
     selector: 'app-agents',
     templateUrl: './agents.component.html',
     styleUrls: ['./agents.component.css'],
-    providers: [MessageService, ConfirmationService]
+    providers: [MessageService, ConfirmationService],
 })
 export class AgentsComponent implements OnInit {
-
     private apiUrl: string | undefined;
     agents: any[] = [];
     filteredRues: any[] = [];
@@ -28,9 +27,18 @@ export class AgentsComponent implements OnInit {
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-        userAccess: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/)]),
-        matricule: new FormControl('', [Validators.required, Validators.pattern(/^\d+$/)]),
+        password: new FormControl('', [
+            Validators.required,
+            Validators.minLength(8),
+        ]),
+        userAccess: new FormControl('', [
+            Validators.required,
+            Validators.pattern(/^\d+$/),
+        ]),
+        matricule: new FormControl('', [
+            Validators.required,
+            Validators.pattern(/^\d+$/),
+        ]),
         firstname: new FormControl(''),
         lastname: new FormControl(''),
         birthday: new FormControl(''),
@@ -38,13 +46,18 @@ export class AgentsComponent implements OnInit {
         iceContact: new FormControl(''),
         adresse: new FormGroup({
             rue: new FormControl(''),
-            numero: new FormControl('')
+            numero: new FormControl(''),
         }),
         picture: new FormControl(''),
-        formations: new FormControl('')
+        formations: new FormControl(''),
     });
 
-    constructor(private http: HttpClient, private messageService: MessageService, private localStorageService: LocalStorageService, private confirmationService: ConfirmationService) { }
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService,
+        private localStorageService: LocalStorageService,
+        private confirmationService: ConfirmationService
+    ) {}
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;
@@ -53,8 +66,17 @@ export class AgentsComponent implements OnInit {
     ngOnInit() {
         this.getAgents();
 
+        this.loadRues();
+    }
+    private handleError(error: any): void {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+        });
+    }
+    private loadRues(): void {
         const ruesLocalStorage = localStorage.getItem('rues');
-
         if (ruesLocalStorage === null) {
             // Si les rues n'existent pas encore dans le local storage
             this.http.get<any[]>('http://localhost:3003/rues').subscribe(
@@ -70,14 +92,9 @@ export class AgentsComponent implements OnInit {
         } else {
             // Les rues existent dans le local storage
             this.rues = JSON.parse(ruesLocalStorage);
-            console.log('Rues déjà chargées');
+            console.log('Rues déjà chargées depuis le local storage');
         }
-
     }
-    private handleError(error: any): void {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
-    }
-
     getAgents() {
         let url = `${this.API_URL}`;
         this.http.get<any[]>(url).subscribe({
@@ -85,8 +102,12 @@ export class AgentsComponent implements OnInit {
                 this.agents = data.filter(agent => !agent.deletedAt);
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
     }
 
@@ -96,16 +117,23 @@ export class AgentsComponent implements OnInit {
             next: data => {
                 this.agents.push(data);
                 this.isAdding = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Agent ajouté' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Agent ajouté',
+                });
                 this.dataForm.reset();
                 this.getAgents();
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
     }
-
 
     editAgent(id: number, agent: any) {
         if (!agent) {
@@ -114,18 +142,49 @@ export class AgentsComponent implements OnInit {
         }
 
         const updatedAgent = {
-            email: agent.email !== null ? agent.email : this.selectedAgent.email,
-            password: agent.password !== null ? agent.password : this.selectedAgent.password,
-            userAccess: agent.userAccess !== null ? agent.userAccess : this.selectedAgent.userAccess,
-            matricule: agent.matricule !== null ? agent.matricule : this.selectedAgent.matricule,
-            firstname: agent.firstname !== null ? agent.firstname : this.selectedAgent.firstname,
-            lastname: agent.lastname !== null ? agent.lastname : this.selectedAgent.lastname,
-            birthday: agent.birthday !== null ? agent.birthday : this.selectedAgent.birthday,
+            email:
+                agent.email !== null ? agent.email : this.selectedAgent.email,
+            password:
+                agent.password !== null
+                    ? agent.password
+                    : this.selectedAgent.password,
+            userAccess:
+                agent.userAccess !== null
+                    ? agent.userAccess
+                    : this.selectedAgent.userAccess,
+            matricule:
+                agent.matricule !== null
+                    ? agent.matricule
+                    : this.selectedAgent.matricule,
+            firstname:
+                agent.firstname !== null
+                    ? agent.firstname
+                    : this.selectedAgent.firstname,
+            lastname:
+                agent.lastname !== null
+                    ? agent.lastname
+                    : this.selectedAgent.lastname,
+            birthday:
+                agent.birthday !== null
+                    ? agent.birthday
+                    : this.selectedAgent.birthday,
             tel: agent.tel !== null ? agent.tel : this.selectedAgent.tel,
-            iceContact: agent.iceContact !== null ? agent.iceContact : this.selectedAgent.iceContact,
-            adresse: agent.adresse !== null ? agent.adresse : this.selectedAgent.adresse,
-            picture: agent.picture !== null ? agent.picture : this.selectedAgent.picture,
-            formations: agent.formations !== null ? agent.formations : this.selectedAgent.formations,
+            iceContact:
+                agent.iceContact !== null
+                    ? agent.iceContact
+                    : this.selectedAgent.iceContact,
+            adresse:
+                agent.adresse !== null
+                    ? agent.adresse
+                    : this.selectedAgent.adresse,
+            picture:
+                agent.picture !== null
+                    ? agent.picture
+                    : this.selectedAgent.picture,
+            formations:
+                agent.formations !== null
+                    ? agent.formations
+                    : this.selectedAgent.formations,
             // Ajouter les autres champs de l'agent ici si nécessaire
         };
 
@@ -137,13 +196,21 @@ export class AgentsComponent implements OnInit {
                 this.agents[index] = data;
                 this.selectedAgent = {};
                 this.isEditing = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Modification effectuée',
+                });
                 this.dataForm.reset();
                 this.getAgents();
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
     }
 
@@ -155,7 +222,7 @@ export class AgentsComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.deleteAgent(agent._id);
-            }
+            },
         });
     }
 
@@ -163,15 +230,22 @@ export class AgentsComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/agents/${id}`).subscribe({
             next: () => {
                 this.agents = this.agents.filter(a => a._id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Agent effacé' });
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Suppression',
+                    detail: 'Agent effacé',
+                });
                 this.getAgents();
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
     }
-
 
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
@@ -182,12 +256,20 @@ export class AgentsComponent implements OnInit {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complètement effacées' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été complètement effacées',
+                });
                 this.getAgents(); // Met à jour la liste
             },
             error: error => {
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message });
-            }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
         });
 
         this.displayConfirmationDialog = false;
@@ -240,5 +322,4 @@ export class AgentsComponent implements OnInit {
             .slice(0, 10)
             .map(rue => rue.nomComplet);
     }
-
 }
