@@ -39,14 +39,16 @@
     <p-table [value]="missions" [paginator]="true" [rows]="10">
         <ng-template pTemplate="header">
             <tr>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Catégorie</th>
-                <th>Horaire</th>
-                <th>Priorité</th>
-                <th>Contact</th>
-                <th>Visible</th>
-                <th>Action</th>
+                <th style="width:10%">Titre</th>
+                <th style="width:10%">Description</th>
+                <th style="width:10%">Catégorie</th>
+                <th style="width:10%">Horaire</th>
+                <th style="width:10%">Priorité</th>
+                <th style="width:10%">Contact</th>
+                <th style="width:10%">Visible</th>
+                <th style="width:10%">Action</th>
+
+
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-mission>
@@ -58,19 +60,24 @@
                 <td>{{ mission.priority }}</td>
                 <td>{{ mission.contact }}</td>
                 <td>{{ mission.visibility }}</td>
-                <td>
-                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                        icon="pi pi-pencil" style="margin-right: 5px;"
-                        (click)="selectData(mission); toggleEdit()"></button>
 
-                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                        icon="pi pi-trash" (click)="selectData(mission); onConfirmDelete(mission)"></button>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectData(mission); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectData(mission); onConfirmDelete(mission)"></button>
+
                 </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
     </p-table>
-    <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary" icon="pi pi-road"
-        style="margin-top: 3px;" (click)="toggleAdd()"></button>
+
 
     <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
         [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"

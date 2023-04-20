@@ -105,7 +105,7 @@
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
-                                dateFormat="dd/mm/yyyy"></p-calendar>
+                                dateFormat="dd/mm/yy"></p-calendar>
                             <label for="birthday">Date de naissance</label>
                         </span>
                     </div>
@@ -139,6 +139,22 @@
                             <label for="iceContact">Contact en cas d'urgence</label>
                         </span>
                     </div>
+                    <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
+                        <label for="formations">Formations</label>
+                        <ng-container *ngFor="let formation of selectedAgent.formations.controls; let i = index">
+                            <div class="p-inputgroup">
+                                <input type="text" id="formations_{{ i }}" name="formations_{{ i }}"
+                                    [formControlName]="i" [value]="formation.value" pInputText>
+                                <button type="button" (click)="removeFormation(i)" pButton icon="pi pi-trash"
+                                    class="p-button-danger"></button>
+                            </div>
+                        </ng-container>
+                        <button type="button" (click)="addFormation()" pButton icon="pi pi-plus"
+                            label="Ajouter une formation"></button>
+                    </div>
+
+
+
 
                     <div class="p-field">
                         <span class="p-float-label">

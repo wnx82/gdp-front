@@ -88,10 +88,10 @@ export const navbarData: INavbarData[] = [
         label: 'Settings',
         expanded: true,
         items: [
-            {
-                routeLink: 'settings/profile',
-                label: 'Profile',
-            },
+            // {
+            //     routeLink: 'settings/profile',
+            //     label: 'Profile',
+            // },
             {
                 routeLink: 'agents',
                 label: 'Liste des agents',

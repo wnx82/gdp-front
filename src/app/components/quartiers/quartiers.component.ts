@@ -101,7 +101,7 @@ export class QuartiersComponent implements OnInit {
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
             next: data => {
-                console.log(data);
+                // console.log(data);
                 this.quartiers = data.filter(quartier => !quartier.deletedAt);
             },
             error: error => {

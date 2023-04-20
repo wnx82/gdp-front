@@ -132,8 +132,22 @@ export class HabitationsComponent implements OnInit {
                 return 'black';
         }
     }
+    getSeverity(localite: string): string {
+        switch (localite) {
+            case 'Dottignies':
+                return 'warning';
+            case 'Luingne':
+                return 'error';
+            case 'Herseaux':
+                return 'info';
+            case 'Mouscron':
+                return 'success';
+            default:
+                return 'success';
+        }
+    }
     addHabitation(habitation: any) {
-        let url = `${this.API_URL}/habitations`;
+        let url = `${this.API_URL}`;
         this.http.post<any>(url, habitation).subscribe({
             next: data => {
                 this.habitations.push(data);
@@ -200,9 +214,10 @@ export class HabitationsComponent implements OnInit {
                     ? habitation.dates.fin
                     : this.selectedHabitation.dates.fin,
             mesures:
-                habitation.mesures !== null
+                habitation.mesures !== null && habitation.mesures.length > 0
                     ? habitation.mesures
-                    : this.selectedHabitation.mesures,
+                    : this.selectedHabitation.mesures || [],
+
             vehicule:
                 habitation.vehicule !== null
                     ? habitation.vehicule
@@ -212,7 +227,7 @@ export class HabitationsComponent implements OnInit {
                     ? habitation.googlemap
                     : this.selectedHabitation.googlemap,
         };
-        const url = `${this.API_URL}/habitations/${this.selectedHabitation._id}`;
+        const url = `${this.API_URL}/${this.selectedHabitation._id}`;
 
         this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {

@@ -46,9 +46,15 @@
                 </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
     </p-table>
-    <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary" icon="pi pi-road"
-        style="margin-top: 3px;" (click)="toggleAdd()"></button>
+
+
 
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">

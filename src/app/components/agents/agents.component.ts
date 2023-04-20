@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -16,6 +16,7 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class AgentsComponent implements OnInit {
     private apiUrl: string | undefined;
+
     agents: any[] = [];
     filteredRues: any[] = [];
     selectedAgent: any = {
@@ -49,7 +50,7 @@ export class AgentsComponent implements OnInit {
             numero: new FormControl(''),
         }),
         picture: new FormControl(''),
-        formations: new FormControl(''),
+        formations: new FormArray([]),
     });
 
     constructor(
@@ -112,7 +113,7 @@ export class AgentsComponent implements OnInit {
     }
 
     addAgent(agent: any) {
-        let url = `${this.API_URL}/agents`;
+        let url = `${this.API_URL}`;
         this.http.post<any>(url, agent).subscribe({
             next: data => {
                 this.agents.push(data);
@@ -182,13 +183,17 @@ export class AgentsComponent implements OnInit {
                     ? agent.picture
                     : this.selectedAgent.picture,
             formations:
-                agent.formations !== null
+                agent.formations && Array.isArray(agent.formations)
                     ? agent.formations
-                    : this.selectedAgent.formations,
+                    : this.selectedAgent.formations &&
+                      Array.isArray(this.selectedAgent.formations)
+                    ? this.selectedAgent.formations
+                    : [],
+
             // Ajouter les autres champs de l'agent ici si nécessaire
         };
 
-        const url = `${this.API_URL}/agents/${this.selectedAgent._id}`;
+        const url = `${this.API_URL}/${this.selectedAgent._id}`;
 
         this.http.patch<any>(url, updatedAgent).subscribe({
             next: data => {
@@ -341,5 +346,13 @@ export class AgentsComponent implements OnInit {
 
             .slice(0, 10)
             .map(rue => rue.nomComplet);
+    }
+
+    addFormation(): void {
+        // this.dataForm.formations.push(this.dataForm.control(''));
+    }
+
+    removeFormation(index: number): void {
+        // this.formations.removeAt(index);
     }
 }

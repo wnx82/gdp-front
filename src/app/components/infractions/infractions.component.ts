@@ -46,7 +46,7 @@ export class InfractionsComponent implements OnInit {
         this.http.get<any[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
-                console.log(this.donnees);
+                // console.log(this.donnees);
             },
             error: error => {
                 console.log(error);

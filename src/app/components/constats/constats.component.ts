@@ -124,7 +124,7 @@ export class ConstatsComponent implements OnInit {
         this.http.get<any[]>(url).subscribe({
             next: data => {
                 this.constats = data.filter(constat => !constat.deletedAt);
-                console.log(this.constats);
+                // console.log(this.constats);
             },
             error: error => {
                 this.messageService.add({

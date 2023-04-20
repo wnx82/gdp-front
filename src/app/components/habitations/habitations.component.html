@@ -51,6 +51,9 @@
                 </span>
             </div>
         </ng-template>
+
+
+
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:10%">Adresse</th>
@@ -69,38 +72,29 @@
                 <td>{{ habitation.adresse[0].quartier }}</td>
 
                 <td>
-                    <p-tag [value]="habitation.adresse[0].localite" [ngClass]="{
-                             'text-danger': habitation.adresse[0].localite === 'Mouscron',
-                             'text-warning': habitation.adresse[0].localite === 'Herseaux',
-                             'text-orange': habitation.adresse[0].localite === 'Dottignies',
-                             'text-purple': habitation.adresse[0].localite === 'Luingne'
-                           }">
-                    </p-tag>
+                    <p-tag [value]="habitation.adresse[0].localite"
+                        [severity]="getSeverity(habitation.adresse[0].localite)"></p-tag>
                 </td>
+
                 <td>{{ habitation.dates.debut | date: 'yyyy-MM-dd HH:mm'}}</td>
                 <td>{{ habitation.dates.fin | date: 'yyyy-MM-dd HH:mm'}}</td>
                 <!-- <td>{{ habitation.adresse[0].localite }}</td> -->
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
-                        (click)="selectData(habitation); toggleEdit()"></button>
+                        (click)="selectHabitation(habitation); toggleEdit()"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                         (click)="deleteHabitation(habitation._id)"></button>
                 </td>
-
-
-
-
-
-
             </tr>
         </ng-template>
         <ng-template pTemplate="paginatorleft">
             <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
         </ng-template>
     </p-table>
+
 
 
     <!-- 
@@ -140,25 +134,13 @@
     <!-- <button pButton pRipple type="button" label="Ajouter un habitation" class="p-button-secondary"
         icon="pi pi-user-plus" style="margin-top: 3px;" (click)="toggleAdd()"></button> -->
 
-    <p-dialog header="{{isAdding ? 'Ajouter un habitation' : 'Modifier un habitation'}}"
+    <p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
         [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
         (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addHabitation(dataForm.value) : editHabitation(selectedHabitation._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-
-                    <!-- 
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="number" id="userAccess" name="userAccess" formControlName="userAccess" required
-                                [value]="selectedHabitation.userAccess" pInputText min="0" max="10"
-                                title="Veuillez saisir un nombre entre 0 et 10">
-                            <label for="userAccess">Niveau d'accès utilisateur</label>
-                        </span>
-                    </div> -->
-
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
@@ -178,10 +160,78 @@
                             <label for="numero">Numéro</label>
                         </span>
                     </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="denomination" name="denomination"
+                                [value]="selectedHabitation?.adresse?.[0]?.denomination || null" pInputText>
+                            <label for="denomination">Dénomination</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="nom" name="nom"
+                                [value]="selectedHabitation?.adresse?.[0]?.nom || null" pInputText>
+                            <label for="nom">Nom de rue</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="quartier" name="quartier"
+                                [value]="selectedHabitation?.adresse?.[0]?.quartier || null" pInputText>
+                            <label for="quartier">Quartier</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="ville" name="ville"
+                                [value]="selectedHabitation?.adresse?.[0]?.ville || null" pInputText>
+                            <label for="ville">Ville</label>
+                        </span>
+                    </div>
+                </div>
 
+                <div class="p-col-6">
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="demandeur" name="demandeur"
+                                [value]="selectedHabitation?.demandeur?.nom || null" pInputText>
+                            <label for="demandeur">Demandeur</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="tel" name="tel" [value]="selectedHabitation?.demandeur?.tel || null"
+                                pInputText>
+                            <label for="tel">Téléphone</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="googlemap" name="googlemap"
+                                [value]="selectedHabitation?.googlemap || null" pInputText>
+                            <label for="googlemap">Google Map</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <p-calendar id="debut" name="debut">
+                            </p-calendar>
+                            <label for="debut">Date de début</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <p-calendar id="fin" name="fin">
+                            </p-calendar>
+                            <label for="fin">Date de fin</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
 
-
-
+                            <label for="mesures">Mesures de sécurité</label>
+                        </span>
+                    </div>
                 </div>
             </div>
 
