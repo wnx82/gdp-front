@@ -64,12 +64,12 @@
 
                 <td>{{ constat.adresse[0].nomComplet }}</td>
                 <td>
-                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                        icon="pi pi-pencil" style="margin-right: 5px;"
-                        (click)="selectConstat(constat); toggleEdit()"></button>
 
-                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                        icon="pi pi-trash" (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
+
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectConstat(constat); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
                 </td>
             </tr>
         </ng-template>

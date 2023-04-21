@@ -38,11 +38,13 @@
                 <td>{{ donnee.immatriculation }}</td>
 
                 <td>
-                    <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
-                        icon="pi pi-pencil" style="margin-right: 5px;"
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(donnee); toggleEdit()"></button>
-                    <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
-                        icon="pi pi-trash" (click)="deleteDonnee(donnee._id)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteDonnee(donnee._id)"></button>
+
+
+
                 </td>
             </tr>
         </ng-template>
