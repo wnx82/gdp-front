@@ -12,17 +12,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/local-storage.service';
-interface Mission {
-    annexes: string[];
-    category: string;
-    contact: string;
-    createdAt: string;
-    description: string;
-    horaire: string;
-    priority: number;
-    title: string;
-    updatedAt: string;
-}
+
 @Component({
     selector: 'app-quartiers',
     templateUrl: './quartiers.component.html',
@@ -42,8 +32,8 @@ export class QuartiersComponent implements OnInit {
         title: new FormControl(''),
         missions: new FormControl(''),
     });
-    selectedMission: Mission | undefined;
-    private readonly MISSIONS_STORAGE_KEY = 'missions';
+    selectedMission: any;
+
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
@@ -60,40 +50,32 @@ export class QuartiersComponent implements OnInit {
         this.get();
         this.loadMissions();
     }
-
     private loadMissions(): void {
-        const missionsLocalStorage = localStorage.getItem(
-            this.MISSIONS_STORAGE_KEY
-        );
+        const missionsLocalStorage = localStorage.getItem('missions');
 
         if (!missionsLocalStorage) {
-            this.http
-                .get<Mission[]>('http://localhost:3003/missions')
-                .subscribe(
-                    data => {
-                        this.missions = data;
-                        localStorage.setItem(
-                            this.MISSIONS_STORAGE_KEY,
-                            JSON.stringify(data)
-                        );
-                        console.log(
-                            'Missions sauvegardées dans le local storage'
-                        );
-                    },
-                    error => console.error(error)
-                );
+            this.http.get<any[]>('http://localhost:3003/missions').subscribe(
+                data => {
+                    this.missions = data;
+                    localStorage.setItem('missions', JSON.stringify(data));
+                    console.log('Missions sauvegardées dans le local storage');
+                },
+                error => console.error(error)
+            );
         } else {
             const missionsLocalStorageArray = JSON.parse(missionsLocalStorage);
 
             if (missionsLocalStorageArray.length !== this.missions.length) {
                 this.missions = missionsLocalStorageArray;
                 console.log('Missions mises à jour depuis le local storage');
+                console.log(missionsLocalStorageArray);
             } else {
                 this.missions = missionsLocalStorageArray;
                 console.log('Missions déjà chargées depuis le local storage');
             }
         }
     }
+
     clear(table: Table) {
         table.clear();
     }

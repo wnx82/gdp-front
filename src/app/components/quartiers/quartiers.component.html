@@ -33,13 +33,30 @@
         <ng-template pTemplate="body" let-donnee>
             <tr>
                 <td>{{ donnee.title }}</td>
-                <td>
+                <!-- <td>{{ donnee.missions }}</td> -->
+                <!-- <td>
                     <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
                         <tr *ngFor="let item of donnee.missions">
-                            <script>console.log(item);</script>
+                            <script>
+                                console.log(donnee.missions);
+                                console.log(item);
+                            </script>
                             <ng-container *ngIf="findMissionById(item)">
                                 <td>{{ findMissionById(item) }}</td>
 
+                            </ng-container>
+                        </tr>
+                    </table>
+                </td> -->
+                <td>
+                    <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
+                        <tr *ngFor="let missionId of donnee.missions">
+                            <script>
+                                console.log(donnee.missions);
+                                console.log(missionId);
+                            </script>
+                            <ng-container *ngIf="findMissionById(missionId)">
+                                <td>{{ findMissionById(missionId) }}</td>
                             </ng-container>
                         </tr>
                     </table>
