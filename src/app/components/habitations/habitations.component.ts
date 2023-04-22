@@ -63,7 +63,8 @@ export class HabitationsComponent implements OnInit {
     readonly API_URL = `${environment.apiUrl}/habitations`;
     date!: Date;
     dates!: Date;
-
+    selectedQuartier: any;
+    selectedLocalite: any;
     ngOnInit() {
         this.getHabitations();
 
@@ -90,6 +91,23 @@ export class HabitationsComponent implements OnInit {
             console.log('Rues déjà chargées depuis le local storage');
         }
     }
+
+    getQuartiers() {
+        const quartiers = new Set<string>();
+        for (const habitation of this.habitations) {
+            quartiers.add(habitation.adresse[0].quartier);
+        }
+        return Array.from(quartiers).map(quartier => ({ name: quartier }));
+    }
+
+    getLocalites() {
+        const localites = new Set<string>();
+        for (const habitation of this.habitations) {
+            localites.add(habitation.adresse[0].localite);
+        }
+        return Array.from(localites).map(localite => ({ name: localite }));
+    }
+
     getHabitations() {
         let url = `${this.API_URL}`;
         this.http.get<any[]>(url).subscribe({
@@ -118,26 +136,26 @@ export class HabitationsComponent implements OnInit {
             detail: error.message,
         });
     }
-    getColor(localite: string): string {
-        switch (localite) {
-            case 'Mouscron':
-                return 'red';
-            case 'Herseaux':
-                return 'yellow';
-            case 'Dottignies':
-                return 'orange';
-            case 'Luingne':
-                return 'purple';
-            default:
-                return 'black';
-        }
-    }
+    // getColor(localite: string): string {
+    //     switch (localite) {
+    //         case 'Mouscron':
+    //             return 'red';
+    //         case 'Herseaux':
+    //             return 'yellow';
+    //         case 'Dottignies':
+    //             return 'orange';
+    //         case 'Luingne':
+    //             return 'purple';
+    //         default:
+    //             return 'black';
+    //     }
+    // }
     getSeverity(localite: string): string {
         switch (localite) {
             case 'Dottignies':
                 return 'warning';
             case 'Luingne':
-                return 'error';
+                return 'danger';
             case 'Herseaux':
                 return 'info';
             case 'Mouscron':
