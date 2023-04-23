@@ -6,7 +6,9 @@ import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { ConfirmationService } from 'primeng/api';
+import { Agent, Rue, AgentsInterface } from './agents.interface';
 
 @Component({
     selector: 'app-agents',
