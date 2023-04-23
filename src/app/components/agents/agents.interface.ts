@@ -23,7 +23,7 @@ export interface Rue {
     nomComplet: string;
 }
 
-export interface AgentsComponent {
+export interface AgentsInterface {
     agents: Agent[];
     filteredRues: string[];
     selectedAgent: Agent;

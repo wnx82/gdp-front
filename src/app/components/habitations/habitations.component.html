@@ -97,16 +97,13 @@
         <ng-template pTemplate="paginatorright">
             <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
         </ng-template>
-    </p-table>
-
-    <p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
+    </p-table><p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
         [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
         (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addHabitation(dataForm.value) : editHabitation(selectedHabitation._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
@@ -123,6 +120,9 @@
                         <span class="p-float-label">
                             <input type="text" id="numero" name="numero"
                                 [value]="selectedHabitation?.adresse?.[0]?.numero || null" pInputText>
+                            <!-- <input type="text" id="numero" name="numero"
+                                [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
+                                pInputText> -->
                             <label for="numero">Numéro</label>
                         </span>
                     </div>
@@ -143,32 +143,46 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="googlemap" name="googlemap"
-                                [value]="selectedHabitation?.googlemap || null" pInputText>
-                            <label for="googlemap">Google Map</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
                             <input type="text" id="debut" name="debut"
                                 [value]="selectedHabitation?.dates?.debut || null" pInputText>
                             <label for="debut">Date de début</label>
                         </span>
                     </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="fin" name="fin" [value]="selectedHabitation?.dates?.fin || null"
+                                pInputText>
+                            <label for="fin">Date de début</label>
+                        </span>
+                    </div>
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-calendar id="fin" name="fin" [(ngModel)]="date">
-                            </p-calendar>
-                            <label for="fin">Date de fin</label>
+                            <input type="text" id="vehicule" name="vehicule"
+                                [value]="selectedHabitation?.vehicule || null" formControlName="vehicule" pInputText>
+                            <label for="vehicule">Véhicule</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
+                            <input type="text" id="googlemap" name="googlemap"
+                                [value]="selectedHabitation?.googlemap || null" formControlName="googlemap" pInputText>
+                            <label for="googlemap">Google Map</label>
+                        </span>
+                    </div>
+
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <ul>
+                                <li *ngFor="let mesure of mesures">{{mesure}}</li>
+                            </ul>
 
                             <label for="mesures">Mesures de sécurité</label>
                         </span>
-                    </div>
+                    </div>Z
+
+
+
                 </div>
             </div>
 
