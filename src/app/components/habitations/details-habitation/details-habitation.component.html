@@ -1,0 +1,14 @@
+<div *ngIf="habitation">
+    <h2>Détails de l'habitation {{ habitation._id }}</h2>
+    <p><strong>Adresse :</strong> {{ habitation.adresse?.rue?.nomComplet }} {{ habitation.adresse?.numero }}</p>
+    <!-- <p><strong>Demandeur :</strong> {{ habitation.demandeur?.nom }} {{ habitation.demandeur?.tel ? '(' +
+        habitation.demandeur.tel + ')' : '' }}</p> -->
+    <!-- <p><strong>Dates :</strong> {{ habitation.dates?.debut | date:'dd/MM/yyyy' }} - {{ habitation.dates?.fin |
+        date:'dd/MM/yyyy' }}</p> -->
+    <p><strong>Mesures :</strong></p>
+    <ul>
+        <li *ngFor="let mesure of habitation.mesures">{{ mesure }}</li>
+    </ul>
+    <p><strong>Véhicule :</strong> {{ habitation.vehicule }}</p>
+    <div [innerHTML]="habitation.googlemap"></div>
+</div>
