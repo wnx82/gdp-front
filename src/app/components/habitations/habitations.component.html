@@ -104,56 +104,77 @@
             (ngSubmit)="isAdding ? addHabitation(dataForm.value) : editHabitation(selectedHabitation._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+                    <div formGroupName="adresse">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
                                 [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
                                 (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
                                 [ngModelOptions]="{standalone: true}">
                                 <ng-template let-item pTemplate="item">
                                     {{ item }}
                                 </ng-template>
-                            </p-autoComplete>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="numero" name="numero"
-                                [value]="selectedHabitation?.adresse?.[0]?.numero || null" pInputText>
-                            <!-- <input type="text" id="numero" name="numero"
+                            </p-autoComplete> -->
+                                <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
+                                    filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                    formControlName="rue" optionValue="_id">
+                                    <ng-template let-nom pTemplate="item">
+                                        <div class="let-nom">
+                                            <div>{{nom.nomComplet}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+
+
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="numero" name="numero"
+                                    [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="numero"
+                                    pInputText>
+                                <!-- <input type="text" id="numero" name="numero"
                                 [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
                                 pInputText> -->
-                            <label for="numero">Numéro</label>
-                        </span>
+                                <label for="numero">Numéro</label>
+                            </span>
+                        </div>
                     </div>
-
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="demandeur" name="demandeur"
-                                [value]="selectedHabitation?.demandeur?.nom || null" pInputText>
-                            <label for="demandeur">Demandeur</label>
-                        </span>
+                    <div formGroupName="demandeur">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="demandeur" name="demandeur"
+                                    [value]="selectedHabitation?.demandeur?.nom || null" formControlName="nom"
+                                    pInputText>
+                                <label for="demandeur">Demandeur</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="tel" name="tel"
+                                    [value]="selectedHabitation?.demandeur?.tel || null" formControlName="tel"
+                                    pInputText>
+                                <label for="tel">Téléphone</label>
+                            </span>
+                        </div>
                     </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="tel" name="tel" [value]="selectedHabitation?.demandeur?.tel || null"
-                                pInputText>
-                            <label for="tel">Téléphone</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="debut" name="debut"
-                                [value]="selectedHabitation?.dates?.debut || null" pInputText>
-                            <label for="debut">Date de début</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="fin" name="fin" [value]="selectedHabitation?.dates?.fin || null"
-                                pInputText>
-                            <label for="fin">Date de début</label>
-                        </span>
+                    <div formGroupName="dates">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar id="debut" name="debut" formControlName="debut" [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'">
+                                </p-calendar>
+                                <label for="debut">Date de début</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar id="fin" name="fin" formControlName="fin" [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'">
+                                </p-calendar>
+                                <label for="fin">Date de fin</label>
+                            </span>
+                        </div>
                     </div>
 
                     <div class="p-field">
@@ -179,7 +200,7 @@
 
                             <label for="mesures">Mesures de sécurité</label>
                         </span>
-                    </div>Z
+                    </div>
 
 
 

@@ -35,9 +35,6 @@ export class HabitationsComponent implements OnInit {
         adresse: new FormGroup({
             rue: new FormControl(''),
             numero: new FormControl(''),
-            // nomComplet: new FormControl(''),
-            // quartier: new FormControl(''),
-            // localite: new FormControl(''),
         }),
         demandeur: new FormGroup({
             nom: new FormControl(''),
@@ -64,7 +61,8 @@ export class HabitationsComponent implements OnInit {
         private http: HttpClient,
         private messageService: MessageService,
         private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -159,9 +157,14 @@ export class HabitationsComponent implements OnInit {
                 return 'success';
         }
     }
+
     addHabitation(habitation: any) {
         let url = `${this.API_URL}`;
-        console.log(habitation);
+        // console.log(habitation);
+        console.log(this.dataForm.value);
+
+        // this.http.post<any>(url, this.dataForm.value).subscribe({
+        // this.dataForm.value.post<any>(url, habitation).subscribe({
         this.http.post<any>(url, habitation).subscribe({
             next: data => {
                 this.habitations.push(data);

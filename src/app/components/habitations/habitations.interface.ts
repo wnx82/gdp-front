@@ -1,4 +1,5 @@
 export interface Habitation {
+    length: number;
     _id: number;
 
     adresse?: {
@@ -16,12 +17,16 @@ export interface Habitation {
     mesures?: string[];
     vehicule?: string;
     googlemap?: string;
+    createdAt: string; // Ajout de la propriété createdAt
+    updatedAt: string; // Ajout de la propriété updatedAt
+    deletedAt: string;
 }
 
 export interface Rue {
     _id?: string;
     nom?: string;
     nomComplet?: string;
+    denomination?: string;
     codePostal?: string;
     ville?: string;
 }

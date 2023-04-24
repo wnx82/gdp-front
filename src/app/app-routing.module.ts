@@ -101,6 +101,7 @@ const routes: Routes = [
                 m => m.VehiculesModule
             ),
     },
+    { path: 'app', loadChildren: () => import('./components/habitations/details-habitation/details-habitation.module').then(m => m.DetailsHabitationModule) },
 ];
 
 @NgModule({
