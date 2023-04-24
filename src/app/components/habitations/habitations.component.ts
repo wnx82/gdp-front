@@ -347,6 +347,23 @@ export class HabitationsComponent implements OnInit {
 
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            adresse: {
+                rue: donnee.adresse.rue,
+                numero: donnee.adresse.numero,
+            },
+            demandeur: {
+                nom: donnee.demandeur.nom,
+                tel: donnee.demandeur.tel,
+            },
+            dates: {
+                debut: donnee.dates.debut,
+                fin: donnee.dates.fin,
+            },
+            mesures: donnee.mesures || [],
+            vehicule: donnee.vehicule,
+            googlemap: donnee.googlemap,
+        });
     }
 
     selectHabitation(habitation: any) {
