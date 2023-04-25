@@ -57,9 +57,9 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:10%">Adresse</th>
-                <th style="width:10%">Quartier <p-columnFilter type="text" field="adresse[0].quartier"></p-columnFilter>
+                <th style="width:10%">Quartier <p-columnFilter type="text" field="adresse.quartier"></p-columnFilter>
                 </th>
-                <th style="width:10%">Localité <p-columnFilter type="text" field="adresse[0].localite"></p-columnFilter>
+                <th style="width:10%">Localité <p-columnFilter type="text" field="adresse.localite"></p-columnFilter>
                 </th>
                 <th style="width:10%">Date Début</th>
                 <th style="width:10%">Date Fin</th>
@@ -69,20 +69,20 @@
 
         <ng-template pTemplate="body" let-habitation>
             <tr>
-                <td>{{ habitation.adresse[0].nomComplet }}, {{ habitation.adresse[0].numero }}</td>
-                <td>{{ habitation.adresse[0].quartier }}</td>
+                <td>{{ habitation.adresse.nomComplet }}, {{ habitation.adresse.numero }}</td>
+                <td>{{ habitation.adresse.quartier }}</td>
 
                 <td>
 
                     <!-- <p-tag [value]="warning" [severity]="danger"></p-tag> -->
 
-                    <p-tag [value]="habitation.adresse[0].localite"
-                        [severity]="getSeverity(habitation.adresse[0].localite)"></p-tag>
+                    <p-tag [value]="habitation.adresse.localite"
+                        [severity]="getSeverity(habitation.adresse.localite)"></p-tag>
                 </td>
 
                 <td>{{ habitation.dates.debut | date: 'yyyy-MM-dd HH:mm'}}</td>
                 <td>{{ habitation.dates.fin | date: 'yyyy-MM-dd HH:mm'}}</td>
-                <!-- <td>{{ habitation.adresse[0].localite }}</td> -->
+                <!-- <td>{{ habitation.adresse.localite }}</td> -->
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectHabitation(habitation); toggleEdit()"></button>
@@ -130,9 +130,7 @@
                         </div>
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="numero" name="numero"
-                                    [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="numero"
-                                    pInputText>
+                                <input type="text" id="numero" name="numero" formControlName="numero" pInputText>
                                 <!-- <input type="text" id="numero" name="numero"
                                 [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
                                 pInputText> -->
@@ -143,17 +141,13 @@
                     <div formGroupName="demandeur">
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="demandeur" name="demandeur"
-                                    [value]="selectedHabitation?.demandeur?.nom || null" formControlName="nom"
-                                    pInputText>
+                                <input type="text" id="demandeur" name="demandeur" formControlName="nom" pInputText>
                                 <label for="demandeur">Demandeur</label>
                             </span>
                         </div>
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="tel" name="tel"
-                                    [value]="selectedHabitation?.demandeur?.tel || null" formControlName="tel"
-                                    pInputText>
+                                <input type="text" id="tel" name="tel" formControlName="tel" pInputText>
                                 <label for="tel">Téléphone</label>
                             </span>
                         </div>
@@ -162,9 +156,10 @@
                         <div class="p-field">
                             <span class="p-float-label">
                                 <p-calendar id="debut" name="debut" formControlName="debut" [showIcon]="true"
-                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'">
+                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'"
+                                    class="p-datepicker-today">
                                 </p-calendar>
-                                <label for="debut">Date de début</label>
+                                <label for="debut">Date de début : </label>
                             </span>
                         </div>
                         <div class="p-field">
@@ -179,15 +174,13 @@
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="vehicule" name="vehicule"
-                                [value]="selectedHabitation?.vehicule || null" formControlName="vehicule" pInputText>
+                            <input type="text" id="vehicule" name="vehicule" formControlName="vehicule" pInputText>
                             <label for="vehicule">Véhicule</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="googlemap" name="googlemap"
-                                [value]="selectedHabitation?.googlemap || null" formControlName="googlemap" pInputText>
+                            <input type="text" id="googlemap" name="googlemap" formControlName="googlemap" pInputText>
                             <label for="googlemap">Google Map</label>
                         </span>
                     </div>

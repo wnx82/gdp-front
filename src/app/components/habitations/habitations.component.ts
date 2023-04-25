@@ -163,9 +163,9 @@ export class HabitationsComponent implements OnInit {
         // console.log(habitation);
         console.log(this.dataForm.value);
 
-        // this.http.post<any>(url, this.dataForm.value).subscribe({
-        // this.dataForm.value.post<any>(url, habitation).subscribe({
-        this.http.post<any>(url, habitation).subscribe({
+        this.http.post<any>(url, this.dataForm.value).subscribe({
+            // this.dataForm.value.post<any>(url, habitation).subscribe({
+            // this.http.post<any>(url, habitation).subscribe({
             next: data => {
                 this.habitations.push(data);
 
@@ -345,29 +345,50 @@ export class HabitationsComponent implements OnInit {
         });
     }
 
-    selectData(donnee: any) {
-        this.selectedData = { ...donnee };
-        this.dataForm.patchValue({
-            adresse: {
-                rue: donnee.adresse.rue,
-                numero: donnee.adresse.numero,
-            },
-            demandeur: {
-                nom: donnee.demandeur.nom,
-                tel: donnee.demandeur.tel,
-            },
-            dates: {
-                debut: donnee.dates.debut,
-                fin: donnee.dates.fin,
-            },
-            mesures: donnee.mesures || [],
-            vehicule: donnee.vehicule,
-            googlemap: donnee.googlemap,
-        });
-    }
+    // selectData(donnee: any) {
+    //     console.log('on est là');
+    //     this.selectedData = { ...donnee };
+    //     this.dataForm.setValue({
+    //         adresse: {
+    //             rue: donnee.adresse.rue,
+    //             numero: donnee.adresse.numero,
+    //         },
+    //         demandeur: {
+    //             nom: donnee.demandeur.nom,
+    //             tel: donnee.demandeur.tel,
+    //         },
+    //         dates: {
+    //             debut: donnee.dates.debut,
+    //             fin: donnee.dates.fin,
+    //         },
+    //         mesures: donnee.mesures || [],
+    //         vehicule: donnee.vehicule,
+    //         googlemap: donnee.googlemap,
+    //     });
+    //     console.log('Data form value: ', this.dataForm.value);
+    // }
 
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
+        console.log(this.selectedHabitation);
+        this.dataForm.patchValue({
+            adresse: {
+                rue: habitation.adresse.nomComplet,
+                numero: habitation.adresse.numero,
+            },
+            demandeur: {
+                nom: habitation.demandeur.nom,
+                tel: habitation.demandeur.tel,
+            },
+            dates: {
+                debut: habitation.dates.debut,
+                fin: habitation.dates.fin,
+            },
+            mesures: habitation.mesures || [],
+            vehicule: habitation.vehicule,
+            googlemap: habitation.googlemap,
+        });
+        console.log('Data form value: ', this.dataForm.value);
     }
 
     cancel() {
@@ -384,7 +405,7 @@ export class HabitationsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedHabitation);
+        // console.log(this.selectedHabitation);
     }
 
     filterRues(event: any) {
