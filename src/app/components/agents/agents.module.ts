@@ -21,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 // import { AgentDetailsComponent } from './agent-details/agent-details.component';
 import { TableModule } from 'primeng/table';
+
 @NgModule({
     declarations: [AgentsComponent],
     imports: [

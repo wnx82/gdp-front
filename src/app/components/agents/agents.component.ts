@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { RuesLocalStorageService } from '../../services/rues-local-storage/rues-local-storage.component';
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
@@ -30,7 +31,7 @@ export class AgentsComponent implements OnInit {
     };
     isAdding: boolean = false;
     isEditing: boolean = false;
-    itemsPerPage: number = 50;
+    itemsPerPage: number = 10;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
@@ -65,7 +66,8 @@ export class AgentsComponent implements OnInit {
         private messageService: MessageService,
         private localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private ruesLocalStorageService: RuesLocalStorageService
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -74,7 +76,9 @@ export class AgentsComponent implements OnInit {
 
     ngOnInit() {
         this.getAgents();
-        this.loadRues();
+        this.rues = this.ruesLocalStorageService.getRues();
+
+        // this.loadRues();
     }
 
     private handleError(error: any): void {
@@ -84,26 +88,26 @@ export class AgentsComponent implements OnInit {
             detail: error.message,
         });
     }
-    private loadRues(): void {
-        const ruesLocalStorage = localStorage.getItem('rues');
-        if (ruesLocalStorage === null) {
-            // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
-                data => {
-                    this.rues = data;
-                    localStorage.setItem('rues', JSON.stringify(this.rues));
-                    console.log('Sauvegarde des rues dans le local storage');
-                },
-                error => {
-                    console.error(error);
-                }
-            );
-        } else {
-            // Les rues existent dans le local storage
-            this.rues = JSON.parse(ruesLocalStorage);
-            console.log('Rues déjà chargées depuis le local storage');
-        }
-    }
+    // private loadRues(): void {
+    //     const ruesLocalStorage = localStorage.getItem('rues');
+    //     if (ruesLocalStorage === null) {
+    //         // Si les rues n'existent pas encore dans le local storage
+    //         this.http.get<any[]>('http://localhost:3003/rues').subscribe(
+    //             data => {
+    //                 this.rues = data;
+    //                 localStorage.setItem('rues', JSON.stringify(this.rues));
+    //                 console.log('Sauvegarde des rues dans le local storage');
+    //             },
+    //             error => {
+    //                 console.error(error);
+    //             }
+    //         );
+    //     } else {
+    //         // Les rues existent dans le local storage
+    //         this.rues = JSON.parse(ruesLocalStorage);
+    //         console.log('Rues déjà chargées depuis le local storage');
+    //     }
+    // }
     getAgents() {
         let url = `${this.API_URL}`;
         this.http.get<any[]>(url).subscribe({

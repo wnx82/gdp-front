@@ -123,7 +123,7 @@
                     <div formGroupName="adresse">
                         <div class="p-field">
                             <span class="p-float-label">
-                                <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
+                                <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
                                     filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
                                     formControlName="rue" optionValue="_id">
                                     <ng-template let-nom pTemplate="item">

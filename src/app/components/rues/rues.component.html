@@ -117,38 +117,46 @@
                 <div class="p-col-6">
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <input type="text" id="nom" name="nom" formControlName="nom" required pInputText>
+                            <input type="text" id="nom" name="nom" formControlName="nom" required pInputText
+                                [(ngModel)]="nom">
                             <label for="nom">Nom de la rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="denomination" name="denomination" formControlName="denomination"
-                                pInputText>
+                                pInputText [(ngModel)]="denomination">
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet" pInputText
-                                [disabled]="true">
+                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
+                                pInputText>
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
+                    <!-- <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
+                                [value]="denomination +' '+ nom" pInputText [(ngModel)]="nomComplet">
+                            <label for="nomComplet">Nom Complet</label>
+                        </span>
+                    </div> -->
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-dropdown formControlName="localite" [options]="localiteOptions" optionLabel="label"
-                                optionValue="value" placeholder="Sélectionner une localité"
-                                [(ngModel)]="selectedData.localite"></p-dropdown>
+                            <p-dropdown formControlName="localite" [options]="localiteList" optionValue="value"
+                                placeholder="Sélectionner une localité">
+                            </p-dropdown>
                             <label for="localite">Localité</label>
                         </span>
                     </div>
 
+
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <p-dropdown formControlName="cp" [options]="cpOptions" optionLabel="value"
-                                optionValue="value" placeholder="Sélectionner un code postal"
-                                [(ngModel)]="selectedData.cp"></p-dropdown>
+                            <p-dropdown formControlName="cp" [options]="cpList" optionValue="value"
+                                placeholder="Sélectionner un code postal"></p-dropdown>
                             <label for="cp">Code Postal</label>
                         </span>
                     </div>

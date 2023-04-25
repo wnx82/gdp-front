@@ -52,6 +52,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th style="width:5%">Picture</th>
                 <th style="width:10%">Matricule</th>
                 <th style="width:10%">Nom</th>
                 <th style="width:10%">Prénom</th>
@@ -62,6 +63,8 @@
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
+                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td>
+
                 <td>{{ agent.matricule }}</td>
                 <td>{{ agent.lastname }}</td>
                 <td>{{ agent.firstname }}</td>
@@ -224,7 +227,7 @@
                                                         {{ item }}
                                                     </ng-template>
                                                 </p-autoComplete> -->
-                                <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
+                                <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
                                     filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
                                     formControlName="rue" optionValue="_id">
                                     <ng-template let-nom pTemplate="item">

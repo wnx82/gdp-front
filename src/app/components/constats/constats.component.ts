@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { RuesLocalStorageService } from '../../services/rues-local-storage/rues-local-storage.component';
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -72,7 +73,8 @@ export class ConstatsComponent implements OnInit {
         private http: HttpClient,
         private messageService: MessageService,
         private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private ruesLocalStorageService: RuesLocalStorageService
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -80,25 +82,7 @@ export class ConstatsComponent implements OnInit {
 
     ngOnInit() {
         this.getConstats();
-        const ruesLocalStorage = localStorage.getItem('rues');
-
-        if (ruesLocalStorage === null) {
-            // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
-                data => {
-                    this.rues = data;
-                    localStorage.setItem('rues', JSON.stringify(this.rues));
-                    console.log('Sauvegarde des rues dans le local storage');
-                },
-                error => {
-                    console.error(error);
-                }
-            );
-        } else {
-            // Les rues existent dans le local storage
-            this.rues = JSON.parse(ruesLocalStorage);
-            console.log('Rues déjà chargées');
-        }
+        this.rues = this.ruesLocalStorageService.getRues();
     }
     private handleError(error: any): void {
         this.messageService.add({
