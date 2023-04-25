@@ -91,45 +91,213 @@
             (ngSubmit)="isAdding ? addConstat(dataForm.value) : editConstat(selectedConstat._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="date" name="date" formControlName="date" pInputText
-                                [value]="selectedConstat.date">
-                            <label for="date">date</label>
+                            <input type="text" id="date" name="date" formControlName="date" pInputText>
+                            <label for="date">Date</label>
                         </span>
+                        <p-message severity="error"
+                            *ngIf="dataForm.get('date')?.invalid && dataForm.get('date')?.dirty">La date est
+                            obligatoire.</p-message>
+
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="agents" name="agents" formControlName="agents" pInputText
-                                [value]="selectedConstat.agents">
+                            <input type="text" id="agents" name="agents" formControlName="agents" pInputText>
                             <label for="agents">Agents</label>
                         </span>
+                        <p-message severity="error"
+                            *ngIf="dataForm.get('agents')?.invalid && dataForm.get('agents')?.dirty">Les agents sont
+                            obligatoires.</p-message>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="pv" name="pv" formControlName="pv" pInputText
-                                [value]="selectedConstat.pv">
-                            <label for="pv">pv</label>
+                            <input type="text" id="pv" name="pv" formControlName="pv" pInputText>
+                            <label for="pv">PV</label>
                         </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="Lieu" name="Lieu" pInputText [value]="">
-                            <label for="Lieu">Lieu</label>
-                        </span>
-                    </div>
+                        <p-message severity="error" *ngIf="dataForm.get('pv')?.invalid && dataForm.get('pv')?.dirty">Le
+                            PV est
+                            obligatoire.</p-message>
 
+                    </div>
+                    <div formGroupName="adresse">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
+                                    filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                    formControlName="rue" optionValue="_id">
+                                    <ng-template let-nom pTemplate="item">
+                                        <div class="let-nom">
+                                            <div>{{nom.nomComplet}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+
+
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="numero" name="numero" formControlName="numero" pInputText>
+
+                                <label for="numero">Numéro</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="lieu" name="lieu" formControlName="adresse.rue" pInputText>
+                            <label for="lieu">Lieu</label>
+                        </span>
+                        <p-message severity="error"
+                            *ngIf="dataForm.get('adresse.rue')?.invalid && dataForm.get('adresse.rue')?.dirty">La rue
+                            est obligatoire.</p-message>
+
+                    </div>
+                </div>
+                <div class="p-col-6">
+                    <div formGroupName="vehicule">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="marque" name="marque" formControlName="marque" pInputText>
+                                <label for="marque">Marque</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="modele" name="modele" formControlName="modele" pInputText>
+                                <label for="modele">Modèle</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="couleur" name="couleur" formControlName="couleur" pInputText>
+                                <label for="couleur">Couleur</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="type" name="type" formControlName="type" pInputText>
+                                <label for="type">Type</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="immatriculation" name="immatriculation"
+                                    formControlName="immatriculation" pInputText>
+                                <label for="immatriculation">Immatriculation</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div formGroupName="personne">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="firstname" name="firstname" formControlName="firstname"
+                                    pInputText>
+                                <label for="firstname">Prénom</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="lastname" name="lastname" formControlName="lastname" pInputText>
+                                <label for="lastname">Nom</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="birthday" name="birthday" formControlName="birthday" pInputText>
+                                <label for="birthday">Date de naissance</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="nationalNumber" name="nationalNumber"
+                                    formControlName="nationalNumber" pInputText>
+                                <label for="nationalNumber">Numéro national</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="tel" name="tel" formControlName="tel" pInputText>
+                                <label for="tel">Téléphone</label>
+                            </span>
+                        </div>
+                        <div formGroupName="adresse">
+                            <div class="p-field">
+                                <span class="p-float-label">
+                                    <input type="text" id="rue" name="rue" formControlName="rue" pInputText>
+                                    <label for="rue">Rue</label>
+                                </span>
+                            </div>
+                            <div class="p-field">
+                                <span class="p-float-label">
+                                    <input type="text" id="cp" name="cp" formControlName="cp" pInputText>
+                                    <label for="cp">Code postal</label>
+                                </span>
+                            </div>
+                            <div class="p-field">
+                                <span class="p-float-label">
+                                    <input type="text" id="localite" name="localite" formControlName="localite"
+                                        pInputText>
+                                    <label for="localite">Localité</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div formGroupName="geolocation">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="latitude" name="latitude" formControlName="latitude" pInputText>
+                                <label for="latitude">Latitude</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="longitude" name="longitude" formControlName="longitude"
+                                    pInputText>
+                                <label for="longitude">Longitude</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="horodatage" name="horodatage" formControlName="horodatage"
+                                    pInputText>
+                                <label for="horodatage">Horodatage</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="infractions" name="infractions" formControlName="infractions"
+                                pInputText>
+                            <label for="infractions">Infractions</label>
+                        </span>
+                        <p-message severity="error"
+                            *ngIf="dataForm.get('infractions')?.invalid && dataForm.get('infractions')?.dirty">Les
+                            infractions sont obligatoires.</p-message>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="notes" name="notes" formControlName="notes" pInputText>
+                            <label for="notes">Notes</label>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="annexes" name="annexes" formControlName="annexes" pInputText>
+                            <label for="annexes">Annexes</label>
+                        </span>
+                    </div>
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                             class="p-button-sm p-button-success"
                             icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
-
                         <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                             icon="pi pi-times" (click)="cancel()"></button>
                     </div>
                 </div>
             </div>
         </form>
+
 
     </p-dialog>

@@ -5,7 +5,13 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 @Component({
@@ -137,8 +143,7 @@ export class ConstatsComponent implements OnInit {
     }
 
     addConstat(constat: any) {
-        let url = `${this.API_URL}/constats`;
-        this.http.post<any>(url, constat).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.constats.push(data);
                 this.isAdding = false;
@@ -242,7 +247,7 @@ export class ConstatsComponent implements OnInit {
 
         const url = `${this.API_URL}/constats/${this.selectedConstat._id}`;
 
-        this.http.patch<any>(url, updatedConstat).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.constats.findIndex(a => a._id === data._id);
                 this.constats[index] = data;
@@ -257,6 +262,13 @@ export class ConstatsComponent implements OnInit {
                 this.getConstats();
             },
             error: error => {
+                console.error('Erreur de requête PATCH', error);
+                if (error.error && error.error.message) {
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
+                }
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
@@ -349,6 +361,44 @@ export class ConstatsComponent implements OnInit {
     }
     selectConstat(constat: any) {
         this.selectedConstat = { ...constat };
+        this.dataForm.patchValue({
+            adresse: {
+                rue: constat?.adresse?.nomComplet,
+                numero: constat?.adresse?.numero,
+            },
+
+            vehicule: {
+                marque: constat?.vehicule?.marque,
+                modele: constat?.vehicule?.modele,
+                couleur: constat?.vehicule?.couleur,
+                type: constat?.vehicule?.type,
+                immatriculation: constat?.vehicule?.immatriculation,
+            },
+            personne: {
+                firstname: constat?.personne?.firstname,
+                lastname: constat?.personne?.lastname,
+                birthday: constat?.personne?.birthday,
+                nationalNumber: constat?.personne?.nationalNumber,
+                tel: constat?.personne?.tel,
+                adresse: {
+                    rue: constat?.personne?.adresse?.rue,
+                    cp: constat?.personne?.adresse?.cp,
+                    localite: constat?.personne?.adresse?.localite,
+                },
+            },
+
+            agents: constat?.agents || [],
+            constats: constat?.constats,
+            date: constat?.date,
+            infractions: constat?.infractions,
+            notes: constat?.notes,
+            annexes: constat?.annexes,
+            geolocation: {
+                latitude: constat?.geolocation?.latitude,
+                longitude: constat?.geolocation?.longitude,
+                horodatage: constat?.geolocation?.couleur,
+            },
+        });
     }
 
     cancel() {
@@ -365,7 +415,7 @@ export class ConstatsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedConstat);
+        // console.log(this.selectedConstat);
     }
 
     filterRues(event: any) {

@@ -117,22 +117,21 @@
                 <div class="p-col-6">
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <input type="text" id="nom" name="nom" formControlName="nom" [value]="selectedData.nom"
-                                required pInputText>
+                            <input type="text" id="nom" name="nom" formControlName="nom" required pInputText>
                             <label for="nom">Nom de la rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="denomination" name="denomination" formControlName="denomination"
-                                [value]="selectedData.denomination" pInputText>
+                                pInputText>
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
-                                [value]="selectedData.nomComplet" pInputText>
+                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet" pInputText
+                                [disabled]="true">
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
@@ -164,27 +163,16 @@
                         </span>
                     </div>
 
-
-
-
-                    <!-- <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="quartier" name="quartier" formControlName="quartier"
-                                [value]="selectedData.quartier" pInputText>
-                            <label for="quartier">quartier</label>
-                        </span>
-                    </div> -->
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="codeRue" name="codeRue" formControlName="codeRue"
-                                [value]="selectedData.codeRue" pInputText>
+                            <input type="text" id="codeRue" name="codeRue" formControlName="codeRue" pInputText>
                             <label for="codeRue">Code rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="traductionNl" name="traductionNl" formControlName="traductionNl"
-                                [value]="selectedData.traductionNl" pInputText>
+                                pInputText>
                             <label for="traductionNl">Traduction NL</label>
                         </span>
                     </div>
@@ -234,8 +222,8 @@
 
                 <div class="p-d-flex p-jc-between">
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success"
-                        icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
                     <!-- <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                         class="p-button-sm p-button-success"
                         icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}" [disabled]="!dataForm.valid"></button> -->

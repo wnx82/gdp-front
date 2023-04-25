@@ -11,7 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
     providers: [MessageService],
 })
 export class CategoriesComponent implements OnInit {
-    private apiUrl: string = environment.apiUrl;
+    private apiUrl: string | undefined;
     donnees: any[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
@@ -48,7 +48,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
@@ -62,6 +62,11 @@ export class CategoriesComponent implements OnInit {
             },
             error: error => {
                 this.handleError(error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
             },
         });
     }
@@ -73,7 +78,7 @@ export class CategoriesComponent implements OnInit {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, donnee).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
@@ -98,7 +103,7 @@ export class CategoriesComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
-                    detail: 'La modification a échoué',
+                    detail: 'La modification a échouée',
                 });
             },
         });
@@ -116,6 +121,11 @@ export class CategoriesComponent implements OnInit {
                 this.get();
             },
             error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
                 console.log(error);
             },
         });
@@ -171,6 +181,9 @@ export class CategoriesComponent implements OnInit {
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            title: donnee?.title,
+        });
     }
     cancel() {
         this.selectedData = {};

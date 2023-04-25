@@ -135,7 +135,7 @@ export class RuesComponent implements OnInit {
     }
 
     addRue(rue: any) {
-        this.http.post<any>(`${this.API_URL}`, rue).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.rues.push(data);
                 this.isAdding = false;
@@ -192,7 +192,7 @@ export class RuesComponent implements OnInit {
             // Ajouter les autres champs de la rue ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, updatedRue).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.rues.findIndex(r => r._id === data._id);
                 this.rues[index] = data;
@@ -299,6 +299,21 @@ export class RuesComponent implements OnInit {
 
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            nom: donnee?.nom,
+            denomination: donnee?.denomination,
+            nomComplet: donnee?.nomComplet,
+            quartier: donnee?.quartier,
+            cp: donnee?.cp,
+            localite: donnee?.localite,
+            codeRue: donnee?.codeRue,
+            traductionNl: donnee?.traductionNl,
+            xMin: donnee?.xMin,
+            xMax: donnee?.xMax,
+            yMin: donnee?.yMin,
+            yMax: donnee?.yMax,
+            idTronconCentral: donnee?.idTronconCentral,
+        });
     }
 
     cancel() {

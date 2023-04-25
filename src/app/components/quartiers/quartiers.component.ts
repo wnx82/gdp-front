@@ -107,7 +107,7 @@ export class QuartiersComponent implements OnInit {
         });
     }
     add(quartier: any) {
-        this.http.post<any>(`${this.API_URL}`, quartier).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.quartiers.push(data);
                 this.isAdding = false;
@@ -149,7 +149,7 @@ export class QuartiersComponent implements OnInit {
             // Ajouter les autres champs de la quartier ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, updatedRue).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.quartiers.findIndex(r => r._id === data._id);
                 this.quartiers[index] = data;
@@ -164,10 +164,18 @@ export class QuartiersComponent implements OnInit {
                 this.get();
             },
             error: error => {
+                console.error('Erreur de requête PATCH', error);
+                if (error.error && error.error.message) {
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
+                }
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
-                    detail: error.error.message,
+                    detail: 'La modification a échouée',
+                    // detail: error.error.message,
                 });
             },
         });
@@ -254,14 +262,16 @@ export class QuartiersComponent implements OnInit {
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            title: donnee?.title,
+            missions: donnee?.mssions,
+        });
     }
-
     cancel() {
         this.selectedData = {};
         this.isAdding = false;
         this.isEditing = false;
     }
-
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedData = {};
@@ -270,9 +280,8 @@ export class QuartiersComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedData);
+        // console.log(this.selectedData);
     }
-
     search() {
         this.get();
     }

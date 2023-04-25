@@ -20,6 +20,8 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
     declarations: [ConstatsComponent],
@@ -42,6 +44,8 @@ import { TagModule } from 'primeng/tag';
         HttpClientModule,
         TableModule,
         TagModule,
+        MessageModule,
+        MessagesModule,
     ],
 })
 export class ConstatsModule {}
