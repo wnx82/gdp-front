@@ -23,6 +23,7 @@ import { SublevelMenuComponent } from './main-page/sidenav/sublevel-menu.compone
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
+import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { RegistrationComponent } from './services/registration/registration.comp
         DashboardComponent,
         NoOpenDirective,
         RegistrationComponent,
+        ToUpperCasePipe,
     ],
     imports: [
         BrowserModule,

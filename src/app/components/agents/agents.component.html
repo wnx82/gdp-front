@@ -63,10 +63,11 @@
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
-                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td>
+                <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td> -->
+                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td>
 
                 <td>{{ agent.matricule }}</td>
-                <td>{{ agent.lastname }}</td>
+                <td>{{ agent.lastname | uppercase }}</td>
                 <td>{{ agent.firstname }}</td>
 
                 <td>

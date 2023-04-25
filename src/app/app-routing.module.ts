@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -111,7 +112,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), ReactiveFormsModule],
+    imports: [
+        RouterModule.forRoot(routes),
+        ReactiveFormsModule,
+        SharedUiModule,
+    ],
     exports: [RouterModule],
 })
 export class AppRoutingModule {}
