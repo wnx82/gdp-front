@@ -125,9 +125,7 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-    clear(table: Table) {
-        table.clear();
-    }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -322,5 +320,8 @@ export class RuesComponent implements OnInit {
 
     search() {
         this.get();
+    }
+    clear(table: Table) {
+        table.clear();
     }
 }

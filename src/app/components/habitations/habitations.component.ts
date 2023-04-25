@@ -214,7 +214,8 @@ export class HabitationsComponent implements OnInit {
 
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, updatedHabitation).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
+            // this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {
                 const index = this.habitations.findIndex(
                     a => a._id === data._id

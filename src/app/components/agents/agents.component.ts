@@ -5,9 +5,15 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-
+import { Table } from 'primeng/table';
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
@@ -24,6 +30,7 @@ export class AgentsComponent implements OnInit {
     };
     isAdding: boolean = false;
     isEditing: boolean = false;
+    itemsPerPage: number = 50;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
@@ -32,7 +39,7 @@ export class AgentsComponent implements OnInit {
             Validators.required,
             Validators.minLength(8),
         ]),
-        userAccess: new FormControl('', [
+        userAccess: new FormControl(1, [
             Validators.required,
             Validators.pattern(/^\d+$/),
         ]),
@@ -57,7 +64,8 @@ export class AgentsComponent implements OnInit {
         private http: HttpClient,
         private messageService: MessageService,
         private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -66,9 +74,9 @@ export class AgentsComponent implements OnInit {
 
     ngOnInit() {
         this.getAgents();
-
         this.loadRues();
     }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -101,6 +109,7 @@ export class AgentsComponent implements OnInit {
         this.http.get<any[]>(url).subscribe({
             next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
+                console.log(this.agents);
             },
             error: error => {
                 this.messageService.add({
@@ -114,7 +123,8 @@ export class AgentsComponent implements OnInit {
 
     addAgent(agent: any) {
         let url = `${this.API_URL}`;
-        this.http.post<any>(url, agent).subscribe({
+        console.log(this.dataForm.value);
+        this.http.post<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 this.agents.push(data);
                 this.isAdding = false;
@@ -141,61 +151,27 @@ export class AgentsComponent implements OnInit {
             console.error('Données invalides', agent);
             return;
         }
-
+        console.log('agent update', agent);
         const updatedAgent = {
-            email:
-                agent.email !== null ? agent.email : this.selectedAgent.email,
-            password:
-                agent.password !== null
-                    ? agent.password
-                    : this.selectedAgent.password,
-            userAccess:
-                agent.userAccess !== null
-                    ? agent.userAccess
-                    : this.selectedAgent.userAccess,
-            matricule:
-                agent.matricule !== null
-                    ? agent.matricule
-                    : this.selectedAgent.matricule,
-            firstname:
-                agent.firstname !== null
-                    ? agent.firstname
-                    : this.selectedAgent.firstname,
-            lastname:
-                agent.lastname !== null
-                    ? agent.lastname
-                    : this.selectedAgent.lastname,
-            birthday:
-                agent.birthday !== null
-                    ? agent.birthday
-                    : this.selectedAgent.birthday,
-            tel: agent.tel !== null ? agent.tel : this.selectedAgent.tel,
-            iceContact:
-                agent.iceContact !== null
-                    ? agent.iceContact
-                    : this.selectedAgent.iceContact,
-            adresse:
-                agent.adresse !== null
-                    ? agent.adresse
-                    : this.selectedAgent.adresse,
-            picture:
-                agent.picture !== null
-                    ? agent.picture
-                    : this.selectedAgent.picture,
-            formations:
-                agent.formations && Array.isArray(agent.formations)
-                    ? agent.formations
-                    : this.selectedAgent.formations &&
-                      Array.isArray(this.selectedAgent.formations)
-                    ? this.selectedAgent.formations
-                    : [],
-
-            // Ajouter les autres champs de l'agent ici si nécessaire
+            ...agent,
+            matricule: { ...agent.matricule },
+            email: { ...agent.email },
+            password: { ...agent.password },
+            userAccess: { ...agent.userAccess },
+            firstname: { ...agent.firstname },
+            lastname: { ...agent.lastname },
+            birthday: { ...agent.birthday },
+            tel: { ...agent.tel },
+            iceContact: { ...agent.iceContact },
+            adresse: { ...agent.adresse },
+            picture: { ...agent.picture },
+            formations: { ...agent.formations },
         };
 
         const url = `${this.API_URL}/${this.selectedAgent._id}`;
 
-        this.http.patch<any>(url, updatedAgent).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
+            // this.http.patch<any>(url, updatedAgent).subscribe({
             next: data => {
                 const index = this.agents.findIndex(a => a._id === data._id);
                 this.agents[index] = data;
@@ -302,6 +278,25 @@ export class AgentsComponent implements OnInit {
     }
     selectAgent(agent: any) {
         this.selectedAgent = { ...agent };
+        console.log("Sélection de l'agent", this.selectedAgent);
+        this.dataForm.patchValue({
+            email: agent?.email,
+            password: agent?.password,
+            userAccess: agent?.userAccess,
+            matricule: agent?.matricule,
+            firstname: agent?.firstname,
+            lastname: agent?.lastname,
+            birthday: agent?.birthday,
+            tel: agent?.tel,
+            iceContact: agent?.iceContact,
+            adresse: {
+                rue: agent?.adresse?.rue,
+                numero: agent?.adresse?.numero,
+            },
+            picture: agent?.picture,
+            formations: agent?.formations || [],
+        });
+        console.log('Data form value: ', this.dataForm.value);
     }
 
     cancel() {
@@ -320,33 +315,35 @@ export class AgentsComponent implements OnInit {
         this.isEditing = !this.isEditing;
         console.log(this.selectedAgent);
     }
-
-    filterRues(event: any) {
-        const query = event.query.toLowerCase();
-        this.filteredRues = this.rues
-            .filter(
-                rue =>
-                    typeof rue.nomComplet === 'string' &&
-                    rue.nomComplet.toLowerCase().includes(query)
-            )
-
-            .sort((a, b) => {
-                const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-                const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-                if (aIndex < bIndex) {
-                    return -1;
-                }
-                if (aIndex > bIndex) {
-                    return 1;
-                }
-                // Si les deux rues ont la même position de la requête,
-                // on les trie par ordre alphabétique
-                return a.nomComplet.localeCompare(b.nomComplet);
-            })
-
-            .slice(0, 10)
-            .map(rue => rue.nomComplet);
+    clear(table: Table) {
+        table.clear();
     }
+    // filterRues(event: any) {
+    //     const query = event.query.toLowerCase();
+    //     this.filteredRues = this.rues
+    //         .filter(
+    //             rue =>
+    //                 typeof rue.nomComplet === 'string' &&
+    //                 rue.nomComplet.toLowerCase().includes(query)
+    //         )
+
+    //         .sort((a, b) => {
+    //             const aIndex = a.nomComplet.toLowerCase().indexOf(query);
+    //             const bIndex = b.nomComplet.toLowerCase().indexOf(query);
+    //             if (aIndex < bIndex) {
+    //                 return -1;
+    //             }
+    //             if (aIndex > bIndex) {
+    //                 return 1;
+    //             }
+    //             // Si les deux rues ont la même position de la requête,
+    //             // on les trie par ordre alphabétique
+    //             return a.nomComplet.localeCompare(b.nomComplet);
+    //         })
+
+    //         .slice(0, 10)
+    //         .map(rue => rue.nomComplet);
+    // }
 
     addFormation(): void {
         // this.dataForm.formations.push(this.dataForm.control(''));
