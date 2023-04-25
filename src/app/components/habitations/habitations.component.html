@@ -69,19 +69,19 @@
 
         <ng-template pTemplate="body" let-habitation>
             <tr>
-                <td>{{ habitation.adresse.nomComplet }}, {{ habitation.adresse.numero }}</td>
-                <td>{{ habitation.adresse.quartier }}</td>
+                <td>{{ habitation?.adresse?.nomComplet }}, {{ habitation?.adresse?.numero }}</td>
+                <td>{{ habitation?.adresse?.quartier }}</td>
 
                 <td>
 
                     <!-- <p-tag [value]="warning" [severity]="danger"></p-tag> -->
 
-                    <p-tag [value]="habitation.adresse.localite"
-                        [severity]="getSeverity(habitation.adresse.localite)"></p-tag>
+                    <p-tag [value]="habitation?.adresse?.localite"
+                        [severity]="getSeverity(habitation?.adresse?.localite)"></p-tag>
                 </td>
 
-                <td>{{ habitation.dates.debut | date: 'yyyy-MM-dd HH:mm'}}</td>
-                <td>{{ habitation.dates.fin | date: 'yyyy-MM-dd HH:mm'}}</td>
+                <td>{{ habitation?.dates?.debut | date: 'yyyy-MM-dd HH:mm'}}</td>
+                <td>{{ habitation?.dates?.fin | date: 'yyyy-MM-dd HH:mm'}}</td>
                 <!-- <td>{{ habitation.adresse.localite }}</td> -->
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
@@ -141,13 +141,13 @@
                     <div formGroupName="demandeur">
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="demandeur" name="demandeur" formControlName="nom" pInputText>
+                                <input type="text" formControlName="nom" pInputText>
                                 <label for="demandeur">Demandeur</label>
                             </span>
                         </div>
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="tel" name="tel" formControlName="tel" pInputText>
+                                <input type="text" formControlName="tel" pInputText>
                                 <label for="tel">Téléphone</label>
                             </span>
                         </div>
@@ -155,17 +155,18 @@
                     <div formGroupName="dates">
                         <div class="p-field">
                             <span class="p-float-label">
-                                <p-calendar id="debut" name="debut" formControlName="debut" [showIcon]="true"
-                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'"
-                                    class="p-datepicker-today">
+                                <!-- <input type="text" id="tel" name="tel" formControlName="debut" pInputText> -->
+                                <p-calendar formControlName="debut" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today">
                                 </p-calendar>
                                 <label for="debut">Date de début : </label>
                             </span>
                         </div>
+
                         <div class="p-field">
                             <span class="p-float-label">
-                                <p-calendar id="fin" name="fin" formControlName="fin" [showIcon]="true"
-                                    [dateFormat]="'dd/mm/yy'" [timeOnly]="false" [hourFormat]="'24'">
+                                <p-calendar formControlName="fin" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today">
                                 </p-calendar>
                                 <label for="fin">Date de fin</label>
                             </span>
@@ -174,18 +175,24 @@
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="vehicule" name="vehicule" formControlName="vehicule" pInputText>
+                            <input type="text" formControlName="vehicule" pInputText>
                             <label for="vehicule">Véhicule</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="googlemap" name="googlemap" formControlName="googlemap" pInputText>
+                            <input type="text" formControlName="googlemap" pInputText>
                             <label for="googlemap">Google Map</label>
                         </span>
                     </div>
-
                     <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" formControlName="mesures" pInputText>
+                            <label for="mesures">mesures</label>
+                        </span>
+                    </div>
+
+                    <!-- <div class="p-field">
                         <span class="p-float-label">
                             <ul>
                                 <li *ngFor="let mesure of mesures">{{mesure}}</li>
@@ -193,7 +200,7 @@
 
                             <label for="mesures">Mesures de sécurité</label>
                         </span>
-                    </div>
+                    </div> -->
 
 
 
@@ -202,7 +209,8 @@
 
             <div class="p-d-flex p-jc-between">
                 <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                    [disabled]="!dataForm.valid"></button>
 
                 <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                     icon="pi pi-times" (click)="cancel()"></button>

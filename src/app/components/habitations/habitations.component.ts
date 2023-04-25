@@ -22,7 +22,8 @@ import { Habitation, Rue } from './habitations.interface';
 })
 export class HabitationsComponent implements OnInit {
     private apiUrl: string | undefined;
-    habitations: Habitation[] = [];
+    // habitations: Habitation[] = [];
+    habitations: any[] = [];
     filteredRues: any[] = [];
     selectedData: any = {};
     selectedHabitation: any = {};
@@ -41,22 +42,23 @@ export class HabitationsComponent implements OnInit {
             tel: new FormControl(''),
         }),
         dates: new FormGroup({
-            debut: new FormControl(''),
-            fin: new FormControl(''),
+            debut: new FormControl(new Date()),
+            fin: new FormControl(new Date()),
         }),
         mesures: new FormArray([]),
+        // mesures: new FormArray([]),
         vehicule: new FormControl(''),
         googlemap: new FormControl(''),
     });
-    mesures = [
-        "Système d'alarme : Oui",
-        'Eclairage extérieur : Oui',
-        "Minuterie d'éclairage : Oui",
-        'Société gardiennage : Non',
-        'Chien : Non',
-        "Présence d'un tiers : Non",
-        'Autres : volets roulants programmables, éclairage programmé entrée et chambres',
-    ];
+    // mesures = [
+    //     "Système d'alarme : Oui",
+    //     'Eclairage extérieur : Oui',
+    //     "Minuterie d'éclairage : Oui",
+    //     'Société gardiennage : Non',
+    //     'Chien : Non',
+    //     "Présence d'un tiers : Non",
+    //     'Autres : volets roulants programmables, éclairage programmé entrée et chambres',
+    // ];
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
@@ -73,7 +75,6 @@ export class HabitationsComponent implements OnInit {
     selectedLocalite: any;
     ngOnInit() {
         this.getHabitations();
-
         this.loadRues();
     }
 
@@ -193,49 +194,25 @@ export class HabitationsComponent implements OnInit {
             console.error('Données invalides', habitation);
             return;
         }
-        console.log(habitation);
+        console.log('habitation update', habitation);
         const updatedHabitation = {
-            // Ajouter les autres champs de l'habitation ici si nécessaire
-            rue:
-                habitation.adresse.rue !== null
-                    ? habitation.adresse.rue
-                    : this.selectedHabitation.adresse.rue,
-            numero:
-                habitation.adresse.numero !== null
-                    ? habitation.adresse.numero
-                    : this.selectedHabitation.adresse.numero,
-
-            nom:
-                habitation.demandeur.nom !== null
-                    ? habitation.demandeur.nom
-                    : this.selectedHabitation.demandeur.nom,
-            tel:
-                habitation.demandeur.tel !== null
-                    ? habitation.demandeur.tel
-                    : this.selectedHabitation.demandeur.tel,
-            debut:
-                habitation.dates.debut !== null
-                    ? habitation.dates.debut
-                    : this.selectedHabitation.dates.debut,
-            fin:
-                habitation.dates.fin !== null
-                    ? habitation.dates.fin
-                    : this.selectedHabitation.dates.fin,
-            mesures:
-                habitation.mesures !== null && habitation.mesures.length > 0
-                    ? habitation.mesures
-                    : this.selectedHabitation.mesures || [],
-
-            vehicule:
-                habitation.vehicule !== null
-                    ? habitation.vehicule
-                    : this.selectedHabitation.vehicule,
-            googlemap:
-                habitation.googlemap !== null
-                    ? habitation.googlemap
-                    : this.selectedHabitation.googlemap,
+            // Écraser les champs modifiés
+            ...habitation,
+            adresse: {
+                ...habitation.adresse,
+            },
+            demandeur: {
+                ...habitation.demandeur,
+            },
+            dates: {
+                ...habitation.dates,
+            },
+            mesures: habitation.mesures?.length
+                ? habitation.mesures
+                : habitation.mesures || [],
         };
-        const url = `${this.API_URL}/${this.selectedHabitation._id}`;
+
+        const url = `${this.API_URL}/${id}`;
 
         this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {
@@ -370,23 +347,24 @@ export class HabitationsComponent implements OnInit {
 
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
-        console.log(this.selectedHabitation);
+        console.log('sélection de lhabitation', this.selectedHabitation);
         this.dataForm.patchValue({
             adresse: {
-                rue: habitation.adresse.nomComplet,
-                numero: habitation.adresse.numero,
+                rue: habitation?.adresse?.nomComplet,
+                numero: habitation?.adresse?.numero,
             },
             demandeur: {
-                nom: habitation.demandeur.nom,
-                tel: habitation.demandeur.tel,
+                nom: habitation?.demandeur?.nom,
+                tel: habitation?.demandeur?.tel,
             },
             dates: {
-                debut: habitation.dates.debut,
-                fin: habitation.dates.fin,
+                debut: habitation?.dates?.debut,
+                fin: habitation?.dates?.fin,
             },
-            mesures: habitation.mesures || [],
-            vehicule: habitation.vehicule,
-            googlemap: habitation.googlemap,
+
+            mesures: habitation?.mesures || [],
+            vehicule: habitation?.vehicule,
+            googlemap: habitation?.googlemap,
         });
         console.log('Data form value: ', this.dataForm.value);
     }
@@ -435,13 +413,13 @@ export class HabitationsComponent implements OnInit {
             .map(rue => rue.nomComplet);
     }
 
-    addMesures() {
-        const mesuresArray = this.selectedHabitation?.mesures || []; // Récupérer la liste de mesures
-        const mesuresFormArray = this.dataForm.get('mesures') as FormArray; // Obtenir la référence au FormArray
+    // addMesures() {
+    //     const mesuresArray = this.selectedHabitation?.mesures || []; // Récupérer la liste de mesures
+    //     const mesuresFormArray = this.dataForm.get('mesures') as FormArray; // Obtenir la référence au FormArray
 
-        // Ajouter chaque élément de mesures au FormArray
-        for (const mesure of mesuresArray) {
-            mesuresFormArray.push(new FormControl(mesure));
-        }
-    }
+    //     // Ajouter chaque élément de mesures au FormArray
+    //     for (const mesure of mesuresArray) {
+    //         mesuresFormArray.push(new FormControl(mesure));
+    //     }
+    // }
 }

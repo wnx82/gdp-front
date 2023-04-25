@@ -20,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+
 // import { DetailsHabitationComponent } from './details-habitation/details-habitation.component';
 
 @NgModule({
