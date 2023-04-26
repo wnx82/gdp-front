@@ -28,7 +28,7 @@
         "openai": "^3.2.1",
         "primeflex": "^3.3.0",
         "primeicons": "^6.0.1",
-        "primeng": "^15.3.0",
+        "primeng": "^15.4.1",
         "rxjs": "~7.8.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.12.0"

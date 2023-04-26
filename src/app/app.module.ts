@@ -11,6 +11,7 @@ import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,7 @@ import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
+import { UploadComponent } from './services/upload/upload.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +40,7 @@ import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
         NoOpenDirective,
         RegistrationComponent,
         ToUpperCasePipe,
+        UploadComponent,
     ],
     imports: [
         BrowserModule,
@@ -53,6 +56,7 @@ import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
         ButtonModule,
         PaginatorModule,
         InputTextModule,
+        FileUploadModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

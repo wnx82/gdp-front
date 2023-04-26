@@ -109,7 +109,7 @@ export class RuesComponent implements OnInit {
         const quartiersLocalStorage = localStorage.getItem('quartiers');
         if (quartiersLocalStorage === null) {
             // Si les quartiers n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/quartiers').subscribe(
+            this.http.get<any[]>(`${environment.apiUrl}/quartiers`).subscribe(
                 data => {
                     this.quartiers = data;
                     localStorage.setItem(

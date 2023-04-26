@@ -11,8 +11,6 @@ import { MessageService } from 'primeng/api';
     providers: [MessageService],
 })
 export class DashboardComponent implements OnInit {
-    readonly API_URL = `${environment.apiUrl}`;
-
     agentCount = 0; // Initialise la propriété agentCount à zéro
     ruesCount = 0; // Initialise la propriété agentCount à zéro
     missionsCount = 0; // Initialise la propriété agentCount à zéro
@@ -21,22 +19,18 @@ export class DashboardComponent implements OnInit {
         private http: HttpClient,
         private messageService: MessageService
     ) {}
-
+    readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
         this.lastUpdate = new Date();
-        this.http
-            .get<any[]>('http://localhost:3003/agents')
-            .subscribe(agents => {
-                this.agentCount = agents.length;
-            });
-        this.http.get<any[]>('http://localhost:3003/rues').subscribe(rues => {
+        this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
+            this.agentCount = agents.length;
+        });
+        this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
             this.ruesCount = rues.length;
         });
-        this.http
-            .get<any[]>('http://localhost:3003/missions')
-            .subscribe(missions => {
-                this.missionsCount = missions.length;
-            });
+        this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
+            this.missionsCount = missions.length;
+        });
     }
 
     clearAll() {
@@ -45,7 +39,7 @@ export class DashboardComponent implements OnInit {
         console.log('Local storage cleared.');
 
         console.log('Flushing Redis cache...');
-        this.http.post<any>(`http://localhost:3003/flushall`, {}).subscribe(
+        this.http.post<any>(`${this.API_URL}/flushall`, {}).subscribe(
             response => {
                 if (response.status === 200) {
                     console.log('Flush all successful', response);

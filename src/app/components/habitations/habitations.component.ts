@@ -82,7 +82,7 @@ export class HabitationsComponent implements OnInit {
         const ruesLocalStorage = localStorage.getItem('rues');
         if (ruesLocalStorage === null) {
             // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
+            this.http.get<any[]>(`${environment.apiUrl}/rues`).subscribe(
                 data => {
                     this.rues = data;
                     localStorage.setItem('rues', JSON.stringify(this.rues));

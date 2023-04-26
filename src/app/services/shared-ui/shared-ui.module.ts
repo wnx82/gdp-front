@@ -13,6 +13,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
@@ -34,6 +35,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         PasswordModule,
         TableModule,
         ToastModule,
+        FileUploadModule,
     ],
 })
 export class SharedUiModule {}

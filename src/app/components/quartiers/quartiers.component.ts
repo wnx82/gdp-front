@@ -54,7 +54,7 @@ export class QuartiersComponent implements OnInit {
         const missionsLocalStorage = localStorage.getItem('missions');
 
         if (!missionsLocalStorage) {
-            this.http.get<any[]>('http://localhost:3003/missions').subscribe(
+            this.http.get<any[]>(`${environment.apiUrl}/missions`).subscribe(
                 data => {
                     this.missions = data;
                     localStorage.setItem('missions', JSON.stringify(data));

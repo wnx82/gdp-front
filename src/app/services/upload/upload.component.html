@@ -1,0 +1,10 @@
+<h1>Upload de fichier</h1>
+
+
+<p-fileUpload name="file" url="{{API_URL}}" (onSelect)="onFileSelected($event)" (onUpload)="onUpload()"
+    accept=".jpg,.jpeg,.png" nameTemplate="{originalName}.{extension}"></p-fileUpload>
+
+
+<div *ngFor="let image of images">
+    <img src="{{API_URL}}/uploads/{{image}}" alt="{{image}}">
+</div>
