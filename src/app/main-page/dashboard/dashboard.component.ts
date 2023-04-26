@@ -8,7 +8,6 @@ import { MessageService } from 'primeng/api';
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    providers: [MessageService],
 })
 export class DashboardComponent implements OnInit {
     agentCount = 0; // Initialise la propriété agentCount à zéro
@@ -42,12 +41,17 @@ export class DashboardComponent implements OnInit {
         this.http.post<any>(`${this.API_URL}/flushall`, {}).subscribe(
             response => {
                 if (response.status === 200) {
-                    console.log('Flush all successful', response);
+                    console.log('Flush all successfully', response);
                 }
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
                     detail: 'Flush all successful',
+                });
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'info',
+                    detail: 'Localstorage successfully cleared',
                 });
             },
             error => {

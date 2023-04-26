@@ -15,6 +15,11 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { RuesLocalStorageService } from '../../services/rues-local-storage/rues-local-storage.component';
+import { SelectItemGroup } from 'primeng/api';
+
+interface Agent {
+    matricule: string;
+}
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -33,7 +38,6 @@ export class ConstatsComponent implements OnInit {
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
-        constats: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
         pv: new FormControl('', [Validators.required]),
         vehicule: new FormGroup({
@@ -59,15 +63,21 @@ export class ConstatsComponent implements OnInit {
             rue: new FormControl('', [Validators.required]),
             numero: new FormControl(''),
         }),
-        geolocation: new FormGroup({
-            latitude: new FormControl(''),
-            longitude: new FormControl(''),
-            horodatage: new FormControl(''),
-        }),
+        // geolocation: new FormGroup({
+        //     latitude: new FormControl(''),
+        //     longitude: new FormControl(''),
+        //     horodatage: new FormControl(''),
+        // }),
         infractions: new FormControl('', [Validators.required]),
         notes: new FormControl(''),
         annexes: new FormControl(''),
     });
+    checked: boolean = false;
+    groupedAgents: SelectItemGroup[] = [];
+    selectedAgents: Agent[] = [];
+    agentsBrut: any[] = [];
+    agents: any[] = [];
+    agentsNeed: any[] = [];
 
     constructor(
         private http: HttpClient,
@@ -83,6 +93,19 @@ export class ConstatsComponent implements OnInit {
     ngOnInit() {
         this.getConstats();
         this.rues = this.ruesLocalStorageService.getRues();
+        this.http.get<any[]>(`${environment.apiUrl}/agents`).subscribe(
+            data => {
+                this.agents = data.map(agent => ({
+                    value: agent._id,
+                    label: agent.matricule,
+                }));
+                localStorage.setItem('agents', JSON.stringify(this.agents));
+                console.log('Sauvegarde des agents dans le local storage');
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
     private handleError(error: any): void {
         this.messageService.add({
@@ -127,6 +150,7 @@ export class ConstatsComponent implements OnInit {
     }
 
     addConstat(constat: any) {
+        console.log(this.dataForm.value);
         this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.constats.push(data);
@@ -155,81 +179,7 @@ export class ConstatsComponent implements OnInit {
             return;
         }
 
-        const updatedConstat = {
-            vehicule: {
-                marque:
-                    constat.vehicule.marque ??
-                    this.selectedConstat.vehicule.marque,
-                modele:
-                    constat.vehicule.modele ??
-                    this.selectedConstat.vehicule.modele,
-                couleur:
-                    constat.vehicule.couleur ??
-                    this.selectedConstat.vehicule.couleur,
-                type:
-                    constat.vehicule.type ?? this.selectedConstat.vehicule.type,
-                immatriculation:
-                    constat.vehicule.immatriculation ??
-                    this.selectedConstat.vehicule.immatriculation,
-            },
-            personne: {
-                firstname:
-                    constat.personne.firstname ??
-                    this.selectedConstat.personne.firstname,
-                lastname:
-                    constat.personne.lastname ??
-                    this.selectedConstat.personne.lastname,
-                birthday:
-                    constat.personne.birthday ??
-                    this.selectedConstat.personne.birthday,
-                nationalNumber:
-                    constat.personne.nationalNumber ??
-                    this.selectedConstat.personne.nationalNumber,
-                tel: constat.personne.tel ?? this.selectedConstat.personne.tel,
-                adresse: {
-                    rue:
-                        constat.personne.adresse.rue ??
-                        this.selectedConstat.personne.adresse.rue,
-                    cp:
-                        constat.personne.adresse.cp ??
-                        this.selectedConstat.personne.adresse.cp,
-                    localite:
-                        constat.personne.adresse.localite ??
-                        this.selectedConstat.personne.adresse.localite,
-                },
-            },
-            adresse: {
-                rue: constat.adresse.rue ?? this.selectedConstat.adresse.rue,
-                numero:
-                    constat.adresse.numero ??
-                    this.selectedConstat.adresse.numero,
-            },
-            geolocation: {
-                latitude:
-                    constat.geolocation.latitude ??
-                    this.selectedConstat.geolocation.latitude,
-                longitude:
-                    constat.geolocation.longitude ??
-                    this.selectedConstat.geolocation.longitude,
-                horodatage:
-                    constat.geolocation.horodatage ??
-                    this.selectedConstat.geolocation.horodatage,
-            },
-            constats: constat.constats ?? this.selectedConstat.constats,
-            date: constat.date ?? this.selectedConstat.date,
-            pv: constat.pv ?? this.selectedConstat.pv,
-            infractions:
-                constat.infractions ?? this.selectedConstat.infractions,
-            notes: constat.notes ?? this.selectedConstat.notes,
-            annexes: constat.annexes ?? this.selectedConstat.annexes,
-            description:
-                constat.description ?? this.selectedConstat.description,
-            degats: constat.degats ?? this.selectedConstat.degats,
-            temoins: constat.temoins ?? this.selectedConstat.temoins,
-            image: constat.image ?? this.selectedConstat.image,
-        };
-
-        const url = `${this.API_URL}/constats/${this.selectedConstat._id}`;
+        const url = `${this.API_URL}/${this.selectedConstat._id}`;
 
         this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
@@ -372,16 +322,15 @@ export class ConstatsComponent implements OnInit {
             },
 
             agents: constat?.agents || [],
-            constats: constat?.constats,
             date: constat?.date,
             infractions: constat?.infractions,
             notes: constat?.notes,
             annexes: constat?.annexes,
-            geolocation: {
-                latitude: constat?.geolocation?.latitude,
-                longitude: constat?.geolocation?.longitude,
-                horodatage: constat?.geolocation?.couleur,
-            },
+            // geolocation: {
+            //     latitude: constat?.geolocation?.latitude,
+            //     longitude: constat?.geolocation?.longitude,
+            //     horodatage: constat?.geolocation?.couleur,
+            // },
         });
     }
 

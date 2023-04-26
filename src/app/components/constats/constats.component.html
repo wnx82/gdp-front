@@ -69,7 +69,9 @@
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectConstat(constat); toggleEdit()"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
+                        (click)="selectConstat(constat); deleteConstat(constat._id)"></button>
+                    <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button> -->
                 </td>
             </tr>
         </ng-template>
@@ -90,36 +92,46 @@
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addConstat(dataForm.value) : editConstat(selectedConstat._id, dataForm.value)">
             <div class="p-grid">
+
+
                 <div class="p-col-6">
+
+
+
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="date" name="date" formControlName="date" pInputText>
-                            <label for="date">Date</label>
+                            <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
+                                [showButtonBar]="true">
+                            </p-calendar>
+                            <label for="date">Date de début : </label>
                         </span>
-                        <p-message severity="error"
-                            *ngIf="dataForm.get('date')?.invalid && dataForm.get('date')?.dirty">La date est
-                            obligatoire.</p-message>
+                    </div>
+
+
+                    <p-multiSelect [options]="this.agents" formControlName="agents" defaultLabel="Select a Agent"
+                        scrollHeight="250px" display="chip">
+                        <ng-template let-agent pTemplate="agent">
+                            <div class="flex align-items-center">
+                                <span>{{ agent.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-multiSelect>
+
+
+
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <p-toggleButton [(ngModel)]="checked" onLabel="PV" offLabel="AV"
+                                formControlName="pv"></p-toggleButton>
+                            <!-- <input type="text" id="pv" name="pv" formControlName="pv" pInputText> -->
+                            <!-- <label for="pv">PV</label> -->
+                        </span>
 
                     </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="agents" name="agents" formControlName="agents" pInputText>
-                            <label for="agents">Agents</label>
-                        </span>
-                        <p-message severity="error"
-                            *ngIf="dataForm.get('agents')?.invalid && dataForm.get('agents')?.dirty">Les agents sont
-                            obligatoires.</p-message>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="pv" name="pv" formControlName="pv" pInputText>
-                            <label for="pv">PV</label>
-                        </span>
-                        <p-message severity="error" *ngIf="dataForm.get('pv')?.invalid && dataForm.get('pv')?.dirty">Le
-                            PV est
-                            obligatoire.</p-message>
 
-                    </div>
+
+
                     <div formGroupName="adresse">
                         <div class="p-field">
                             <span class="p-float-label">
@@ -144,16 +156,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="lieu" name="lieu" formControlName="adresse.rue" pInputText>
-                            <label for="lieu">Lieu</label>
-                        </span>
-                        <p-message severity="error"
-                            *ngIf="dataForm.get('adresse.rue')?.invalid && dataForm.get('adresse.rue')?.dirty">La rue
-                            est obligatoire.</p-message>
 
-                    </div>
                 </div>
                 <div class="p-col-6">
                     <div formGroupName="vehicule">
@@ -205,7 +208,10 @@
                         </div>
                         <div class="p-field">
                             <span class="p-float-label">
-                                <input type="text" id="birthday" name="birthday" formControlName="birthday" pInputText>
+                                <p-calendar formControlName="birthday" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    class="p-datepicker-today">
+                                </p-calendar>
+                                <label for="date">Date de début : </label>
                                 <label for="birthday">Date de naissance</label>
                             </span>
                         </div>
@@ -244,28 +250,7 @@
                             </div>
                         </div>
                     </div>
-                    <div formGroupName="geolocation">
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="latitude" name="latitude" formControlName="latitude" pInputText>
-                                <label for="latitude">Latitude</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="longitude" name="longitude" formControlName="longitude"
-                                    pInputText>
-                                <label for="longitude">Longitude</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="horodatage" name="horodatage" formControlName="horodatage"
-                                    pInputText>
-                                <label for="horodatage">Horodatage</label>
-                            </span>
-                        </div>
-                    </div>
+
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="infractions" name="infractions" formControlName="infractions"

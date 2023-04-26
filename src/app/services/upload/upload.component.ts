@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
+import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-upload',
     templateUrl: './upload.component.html',
@@ -12,7 +12,10 @@ export class UploadComponent {
 
     images: string[] = [];
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService
+    ) {}
 
     readonly API_URL = `${environment.apiUrl}/upload`;
     readonly API_URL_UPLOADS = `${environment.apiUrl}/uploads`;
@@ -28,8 +31,13 @@ export class UploadComponent {
     }
 
     onUpload(): void {
-        console.log('File uploaded successfully!');
-        alert('File uploaded successfully!');
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail: 'File uploaded successfully',
+        });
+        // console.log('File uploaded successfully!');
+        // alert('File uploaded successfully!');
     }
 
     uploadFile(): void {

@@ -14,8 +14,12 @@ import { PasswordModule } from 'primeng/password';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
-
+import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TagModule } from 'primeng/tag';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 @NgModule({
     declarations: [],
     exports: [
@@ -36,6 +40,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         TableModule,
         ToastModule,
         FileUploadModule,
+        MultiSelectModule,
+        TagModule,
+        MessageModule,
+        MessagesModule,
+        ToggleButtonModule,
     ],
 })
 export class SharedUiModule {}
