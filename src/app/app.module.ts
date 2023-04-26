@@ -26,6 +26,8 @@ import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
 import { UploadComponent } from './services/upload/upload.component';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     declarations: [
@@ -57,8 +59,9 @@ import { UploadComponent } from './services/upload/upload.component';
         PaginatorModule,
         InputTextModule,
         FileUploadModule,
+        ToastModule,
     ],
-    providers: [],
+    providers: [MessageService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
