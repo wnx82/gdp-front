@@ -51,7 +51,53 @@ export class LocalStorageService {
         } else {
             // Les rues existent dans le local storage
             console.log('Rues déjà chargées depuis le local storage');
-            return JSON.parse(ruesLocalStorage);
+            const ruesServeurPromise = this.http
+                .get<any[]>(this.API_URL)
+                .toPromise();
+            const ruesLocalStorageParsed = JSON.parse(ruesLocalStorage);
+            ruesServeurPromise
+                .then(ruesServeurParsed => {
+                    if (
+                        ruesServeurParsed &&
+                        ruesServeurParsed.length !==
+                            ruesLocalStorageParsed.length
+                    ) {
+                        localStorage.setItem(
+                            'rues',
+                            JSON.stringify(ruesServeurParsed)
+                        );
+                        console.log(
+                            'Les rues en localStorage ont été remplacées par celles du serveur'
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            return ruesLocalStorageParsed;
+        }
+        return [];
+    }
+
+    getAgents(): any[] {
+        const agentsLocalStorage = localStorage.getItem('agents');
+        if (agentsLocalStorage === null) {
+            // Si les agents n'existent pas encore dans le local storage
+            this.http.get<any[]>(this.API_URL).subscribe(
+                data => {
+                    localStorage.setItem('agents', JSON.stringify(data));
+                    console.log('Sauvegarde des agents dans le local storage');
+                    return data;
+                },
+                error => {
+                    console.error(error);
+                    return [];
+                }
+            );
+        } else {
+            // Les agents existent dans le local storage
+            console.log('Agents déjà chargés depuis le local storage');
+            return JSON.parse(agentsLocalStorage);
         }
         return [];
     }

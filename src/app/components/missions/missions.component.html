@@ -1,5 +1,4 @@
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
     </div>
@@ -9,8 +8,7 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
     </div>
@@ -80,7 +78,7 @@
 
 
     <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
-        [(visible)]="isAdding || isEditing" [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true"
+        [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
         [style]="{width: '50vw'}" (onHide)="cancel()">
 
         <form [formGroup]="dataForm"
