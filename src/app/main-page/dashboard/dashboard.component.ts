@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
 
 @Component({

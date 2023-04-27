@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
 @Component({
     selector: 'app-rues',
@@ -78,7 +78,7 @@ export class RuesComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private localStorageService: LocalStorageService,
+        private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
         private formBuilder: FormBuilder
     ) {}

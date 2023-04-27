@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
 import {
     FormArray,
@@ -14,7 +13,7 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { RuesLocalStorageService } from '../../services/rues-local-storage/rues-local-storage.component';
+import { LocalStorageService } from 'src/app/services/localstorage/local-storage.service';
 import { SelectItemGroup } from 'primeng/api';
 
 interface Agent {
@@ -82,9 +81,8 @@ export class ConstatsComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
-        private ruesLocalStorageService: RuesLocalStorageService
+        private _localStorageService: LocalStorageService
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -92,7 +90,7 @@ export class ConstatsComponent implements OnInit {
 
     ngOnInit() {
         this.getConstats();
-        this.rues = this.ruesLocalStorageService.getRues();
+        this.rues = this._localStorageService.getRues();
         this.http.get<any[]>(`${environment.apiUrl}/agents`).subscribe(
             data => {
                 this.agents = data.map(agent => ({
