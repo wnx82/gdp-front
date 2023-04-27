@@ -20,6 +20,8 @@ import { TagModule } from 'primeng/tag';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { AccordionModule } from 'primeng/accordion';
+
 @NgModule({
     declarations: [],
     exports: [
@@ -45,6 +47,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
         MessageModule,
         MessagesModule,
         ToggleButtonModule,
+        AccordionModule,
     ],
 })
 export class SharedUiModule {}
