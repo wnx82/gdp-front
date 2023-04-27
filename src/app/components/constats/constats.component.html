@@ -107,8 +107,8 @@
 
                     <div class="p-col-12 p-md-6">
                         <label for="agents">Agents: </label>
-                        <p-multiSelect [options]="this.agents" formControlName="agents" defaultLabel="Select a Agent"
-                            scrollHeight="250px" display="chip">
+                        <p-multiSelect [options]="this.agents" formControlName="agents"
+                            defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
                             <ng-template let-agent pTemplate="agent">
                                 <div class="flex align-items-center">
                                     <span>{{ agent.label }}</span>
