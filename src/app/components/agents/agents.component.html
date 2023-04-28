@@ -1,5 +1,4 @@
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
     </div>
@@ -9,8 +8,7 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer cet agent ?</p>
     </div>
@@ -34,7 +32,70 @@
                 class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
         </div>
     </div>
-    <ng-container *ngFor="let agent of agents">
+    <p-table #dataTableAgents [value]="agents" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableAgents)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableAgents.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:5%">Picture</th>
+                <th style="width:10%">Matricule</th>
+                <th style="width:10%">Nom</th>
+                <th style="width:10%">Prénom</th>
+
+                <th style="width:10%"></th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-agent>
+            <tr>
+                <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td> -->
+                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td>
+
+                <td>{{ agent.matricule }}</td>
+                <td>{{ agent.lastname | uppercase }}</td>
+                <td>{{ agent.firstname }}</td>
+
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectAgent(agent); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteAgent(agent._id)"></button>
+                </td>
+
+
+
+
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
+    </p-table>
+    <!-- <ng-container *ngFor="let agent of agents">
         <div class="card-deck">
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <p-card header="A{{agent.matricule}}" subheader="{{agent.firstname}} {{agent.lastname}}"
@@ -64,12 +125,12 @@
                 </p-card>
             </div>
         </div>
-    </ng-container>
+    </ng-container> -->
     <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
         style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
             <div class="p-grid">
@@ -111,7 +172,7 @@
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="email" name="email" formControlName="email" required
+                            <input type="email" id="email" name="email" formControlName="email" required
                                 [value]="selectedAgent.email" pInputText>
                             <label for="email">Email</label>
                         </span>
@@ -154,9 +215,44 @@
                     </div>
 
 
+                    <div formGroupName="adresse">
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+                                                    [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
+                                                    (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                    <ng-template let-item pTemplate="item">
+                                                        {{ item }}
+                                                    </ng-template>
+                                                </p-autoComplete> -->
+                                <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
+                                    filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                    formControlName="rue" optionValue="_id">
+                                    <ng-template let-nom pTemplate="item">
+                                        <div class="let-nom">
+                                            <div>{{nom.nomComplet}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
 
 
-                    <div class="p-field">
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" formControlName="numero" pInputText>
+                                <!-- <input type="text" id="numero" name="numero"
+                                                    [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
+                                                    pInputText> -->
+                                <label for="numero">Numéro</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="p-field">
                         <span class="p-float-label">
                             <p-autoComplete [(ngModel)]="selectedAgent.adresse" [dropdown]="true"
                                 [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
@@ -174,13 +270,9 @@
                                 [value]="selectedAgent?.adresse?.[0]?.numero || null" pInputText>
                             <label for="numero">Numéro</label>
                         </span>
-                    </div>
+                    </div> -->
 
 
-
-
-                </div>
-            </div>
 
             <div class="p-d-flex p-jc-between">
                 <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"

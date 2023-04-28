@@ -10,7 +10,8 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '../../services/localstorage/local-storage.service';
+
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -21,39 +22,46 @@ export class RuesComponent implements OnInit {
     private apiUrl: string | undefined;
     rues: any[] = [];
     quartiers: any[] = [];
+    localiteList = [
+        { label: 'Mouscron', value: 'Mouscron', cp: '7700' },
+        { label: 'Luingne', value: 'Luingne', cp: '7700' },
+        { label: 'Herseaux', value: 'Herseaux', cp: '7712' },
+        { label: 'Dottignies', value: 'Dottignies', cp: '7711' },
+    ];
+    cpList = [
+        { label: '7700', value: '7700', name: 'Mouscron' || 'Luingne' },
 
-    localiteToCodePostal = {
+        { label: '7712', value: '7712', name: 'Herseaux' },
+        { label: '7711', value: '7711', name: 'Dottignies' },
+    ];
+
+    localiteToCodePostal: { [key: string]: string } = {
         Mouscron: '7700',
         Luingne: '7700',
         Herseaux: '7712',
         Dottignies: '7711',
     };
 
-    codePostalToLocalite = {
-        '7700': 'Mouscron',
-        '7711': 'Dottignies',
-        '7712': 'Herseaux',
-    };
-    localiteOptions: SelectItem[] = Object.keys(this.localiteToCodePostal).map(
-        localite => ({ label: localite, value: localite })
-    );
-    cpOptions = Object.values(this.localiteToCodePostal).map(cp => ({
-        label: cp,
-        value: cp,
-    }));
-
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
 
-    itemsPerPage: number = 50;
+    itemsPerPage: number = 25;
 
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
+    nom: string = '';
+    denomination: string = '';
+    nomComplet: string = '';
+
     dataForm = new FormGroup({
-        nom: new FormControl(''),
+        nom: new FormControl({ value: '', disabled: false }),
         denomination: new FormControl(''),
-        nomComplet: new FormControl(''),
+
+        nomComplet: new FormControl(
+            { value: '', disabled: false },
+            Validators.required
+        ),
         quartier: new FormControl(''),
         cp: new FormControl(''),
         localite: new FormControl(''),
@@ -70,7 +78,7 @@ export class RuesComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private localStorageService: LocalStorageService,
+        private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
         private formBuilder: FormBuilder
     ) {}
@@ -81,36 +89,23 @@ export class RuesComponent implements OnInit {
 
     ngOnInit(): void {
         this.get();
-        this.formulaire = this.formBuilder.group({
-            quartier: ['', Validators.required],
+        // this.loadQuartiers();
+        this.quartiers = this._localStorageService.getQuartiers();
+        this.dataForm.get('localite')?.valueChanges.subscribe(value => {
+            const codePostal = this.localiteList.find(
+                option => option.value === value
+            )?.cp;
+            this.dataForm.get('cp')?.setValue(codePostal ?? null);
         });
-        this.loadQuartiers();
+
+        this.dataForm.get('cp')?.valueChanges.subscribe(value => {
+            const localite = this.cpList.find(
+                option => option.value === value
+            )?.name;
+            this.dataForm.get('localite')?.setValue(localite ?? null);
+        });
     }
-    private loadQuartiers(): void {
-        const quartiersLocalStorage = localStorage.getItem('quartiers');
-        if (quartiersLocalStorage === null) {
-            // Si les quartiers n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/quartiers').subscribe(
-                data => {
-                    this.quartiers = data;
-                    localStorage.setItem(
-                        'quartiers',
-                        JSON.stringify(this.quartiers)
-                    );
-                    console.log(
-                        'Sauvegarde des quartiers dans le local storage'
-                    );
-                },
-                error => {
-                    console.error(error);
-                }
-            );
-        } else {
-            // Les quartiers existent dans le local storage
-            this.quartiers = JSON.parse(quartiersLocalStorage);
-            console.log('Quartiers déjà chargés depuis le local storage');
-        }
-    }
+
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
             next: data => {
@@ -125,9 +120,7 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-    clear(table: Table) {
-        table.clear();
-    }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -137,7 +130,7 @@ export class RuesComponent implements OnInit {
     }
 
     addRue(rue: any) {
-        this.http.post<any>(`${this.API_URL}`, rue).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.rues.push(data);
                 this.isAdding = false;
@@ -194,7 +187,7 @@ export class RuesComponent implements OnInit {
             // Ajouter les autres champs de la rue ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, updatedRue).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.rues.findIndex(r => r._id === data._id);
                 this.rues[index] = data;
@@ -301,6 +294,21 @@ export class RuesComponent implements OnInit {
 
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            nom: donnee?.nom,
+            denomination: donnee?.denomination,
+            nomComplet: donnee?.nomComplet,
+            quartier: donnee?.quartier,
+            cp: donnee?.cp,
+            localite: donnee?.localite,
+            codeRue: donnee?.codeRue,
+            traductionNl: donnee?.traductionNl,
+            xMin: donnee?.xMin,
+            xMax: donnee?.xMax,
+            yMin: donnee?.yMin,
+            yMax: donnee?.yMax,
+            idTronconCentral: donnee?.idTronconCentral,
+        });
     }
 
     cancel() {
@@ -322,5 +330,8 @@ export class RuesComponent implements OnInit {
 
     search() {
         this.get();
+    }
+    clear(table: Table) {
+        table.clear();
     }
 }

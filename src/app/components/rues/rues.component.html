@@ -1,5 +1,4 @@
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
     </div>
@@ -9,8 +8,7 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer cette rue ?</p>
     </div>
@@ -110,46 +108,53 @@
 
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addRue(dataForm.value) : editRue(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <input type="text" id="nom" name="nom" formControlName="nom" [value]="selectedData.nom"
-                                required pInputText>
+                            <input type="text" id="nom" name="nom" formControlName="nom" required pInputText
+                                [(ngModel)]="nom">
                             <label for="nom">Nom de la rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="denomination" name="denomination" formControlName="denomination"
-                                [value]="selectedData.denomination" pInputText>
+                                pInputText [(ngModel)]="denomination">
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
-                                [value]="selectedData.nomComplet" pInputText>
+                                pInputText>
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
+                    <!-- <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
+                                [value]="denomination +' '+ nom" pInputText [(ngModel)]="nomComplet">
+                            <label for="nomComplet">Nom Complet</label>
+                        </span>
+                    </div> -->
                     <div class="p-field">
                         <span class="p-float-label">
-                            <p-dropdown formControlName="localite" [options]="localiteOptions" optionLabel="label"
-                                optionValue="value" placeholder="Sélectionner une localité"
-                                [(ngModel)]="selectedData.localite"></p-dropdown>
+                            <p-dropdown formControlName="localite" [options]="localiteList" optionValue="value"
+                                placeholder="Sélectionner une localité">
+                            </p-dropdown>
                             <label for="localite">Localité</label>
                         </span>
                     </div>
 
+
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <p-dropdown formControlName="cp" [options]="cpOptions" optionLabel="value"
-                                optionValue="value" placeholder="Sélectionner un code postal"
-                                [(ngModel)]="selectedData.cp"></p-dropdown>
+                            <p-dropdown formControlName="cp" [options]="cpList" optionValue="value"
+                                placeholder="Sélectionner un code postal"></p-dropdown>
                             <label for="cp">Code Postal</label>
                         </span>
                     </div>
@@ -164,27 +169,16 @@
                         </span>
                     </div>
 
-
-
-
-                    <!-- <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="quartier" name="quartier" formControlName="quartier"
-                                [value]="selectedData.quartier" pInputText>
-                            <label for="quartier">quartier</label>
-                        </span>
-                    </div> -->
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="codeRue" name="codeRue" formControlName="codeRue"
-                                [value]="selectedData.codeRue" pInputText>
+                            <input type="text" id="codeRue" name="codeRue" formControlName="codeRue" pInputText>
                             <label for="codeRue">Code rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="traductionNl" name="traductionNl" formControlName="traductionNl"
-                                [value]="selectedData.traductionNl" pInputText>
+                                pInputText>
                             <label for="traductionNl">Traduction NL</label>
                         </span>
                     </div>
@@ -234,8 +228,8 @@
 
                 <div class="p-d-flex p-jc-between">
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success"
-                        icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
                     <!-- <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                         class="p-button-sm p-button-success"
                         icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}" [disabled]="!dataForm.valid"></button> -->

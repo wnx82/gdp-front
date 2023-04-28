@@ -64,7 +64,9 @@ export class MissionsComponent implements OnInit {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+        console.log(this.dataForm.value);
+        const visibility = this.dataForm?.get('visibility')?.value ?? true;
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.missions.push(data);
                 this.isAdding = false;
@@ -117,7 +119,7 @@ export class MissionsComponent implements OnInit {
         };
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, updateMission).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.missions.findIndex(r => r._id === data._id);
                 this.missions[index] = data;
@@ -164,6 +166,11 @@ export class MissionsComponent implements OnInit {
                 this.get();
             },
             error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
                 console.log(error);
             },
         });
@@ -179,7 +186,7 @@ export class MissionsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
-                    detail: 'Toutes les données ont été complétement effacées',
+                    detail: 'Toutes les données ont été complètement effacées',
                 });
                 this.get(); // Met à jour la liste
             },
@@ -218,8 +225,17 @@ export class MissionsComponent implements OnInit {
         });
     }
     selectData(donnee: any) {
-        console.log(donnee);
+        // console.log(donnee);
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            title: donnee?.title,
+            description: donnee?.description,
+            category: donnee?.category,
+            horaire: donnee?.horaire,
+            contact: donnee?.contact,
+            priority: donnee?.priority,
+            visibility: donnee?.visibility,
+        });
     }
 
     cancel() {
@@ -236,5 +252,9 @@ export class MissionsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
+    }
+
+    search() {
+        this.get();
     }
 }

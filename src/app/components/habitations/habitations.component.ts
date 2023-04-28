@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-
 import { MessageService, SelectItem } from 'primeng/api';
 import {
     FormControl,
     FormBuilder,
     FormGroup,
     Validators,
+    FormArray,
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '../../services/localstorage/local-storage.service';
+
+import { Habitation, Rue } from './habitations.interface';
+
 @Component({
     selector: 'app-habitations',
     templateUrl: './habitations.component.html',
@@ -22,6 +23,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 })
 export class HabitationsComponent implements OnInit {
     private apiUrl: string | undefined;
+    // habitations: Habitation[] = [];
     habitations: any[] = [];
     filteredRues: any[] = [];
     selectedData: any = {};
@@ -35,28 +37,35 @@ export class HabitationsComponent implements OnInit {
         adresse: new FormGroup({
             rue: new FormControl(''),
             numero: new FormControl(''),
-            nomComplet: new FormControl(''),
-            quartier: new FormControl(''),
-            localite: new FormControl(''),
         }),
         demandeur: new FormGroup({
             nom: new FormControl(''),
             tel: new FormControl(''),
         }),
         dates: new FormGroup({
-            debut: new FormControl(''),
-            fin: new FormControl(''),
+            debut: new FormControl(new Date()),
+            fin: new FormControl(new Date()),
         }),
-        mesures: new FormControl(''),
+        mesures: new FormArray([]),
+        // mesures: new FormArray([]),
         vehicule: new FormControl(''),
         googlemap: new FormControl(''),
     });
-
+    // mesures = [
+    //     "Système d'alarme : Oui",
+    //     'Eclairage extérieur : Oui',
+    //     "Minuterie d'éclairage : Oui",
+    //     'Société gardiennage : Non',
+    //     'Chien : Non',
+    //     "Présence d'un tiers : Non",
+    //     'Autres : volets roulants programmables, éclairage programmé entrée et chambres',
+    // ];
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService
+        private _localStorageService: LocalStorageService,
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -67,45 +76,7 @@ export class HabitationsComponent implements OnInit {
     selectedLocalite: any;
     ngOnInit() {
         this.getHabitations();
-
-        this.loadRues();
-    }
-
-    private loadRues(): void {
-        const ruesLocalStorage = localStorage.getItem('rues');
-        if (ruesLocalStorage === null) {
-            // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
-                data => {
-                    this.rues = data;
-                    localStorage.setItem('rues', JSON.stringify(this.rues));
-                    console.log('Sauvegarde des rues dans le local storage');
-                },
-                error => {
-                    console.error(error);
-                }
-            );
-        } else {
-            // Les rues existent dans le local storage
-            this.rues = JSON.parse(ruesLocalStorage);
-            console.log('Rues déjà chargées depuis le local storage');
-        }
-    }
-
-    getQuartiers() {
-        const quartiers = new Set<string>();
-        for (const habitation of this.habitations) {
-            quartiers.add(habitation.adresse[0].quartier);
-        }
-        return Array.from(quartiers).map(quartier => ({ name: quartier }));
-    }
-
-    getLocalites() {
-        const localites = new Set<string>();
-        for (const habitation of this.habitations) {
-            localites.add(habitation.adresse[0].localite);
-        }
-        return Array.from(localites).map(localite => ({ name: localite }));
+        this.rues = this._localStorageService.getRues();
     }
 
     getHabitations() {
@@ -136,20 +107,6 @@ export class HabitationsComponent implements OnInit {
             detail: error.message,
         });
     }
-    // getColor(localite: string): string {
-    //     switch (localite) {
-    //         case 'Mouscron':
-    //             return 'red';
-    //         case 'Herseaux':
-    //             return 'yellow';
-    //         case 'Dottignies':
-    //             return 'orange';
-    //         case 'Luingne':
-    //             return 'purple';
-    //         default:
-    //             return 'black';
-    //     }
-    // }
     getSeverity(localite: string): string {
         switch (localite) {
             case 'Dottignies':
@@ -164,11 +121,18 @@ export class HabitationsComponent implements OnInit {
                 return 'success';
         }
     }
+
     addHabitation(habitation: any) {
         let url = `${this.API_URL}`;
-        this.http.post<any>(url, habitation).subscribe({
+        // console.log(habitation);
+        console.log(this.dataForm.value);
+
+        this.http.post<any>(url, this.dataForm.value).subscribe({
+            // this.dataForm.value.post<any>(url, habitation).subscribe({
+            // this.http.post<any>(url, habitation).subscribe({
             next: data => {
                 this.habitations.push(data);
+
                 this.isAdding = false;
                 this.messageService.add({
                     severity: 'success',
@@ -193,61 +157,28 @@ export class HabitationsComponent implements OnInit {
             console.error('Données invalides', habitation);
             return;
         }
+        console.log('habitation update', habitation);
         const updatedHabitation = {
-            // Ajouter les autres champs de l'habitation ici si nécessaire
-            rue:
-                habitation.adresse.rue !== null
-                    ? habitation.adresse.rue
-                    : this.selectedHabitation.adresse.rue,
-            numero:
-                habitation.adresse.numero !== null
-                    ? habitation.adresse.numero
-                    : this.selectedHabitation.adresse.numero,
-            nomComplet:
-                habitation.adresse.nomComplet !== null
-                    ? habitation.adresse.nomComplet
-                    : this.selectedHabitation.adresse.nomComplet,
-            quartier:
-                habitation.adresse.quartier !== null
-                    ? habitation.adresse.quartier
-                    : this.selectedHabitation.adresse.quartier,
-            localite:
-                habitation.adresse.localite !== null
-                    ? habitation.adresse.localite
-                    : this.selectedHabitation.adresse.localite,
-            nom:
-                habitation.demandeur.nom !== null
-                    ? habitation.demandeur.nom
-                    : this.selectedHabitation.demandeur.nom,
-            tel:
-                habitation.demandeur.tel !== null
-                    ? habitation.demandeur.tel
-                    : this.selectedHabitation.demandeur.tel,
-            debut:
-                habitation.dates.debut !== null
-                    ? habitation.dates.debut
-                    : this.selectedHabitation.dates.debut,
-            fin:
-                habitation.dates.fin !== null
-                    ? habitation.dates.fin
-                    : this.selectedHabitation.dates.fin,
-            mesures:
-                habitation.mesures !== null && habitation.mesures.length > 0
-                    ? habitation.mesures
-                    : this.selectedHabitation.mesures || [],
-
-            vehicule:
-                habitation.vehicule !== null
-                    ? habitation.vehicule
-                    : this.selectedHabitation.vehicule,
-            googlemap:
-                habitation.googlemap !== null
-                    ? habitation.googlemap
-                    : this.selectedHabitation.googlemap,
+            // Écraser les champs modifiés
+            ...habitation,
+            adresse: {
+                ...habitation.adresse,
+            },
+            demandeur: {
+                ...habitation.demandeur,
+            },
+            dates: {
+                ...habitation.dates,
+            },
+            mesures: habitation.mesures?.length
+                ? habitation.mesures
+                : habitation.mesures || [],
         };
-        const url = `${this.API_URL}/${this.selectedHabitation._id}`;
 
-        this.http.patch<any>(url, updatedHabitation).subscribe({
+        const url = `${this.API_URL}/${id}`;
+
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
+            // this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {
                 const index = this.habitations.findIndex(
                     a => a._id === data._id
@@ -355,12 +286,51 @@ export class HabitationsComponent implements OnInit {
         });
     }
 
-    selectData(donnee: any) {
-        this.selectedData = { ...donnee };
-    }
+    // selectData(donnee: any) {
+    //     console.log('on est là');
+    //     this.selectedData = { ...donnee };
+    //     this.dataForm.setValue({
+    //         adresse: {
+    //             rue: donnee.adresse.rue,
+    //             numero: donnee.adresse.numero,
+    //         },
+    //         demandeur: {
+    //             nom: donnee.demandeur.nom,
+    //             tel: donnee.demandeur.tel,
+    //         },
+    //         dates: {
+    //             debut: donnee.dates.debut,
+    //             fin: donnee.dates.fin,
+    //         },
+    //         mesures: donnee.mesures || [],
+    //         vehicule: donnee.vehicule,
+    //         googlemap: donnee.googlemap,
+    //     });
+    //     console.log('Data form value: ', this.dataForm.value);
+    // }
 
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
+        console.log('sélection de lhabitation', this.selectedHabitation);
+        this.dataForm.patchValue({
+            adresse: {
+                rue: habitation?.adresse?.nomComplet,
+                numero: habitation?.adresse?.numero,
+            },
+            demandeur: {
+                nom: habitation?.demandeur?.nom,
+                tel: habitation?.demandeur?.tel,
+            },
+            dates: {
+                debut: habitation?.dates?.debut,
+                fin: habitation?.dates?.fin,
+            },
+
+            mesures: habitation?.mesures || [],
+            vehicule: habitation?.vehicule,
+            googlemap: habitation?.googlemap,
+        });
+        console.log('Data form value: ', this.dataForm.value);
     }
 
     cancel() {
@@ -377,7 +347,7 @@ export class HabitationsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedHabitation);
+        // console.log(this.selectedHabitation);
     }
 
     filterRues(event: any) {
@@ -406,4 +376,14 @@ export class HabitationsComponent implements OnInit {
             .slice(0, 10)
             .map(rue => rue.nomComplet);
     }
+
+    // addMesures() {
+    //     const mesuresArray = this.selectedHabitation?.mesures || []; // Récupérer la liste de mesures
+    //     const mesuresFormArray = this.dataForm.get('mesures') as FormArray; // Obtenir la référence au FormArray
+
+    //     // Ajouter chaque élément de mesures au FormArray
+    //     for (const mesure of mesuresArray) {
+    //         mesuresFormArray.push(new FormControl(mesure));
+    //     }
+    // }
 }

@@ -50,7 +50,7 @@ export class VehiculesComponent {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
@@ -75,7 +75,7 @@ export class VehiculesComponent {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, donnee).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
@@ -173,6 +173,11 @@ export class VehiculesComponent {
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            marque: donnee?.marque,
+            modele: donnee?.modele,
+            immatriculation: donnee?.immatriculation,
+        });
     }
     cancel() {
         this.selectedData = {};

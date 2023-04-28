@@ -1,5 +1,4 @@
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
     </div>
@@ -59,7 +58,7 @@
 
 
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
 
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">

@@ -13,7 +13,6 @@ import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 
-
 @NgModule({
     declarations: [CategoriesComponent],
     imports: [
@@ -26,7 +25,7 @@ import { TableModule } from 'primeng/table';
         DialogModule,
         ToastModule,
         ReactiveFormsModule,
-        TableModule
+        TableModule,
     ],
 })
-export class CategoriesModule { }
+export class CategoriesModule {}

@@ -48,7 +48,7 @@ export class HorairesComponent implements OnInit {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
@@ -73,7 +73,7 @@ export class HorairesComponent implements OnInit {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, donnee).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
@@ -98,7 +98,7 @@ export class HorairesComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
-                    detail: 'La modification a échoué',
+                    detail: 'La modification a échouée',
                 });
             },
         });
@@ -116,6 +116,11 @@ export class HorairesComponent implements OnInit {
                 this.get();
             },
             error: error => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
                 console.log(error);
             },
         });
@@ -171,6 +176,9 @@ export class HorairesComponent implements OnInit {
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            horaire: donnee?.horaire,
+        });
     }
     cancel() {
         this.selectedData = {};
@@ -186,5 +194,8 @@ export class HorairesComponent implements OnInit {
     toggleEdit() {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedData);
+    }
+    search() {
+        this.get();
     }
 }

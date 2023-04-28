@@ -1,5 +1,4 @@
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
     </div>
@@ -9,8 +8,7 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true"
-    [responsive]="true">
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
     <div class="confirmation-dialog-content">
         <p>Êtes-vous sûr de vouloir supprimer ce constat ?</p>
     </div>
@@ -69,7 +67,9 @@
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectConstat(constat); toggleEdit()"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button>
+                        (click)="selectConstat(constat); deleteConstat(constat._id)"></button>
+                    <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button> -->
                 </td>
             </tr>
         </ng-template>
@@ -84,52 +84,217 @@
 
 
     <p-dialog header="{{ isAdding ? 'Ajouter un constat' : 'Modifier un constat' }}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [responsive]="true" [maximizable]="true" [closable]="true" [style]="{width: '50vw'}"
+        [modal]="true" [maximizable]="true" [closable]="true" [style]="{width: '50vw'}" [dismissableMask]="true"
         (onHide)="cancel()">
 
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addConstat(dataForm.value) : editConstat(selectedConstat._id, dataForm.value)">
             <div class="p-grid">
-                <div class="p-col-6">
+
+                <div style="display: flex; flex-direction: column; gap: 20px;">
 
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="date" name="date" formControlName="date" pInputText
-                                [value]="selectedConstat.date">
-                            <label for="date">date</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="agents" name="agents" formControlName="agents" pInputText
-                                [value]="selectedConstat.agents">
-                            <label for="agents">Agents</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="pv" name="pv" formControlName="pv" pInputText
-                                [value]="selectedConstat.pv">
-                            <label for="pv">pv</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="Lieu" name="Lieu" pInputText [value]="">
-                            <label for="Lieu">Lieu</label>
+                            <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
+                                [showButtonBar]="true">
+                            </p-calendar>
+                            <label for="date">Date de début : </label>
                         </span>
                     </div>
 
+                    <div class="p-col-12 p-md-6">
+                        <label for="agents">Agents: </label>
+                        <p-multiSelect [options]="this.agents" formControlName="agents"
+                            defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
+                            <ng-template let-agent pTemplate="agent">
+                                <div class="flex align-items-center">
+                                    <span>{{ agent.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+
+                    </div>
+
+
+                    <div class="p-col-12 p-md-6">
+                        <div class="p-inputgroup">
+                            <label for="agents">AV/PV </label>
+                            <p-toggleButton [(ngModel)]="checked" onLabel="PV" offLabel="AV"
+                                formControlName="pv"></p-toggleButton>
+                            <!-- <input type="text" id="pv" name="pv" formControlName="pv" pInputText> -->
+                            <!-- <label for="pv">PV</label> -->
+                        </div>
+                    </div>
+
+                    <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
+                        <label for="agents">Rue: </label>
+                        <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
+                            [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue"
+                            optionValue="_id">
+                            <ng-template let-nom pTemplate="item">
+                                <div class="let-nom">
+                                    <div>{{nom.nomComplet}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <span class="p-float-label">
+                            <input pInputText formControlName="numero" />
+                            <label htmlFor="numero">Numéro</label>
+                        </span>
+
+
+
+                    </div>
+
+                    <div class="card flex justify-content-center">
+                        <p-accordion [multiple]="true">
+                            <!-- <p-accordion [multiple]="true" [activeIndex]="[0]"> -->
+                            <p-accordionTab header="Véhicule">
+
+                                <div formGroupName="vehicule" style="display: flex; flex-direction: column; gap: 20px;">
+
+                                    <div class="p-col-12 p-md-6">
+                                        <div class="p-inputgroup">
+                                            <span class="p-inputgroup-addon">
+                                                <label for="marque">Marque</label>
+                                            </span>
+                                            <input type="text" id="marque" name="marque" formControlName="marque"
+                                                pInputText>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-6">
+                                        <div class="p-inputgroup">
+                                            <span class="p-inputgroup-addon">
+                                                <label for="modele">Modèle</label>
+                                            </span>
+                                            <input type="text" id="modele" name="modele" formControlName="modele"
+                                                pInputText>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-6">
+                                        <div class="p-inputgroup">
+                                            <span class="p-inputgroup-addon">
+                                                <label for="couleur">Couleur</label>
+                                            </span>
+                                            <input type="text" id="couleur" name="couleur" formControlName="couleur"
+                                                pInputText>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12 p-md-6">
+                                        <div class="p-inputgroup">
+                                            <span class="p-inputgroup-addon">
+                                                <label for="type">Type</label>
+                                            </span>
+                                            <input type="text" id="type" name="type" formControlName="type" pInputText>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-12">
+                                        <div class="p-inputgroup">
+                                            <span class="p-inputgroup-addon">
+                                                <label for="immatriculation">Immatriculation</label>
+                                            </span>
+                                            <input type="text" id="immatriculation" name="immatriculation"
+                                                formControlName="immatriculation" pInputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-accordionTab>
+                            <p-accordionTab header="Personne">
+                                <div formGroupName="personne" style="display: flex; flex-direction: column; gap: 20px;">
+
+
+
+                                    <span class="p-float-label">
+                                        <input pInputText formControlName="firstname" pInputText>
+                                        <label htmlFor="firstname">Prénom</label>
+                                    </span>
+
+
+                                    <span class="p-float-label">
+                                        <input type="text" id="lastname" name="lastname" formControlName="lastname"
+                                            pInputText>
+                                        <label for="lastname">Nom</label>
+                                    </span>
+
+
+                                    <span class="p-float-label">
+                                        <p-calendar formControlName="birthday" [showIcon]="true"
+                                            [dateFormat]="'dd/mm/yy'" class="p-datepicker-today">
+                                        </p-calendar>
+                                        <label for="date">Date de début : </label>
+                                        <label for="birthday">Date de naissance</label>
+                                    </span>
+
+
+                                    <span class="p-float-label">
+                                        <input type="text" id="nationalNumber" name="nationalNumber"
+                                            formControlName="nationalNumber" pInputText>
+                                        <label for="nationalNumber">Numéro national</label>
+                                    </span>
+
+
+                                    <span class="p-float-label">
+                                        <input type="text" id="tel" name="tel" formControlName="tel" pInputText>
+                                        <label for="tel">Téléphone</label>
+                                    </span>
+
+                                    <div formGroupName="adresse"
+                                        style="display: flex; flex-direction: column; gap: 20px;">
+
+                                        <span class="p-float-label">
+                                            <input type="text" id="rue" name="rue" formControlName="rue" pInputText>
+                                            <label for="rue">Rue</label>
+                                        </span>
+
+                                        <span class="p-float-label">
+                                            <input type="text" id="cp" name="cp" formControlName="cp" pInputText>
+                                            <label for="cp">Code postal</label>
+                                        </span>
+
+                                        <span class="p-float-label">
+                                            <input type="text" id="localite" name="localite" formControlName="localite"
+                                                pInputText>
+                                            <label for="localite">Localité</label>
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                            </p-accordionTab>
+                            <p-accordionTab header="Infraction">
+                                <span class="p-float-label">
+                                    <input type="text" id="infractions" name="infractions" formControlName="infractions"
+                                        pInputText>
+                                    <label for="infractions">Infractions</label>
+                                </span>
+                                <p-message severity="error"
+                                    *ngIf="dataForm.get('infractions')?.invalid && dataForm.get('infractions')?.dirty">Les
+                                    infractions sont obligatoires.</p-message>
+                                <span class="p-float-label">
+                                    <input type="text" id="notes" name="notes" formControlName="notes" pInputText>
+                                    <label for="notes">Notes</label>
+                                </span>
+                            </p-accordionTab>
+                        </p-accordion>
+                        <span class="p-float-label">
+                            <input type="text" id="annexes" name="annexes" formControlName="annexes" pInputText>
+                            <label for="annexes">Annexes</label>
+                        </span>
+
+                    </div>
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                             class="p-button-sm p-button-success"
                             icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
-
                         <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                             icon="pi pi-times" (click)="cancel()"></button>
                     </div>
                 </div>
             </div>
         </form>
+
 
     </p-dialog>

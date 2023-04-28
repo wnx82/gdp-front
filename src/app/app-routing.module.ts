@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedUiModule } from './services/shared-ui/shared-ui.module';
+import { UploadComponent } from './services/upload/upload.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -40,11 +42,12 @@ const routes: Routes = [
                 m => m.StatisticsModule
             ),
     },
-    {
-        path: 'media',
-        loadChildren: () =>
-            import('./components/media/media.module').then(m => m.MediaModule),
-    },
+    { path: 'media', component: UploadComponent },
+    // {
+    //     path: 'media',
+    //     loadChildren: () =>
+    //         import('./components/media/media.module').then(m => m.MediaModule),
+    // },
     {
         path: 'categories',
         loadChildren: () =>
@@ -101,10 +104,21 @@ const routes: Routes = [
                 m => m.VehiculesModule
             ),
     },
+    {
+        path: 'app',
+        loadChildren: () =>
+            import(
+                './components/habitations/details-habitation/details-habitation.module'
+            ).then(m => m.DetailsHabitationModule),
+    },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), ReactiveFormsModule],
+    imports: [
+        RouterModule.forRoot(routes),
+        ReactiveFormsModule,
+        SharedUiModule,
+    ],
     exports: [RouterModule],
 })
 export class AppRoutingModule {}

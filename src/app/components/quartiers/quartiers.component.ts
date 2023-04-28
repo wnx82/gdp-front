@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
 @Component({
     selector: 'app-quartiers',
@@ -20,7 +20,15 @@ import { LocalStorageService } from '../../services/local-storage.service';
     providers: [MessageService, ConfirmationService],
 })
 export class QuartiersComponent implements OnInit {
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService,
+        private _localStorageService: LocalStorageService,
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder
+    ) {}
     private apiUrl: string | undefined;
+    readonly API_URL = `${environment.apiUrl}/quartiers`;
     quartiers: any[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
@@ -33,49 +41,13 @@ export class QuartiersComponent implements OnInit {
         missions: new FormControl(''),
     });
     selectedMission: any;
-
-    constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
-        private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService,
-        private fb: FormBuilder
-    ) {}
-
     storedValue: any;
     missions: any[] = [];
-    readonly API_URL = `${environment.apiUrl}/quartiers`;
 
     ngOnInit(): void {
         this.get();
-        this.loadMissions();
+        this._localStorageService.getMissions();
     }
-    private loadMissions(): void {
-        const missionsLocalStorage = localStorage.getItem('missions');
-
-        if (!missionsLocalStorage) {
-            this.http.get<any[]>('http://localhost:3003/missions').subscribe(
-                data => {
-                    this.missions = data;
-                    localStorage.setItem('missions', JSON.stringify(data));
-                    console.log('Missions sauvegardées dans le local storage');
-                },
-                error => console.error(error)
-            );
-        } else {
-            const missionsLocalStorageArray = JSON.parse(missionsLocalStorage);
-
-            if (missionsLocalStorageArray.length !== this.missions.length) {
-                this.missions = missionsLocalStorageArray;
-                console.log('Missions mises à jour depuis le local storage');
-                console.log(missionsLocalStorageArray);
-            } else {
-                this.missions = missionsLocalStorageArray;
-                console.log('Missions déjà chargées depuis le local storage');
-            }
-        }
-    }
-
     clear(table: Table) {
         table.clear();
     }
@@ -90,7 +62,6 @@ export class QuartiersComponent implements OnInit {
         const mission = this.missions.find(m => m._id === missionId);
         return mission ? mission.title : '';
     }
-
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
             next: data => {
@@ -107,7 +78,7 @@ export class QuartiersComponent implements OnInit {
         });
     }
     add(quartier: any) {
-        this.http.post<any>(`${this.API_URL}`, quartier).subscribe({
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.quartiers.push(data);
                 this.isAdding = false;
@@ -128,7 +99,6 @@ export class QuartiersComponent implements OnInit {
             },
         });
     }
-
     edit(id: number, quartier: any) {
         console.log(quartier);
         if (!quartier) {
@@ -149,7 +119,7 @@ export class QuartiersComponent implements OnInit {
             // Ajouter les autres champs de la quartier ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, updatedRue).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.quartiers.findIndex(r => r._id === data._id);
                 this.quartiers[index] = data;
@@ -164,10 +134,18 @@ export class QuartiersComponent implements OnInit {
                 this.get();
             },
             error: error => {
+                console.error('Erreur de requête PATCH', error);
+                if (error.error && error.error.message) {
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
+                }
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
-                    detail: error.error.message,
+                    detail: 'La modification a échouée',
+                    // detail: error.error.message,
                 });
             },
         });
@@ -207,7 +185,6 @@ export class QuartiersComponent implements OnInit {
         this.displayConfirmationDialog = true;
         //
     }
-
     confirmDeleteDeleted(): void {
         // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
@@ -254,25 +231,25 @@ export class QuartiersComponent implements OnInit {
     }
     selectData(donnee: any) {
         this.selectedData = { ...donnee };
+        this.dataForm.patchValue({
+            title: donnee?.title,
+            missions: donnee?.mssions,
+        });
     }
-
     cancel() {
         this.selectedData = {};
         this.isAdding = false;
         this.isEditing = false;
     }
-
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedData = {};
         this.dataForm.reset();
     }
-
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedData);
+        // console.log(this.selectedData);
     }
-
     search() {
         this.get();
     }

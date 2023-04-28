@@ -4,42 +4,50 @@
     <title>Dashboard</title>
 
 </head>
+<p-toast></p-toast>
 
 <body>
+    <button pButton type="button" label="Clear All" (click)="clearAll()"></button>
+
     <h1>Dashboard</h1>
-    <div class="card">
-        <!-- <app-statistics></app-statistics> -->
-        <div class="card-head">📊 Statistiques</div>
-        <div class="card-body">
-            <a no-open href="http://google.com/">Google!</a>
-            <div class="chart">Nombres d'agents : {{ agentCount }}<br>
-                Nombres de rues : {{ ruesCount }}<br>
-                Nombres de missions : {{ missionsCount }}<br>
+    <div *ngIf="!dataLoaded">
+        <div class="card"><p-skeleton width="100%" height="400px"></p-skeleton></div>
+        <div class="card"><p-skeleton width="100%" height="200px"></p-skeleton></div>
+        <div class="card"><p-skeleton width="100%" height="400px"></p-skeleton></div>
+    </div>
+    <div *ngIf="dataLoaded">
+        <div class="card">
+            <!-- <app-statistics></app-statistics> -->
+            <div class="card-head">📊 Statistiques</div>
+            <div class="card-body">
+                <a no-open href="http://google.com/">Google!</a>
+                <div class="chart">Nombres d'agents : {{ agentCount }}<br>
+                    Nombres de rues : {{ ruesCount }}<br>
+                    Nombres de missions : {{ missionsCount }}<br>
+                </div>
+                <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
             </div>
-            <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="card">
+            <div class="card-head">Top PV</div>
+            <div class="card-body">
+                <ul>
+                    <li>Rue A</li>
+                    <li>Rue B</li>
+                    <li>Rue C</li>
+                </ul>
+                <p>Top avertissements / pv for the past month</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-head">Agent Satisfaction</div>
+            <div class="card-body">
+                <div class="chart">Insert Agent satisfaction chart here</div>
+                <p>Agent satisfaction ratings for the past month</p>
+            </div>
         </div>
     </div>
 
-
-    <div class="card">
-        <div class="card-head">Top PV</div>
-        <div class="card-body">
-            <ul>
-                <li>Rue A</li>
-                <li>Rue B</li>
-                <li>Rue C</li>
-            </ul>
-            <p>Top avertissements / pv for the past month</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-head">Agent Satisfaction</div>
-        <div class="card-body">
-            <div class="chart">Insert Agent satisfaction chart here</div>
-            <p>Agent satisfaction ratings for the past month</p>
-        </div>
-    </div>
 
 </body>
 

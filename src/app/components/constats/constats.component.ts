@@ -3,11 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { LocalStorageService } from 'src/app/services/localstorage/local-storage.service';
+import { SelectItemGroup } from 'primeng/api';
+
+interface Agent {
+    matricule: string;
+}
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -26,7 +37,6 @@ export class ConstatsComponent implements OnInit {
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
-        constats: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
         pv: new FormControl('', [Validators.required]),
         vehicule: new FormGroup({
@@ -52,21 +62,27 @@ export class ConstatsComponent implements OnInit {
             rue: new FormControl('', [Validators.required]),
             numero: new FormControl(''),
         }),
-        geolocation: new FormGroup({
-            latitude: new FormControl(''),
-            longitude: new FormControl(''),
-            horodatage: new FormControl(''),
-        }),
+        // geolocation: new FormGroup({
+        //     latitude: new FormControl(''),
+        //     longitude: new FormControl(''),
+        //     horodatage: new FormControl(''),
+        // }),
         infractions: new FormControl('', [Validators.required]),
         notes: new FormControl(''),
         annexes: new FormControl(''),
     });
+    checked: boolean = false;
+    groupedAgents: SelectItemGroup[] = [];
+    selectedAgents: Agent[] = [];
+    agentsBrut: any[] = [];
+    agents: any[] = [];
+    agentsNeed: any[] = [];
 
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private _localStorageService: LocalStorageService
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -74,25 +90,20 @@ export class ConstatsComponent implements OnInit {
 
     ngOnInit() {
         this.getConstats();
-        const ruesLocalStorage = localStorage.getItem('rues');
-
-        if (ruesLocalStorage === null) {
-            // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>('http://localhost:3003/rues').subscribe(
-                data => {
-                    this.rues = data;
-                    localStorage.setItem('rues', JSON.stringify(this.rues));
-                    console.log('Sauvegarde des rues dans le local storage');
-                },
-                error => {
-                    console.error(error);
-                }
-            );
-        } else {
-            // Les rues existent dans le local storage
-            this.rues = JSON.parse(ruesLocalStorage);
-            console.log('Rues déjà chargées');
-        }
+        this.rues = this._localStorageService.getRues();
+        this.http.get<any[]>(`${environment.apiUrl}/agents`).subscribe(
+            data => {
+                this.agents = data.map(agent => ({
+                    value: agent._id,
+                    label: agent.matricule,
+                }));
+                // localStorage.setItem('agents', JSON.stringify(this.agents));
+                // console.log('Sauvegarde des agents dans le local storage');
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
     private handleError(error: any): void {
         this.messageService.add({
@@ -137,8 +148,8 @@ export class ConstatsComponent implements OnInit {
     }
 
     addConstat(constat: any) {
-        let url = `${this.API_URL}/constats`;
-        this.http.post<any>(url, constat).subscribe({
+        console.log(this.dataForm.value);
+        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.constats.push(data);
                 this.isAdding = false;
@@ -166,83 +177,9 @@ export class ConstatsComponent implements OnInit {
             return;
         }
 
-        const updatedConstat = {
-            vehicule: {
-                marque:
-                    constat.vehicule.marque ??
-                    this.selectedConstat.vehicule.marque,
-                modele:
-                    constat.vehicule.modele ??
-                    this.selectedConstat.vehicule.modele,
-                couleur:
-                    constat.vehicule.couleur ??
-                    this.selectedConstat.vehicule.couleur,
-                type:
-                    constat.vehicule.type ?? this.selectedConstat.vehicule.type,
-                immatriculation:
-                    constat.vehicule.immatriculation ??
-                    this.selectedConstat.vehicule.immatriculation,
-            },
-            personne: {
-                firstname:
-                    constat.personne.firstname ??
-                    this.selectedConstat.personne.firstname,
-                lastname:
-                    constat.personne.lastname ??
-                    this.selectedConstat.personne.lastname,
-                birthday:
-                    constat.personne.birthday ??
-                    this.selectedConstat.personne.birthday,
-                nationalNumber:
-                    constat.personne.nationalNumber ??
-                    this.selectedConstat.personne.nationalNumber,
-                tel: constat.personne.tel ?? this.selectedConstat.personne.tel,
-                adresse: {
-                    rue:
-                        constat.personne.adresse.rue ??
-                        this.selectedConstat.personne.adresse.rue,
-                    cp:
-                        constat.personne.adresse.cp ??
-                        this.selectedConstat.personne.adresse.cp,
-                    localite:
-                        constat.personne.adresse.localite ??
-                        this.selectedConstat.personne.adresse.localite,
-                },
-            },
-            adresse: {
-                rue: constat.adresse.rue ?? this.selectedConstat.adresse.rue,
-                numero:
-                    constat.adresse.numero ??
-                    this.selectedConstat.adresse.numero,
-            },
-            geolocation: {
-                latitude:
-                    constat.geolocation.latitude ??
-                    this.selectedConstat.geolocation.latitude,
-                longitude:
-                    constat.geolocation.longitude ??
-                    this.selectedConstat.geolocation.longitude,
-                horodatage:
-                    constat.geolocation.horodatage ??
-                    this.selectedConstat.geolocation.horodatage,
-            },
-            constats: constat.constats ?? this.selectedConstat.constats,
-            date: constat.date ?? this.selectedConstat.date,
-            pv: constat.pv ?? this.selectedConstat.pv,
-            infractions:
-                constat.infractions ?? this.selectedConstat.infractions,
-            notes: constat.notes ?? this.selectedConstat.notes,
-            annexes: constat.annexes ?? this.selectedConstat.annexes,
-            description:
-                constat.description ?? this.selectedConstat.description,
-            degats: constat.degats ?? this.selectedConstat.degats,
-            temoins: constat.temoins ?? this.selectedConstat.temoins,
-            image: constat.image ?? this.selectedConstat.image,
-        };
+        const url = `${this.API_URL}/${this.selectedConstat._id}`;
 
-        const url = `${this.API_URL}/constats/${this.selectedConstat._id}`;
-
-        this.http.patch<any>(url, updatedConstat).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.constats.findIndex(a => a._id === data._id);
                 this.constats[index] = data;
@@ -257,6 +194,13 @@ export class ConstatsComponent implements OnInit {
                 this.getConstats();
             },
             error: error => {
+                console.error('Erreur de requête PATCH', error);
+                if (error.error && error.error.message) {
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
+                }
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erreur',
@@ -349,6 +293,43 @@ export class ConstatsComponent implements OnInit {
     }
     selectConstat(constat: any) {
         this.selectedConstat = { ...constat };
+        this.dataForm.patchValue({
+            adresse: {
+                rue: constat?.adresse?.nomComplet,
+                numero: constat?.adresse?.numero,
+            },
+
+            vehicule: {
+                marque: constat?.vehicule?.marque,
+                modele: constat?.vehicule?.modele,
+                couleur: constat?.vehicule?.couleur,
+                type: constat?.vehicule?.type,
+                immatriculation: constat?.vehicule?.immatriculation,
+            },
+            personne: {
+                firstname: constat?.personne?.firstname,
+                lastname: constat?.personne?.lastname,
+                birthday: constat?.personne?.birthday,
+                nationalNumber: constat?.personne?.nationalNumber,
+                tel: constat?.personne?.tel,
+                adresse: {
+                    rue: constat?.personne?.adresse?.rue,
+                    cp: constat?.personne?.adresse?.cp,
+                    localite: constat?.personne?.adresse?.localite,
+                },
+            },
+
+            agents: constat?.agents || [],
+            date: constat?.date,
+            infractions: constat?.infractions,
+            notes: constat?.notes,
+            annexes: constat?.annexes,
+            // geolocation: {
+            //     latitude: constat?.geolocation?.latitude,
+            //     longitude: constat?.geolocation?.longitude,
+            //     horodatage: constat?.geolocation?.couleur,
+            // },
+        });
     }
 
     cancel() {
@@ -365,7 +346,7 @@ export class ConstatsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        console.log(this.selectedConstat);
+        // console.log(this.selectedConstat);
     }
 
     filterRues(event: any) {

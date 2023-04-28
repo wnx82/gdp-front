@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
 @Component({
     selector: 'app-statistics',
     templateUrl: './statistics.component.html',
@@ -18,50 +20,42 @@ export class StatisticsComponent {
     lastUpdate: Date = new Date(); // Initialise la propriété lastUpdate avec la date et l'heure actuelles.
 
     constructor(private http: HttpClient) {}
-
+    readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
         this.lastUpdate = new Date();
+        this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
+            this.agentCount = agents.length;
+        });
         this.http
-            .get<any[]>('http://localhost:3003/agents')
-            .subscribe(agents => {
-                this.agentCount = agents.length;
-            });
-        this.http
-            .get<any[]>('http://localhost:3003/categories')
+            .get<any[]>(`${this.API_URL}/categories`)
             .subscribe(categories => {
                 this.categoriesCount = categories.length;
             });
+        this.http.get<any[]>(`${this.API_URL}/constats`).subscribe(constats => {
+            this.constatsCount = constats.length;
+        });
+        this.http.get<any[]>(`${this.API_URL}/horaires`).subscribe(horaires => {
+            this.horairesCount = horaires.length;
+        });
         this.http
-            .get<any[]>('http://localhost:3003/constats')
-            .subscribe(constats => {
-                this.constatsCount = constats.length;
-            });
-        this.http
-            .get<any[]>('http://localhost:3003/horaires')
-            .subscribe(horaires => {
-                this.horairesCount = horaires.length;
-            });
-        this.http
-            .get<any[]>('http://localhost:3003/infractions')
+            .get<any[]>(`${this.API_URL}/infractions`)
             .subscribe(infractions => {
                 this.infractionsCount = infractions.length;
             });
 
+        this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
+            this.missionsCount = missions.length;
+        });
         this.http
-            .get<any[]>('http://localhost:3003/missions')
-            .subscribe(missions => {
-                this.missionsCount = missions.length;
-            });
-        this.http
-            .get<any[]>('http://localhost:3003/quartiers')
+            .get<any[]>(`${this.API_URL}/quartiers`)
             .subscribe(quartiers => {
                 this.quartiersCount = quartiers.length;
             });
-        this.http.get<any[]>('http://localhost:3003/rues').subscribe(rues => {
+        this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
             this.ruesCount = rues.length;
         });
         this.http
-            .get<any[]>('http://localhost:3003/vehicules')
+            .get<any[]>(`${this.API_URL}/vehicules`)
             .subscribe(vehicules => {
                 this.vehiculesCount = vehicules.length;
             });
