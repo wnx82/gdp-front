@@ -1,0 +1,29 @@
+<!-- <div class="card">
+    <div class="card-header">
+        <h3>Détails de l'habitation</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Demandeur : </strong>{{ habitation?.demandeur.nom }}</p>
+        <p><strong>Téléphone : </strong>{{ habitation?.demandeur.tel }}</p>
+        <p><strong>Date de début : </strong>{{ habitation?.dates.debut | date }}</p>
+        <p><strong>Date de fin : </strong>{{ habitation?.dates.fin | date }}</p>
+        <p><strong>Rue : </strong>{{ habitation?.adresse[0].nomComplet }}</p>
+        <p><strong>Numéro : </strong>{{ habitation?.adresse[0].numero }}</p>
+        <p><strong>Mesures de sécurité : </strong></p>
+        <ul>
+            <li *ngFor="let mesure of habitation?.mesures">{{ mesure }}</li>
+        </ul>
+        <p><strong>Véhicule : </strong>{{ habitation?.vehicule }}</p>
+        <p><strong>Lien Google Maps : </strong><a href="{{ habitation?.googlemap }}">{{ habitation?.googlemap }}</a></p>
+    </div>
+</div> -->
+
+<!-- <div *ngIf="habitation">
+    <h2>Détails de l'habitation {{ habitation._id }}</h2>
+    <h2>Google Map {{ habitation.googlemap }}</h2>
+    <p><strong>Demandeur : </strong>{{ habitation?.demandeur?.nom }}</p>
+    <p><strong>Date de création : </strong>{{ habitation.createdAt ? (habitation.createdAt | date) : '' }}</p>
+    <p><strong>Date de modification : </strong>{{ habitation.updatedAt ? (habitation.updatedAt | date) : '' }}</p>
+    <p><strong>Adresse : </strong>{{ habitation?.adresse?.rue?.nomComplet }}</p>
+    <p><strong>Numéro : </strong>{{ habitation?.adresse?.numero }}</p>
+</div> -->

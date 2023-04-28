@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des agents</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Liste des agents</h1>
+        <button type="button" class="add-button" onclick="toggleForm()">
+            {{ !showForm ? 'Ajouter' : 'Retour'}}
+        </button>
+    </header>
+
+    <main>
+        <section class="agent-list">
+            <h2>Mes agents</h2>
+            <ul>
+                <li *ngFor="let agent of agents" class="agent">
+                    <div class="agent-card" agentsBorderCard>
+                        <img class="avatar" src="{{ agent.picture }}"
+                            alt="Photo de {{ agent.firstname }} {{ agent.lastname }}">
+                        <div class="agent-details">
+                            <h3>{{ agent.firstname }} {{ agent.lastname }}</h3>
+                            <p><small>{{ agent.createdAt | date: 'dd/MM/yyyy' }}</small></p>
+                            <span *ngFor="let type of agent.formations">
+                                {{ type }}
+                            </span>
+                        </div>
+                        <button type="button" class="delete" title="Supprimer l'agent"
+                            (click)="delete(agent)">x</button>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="agent-form" *ngIf="showForm">
+            <h2>Création d'un agent</h2>
+            <form action="/agents/create" method="POST">
+                <div class="form-group">
+                    <label for="matricule">Matricule :</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">A</span>
+                        <input type="text" id="matricule" name="matricule" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Nom :</label>
+                    <input type="text" id="lastname" name="lastname" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="firstname">Prénom :</label>
+                    <input type="text" id="firstname" name="firstname" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Date de naissance :</label>
+                    <input type="date" id="birthday" name="birthday" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="adresse">Adresse :</label>
+                    <input type="text" id="adresse" name="adresse" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="cp">Code postal :</label>
+                    <input type="text" id="cp" name="cp" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="tel">Téléphone :</label>
+                    <input type="tel" id="tel" name="tel" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    </footer>
+
+    <script>
+        const addButton = document.querySelector('.add-button');
+        const agentList = document.querySelector('.agent-list');
+        const agentForm = document.querySelector('.agent-form');
+        let showForm = false;
+
+        function toggleForm() {
+            showForm = !showForm;
+            addButton.textContent = showForm ? 'Retour' : 'Ajouter';
+            agentList.style.display = showForm ? 'none' : 'block';
+            agentForm.style.display = showForm ? 'block' : 'none';
+        }
+    </script>
+</body>
+
+</html>
