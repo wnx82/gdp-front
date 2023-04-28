@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LocalStorageService {
     constructor(private http: HttpClient) {}
-    readonly API_URL = `${environment.apiUrl}/rues`;
+    readonly API_URL = `${environment.apiUrl}`;
 
     // Stocke une valeur dans le LocalStorage
     setItem(key: string, value: any): void {
@@ -33,11 +33,17 @@ export class LocalStorageService {
         localStorage.clear();
     }
 
+    getAll() {
+        this.getRues();
+        this.getAgents();
+        this.getQuartiers();
+        this.getMissions();
+    }
     getRues(): any[] {
         const ruesLocalStorage = localStorage.getItem('rues');
         if (ruesLocalStorage === null) {
             // Si les rues n'existent pas encore dans le local storage
-            this.http.get<any[]>(this.API_URL).subscribe(
+            this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(
                 data => {
                     localStorage.setItem('rues', JSON.stringify(data));
                     console.log('Sauvegarde des rues dans le local storage');
@@ -52,7 +58,7 @@ export class LocalStorageService {
             // Les rues existent dans le local storage
             console.log('Rues déjà chargées depuis le local storage');
             const ruesServeurPromise = this.http
-                .get<any[]>(this.API_URL)
+                .get<any[]>(`${this.API_URL}/rues`)
                 .toPromise();
             const ruesLocalStorageParsed = JSON.parse(ruesLocalStorage);
             ruesServeurPromise
@@ -82,7 +88,7 @@ export class LocalStorageService {
         const agentsLocalStorage = localStorage.getItem('agents');
         if (agentsLocalStorage === null) {
             // Si les agents n'existent pas encore dans le local storage
-            this.http.get<any[]>(this.API_URL).subscribe(
+            this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(
                 data => {
                     localStorage.setItem('agents', JSON.stringify(data));
                     console.log('Sauvegarde des agents dans le local storage');
@@ -97,7 +103,7 @@ export class LocalStorageService {
             // Les agents existent dans le local storage
             console.log('Agents déjà chargées depuis le local storage');
             const agentsServeurPromise = this.http
-                .get<any[]>(this.API_URL)
+                .get<any[]>(`${this.API_URL}/agents`)
                 .toPromise();
             const agentsLocalStorageParsed = JSON.parse(agentsLocalStorage);
             agentsServeurPromise
@@ -127,7 +133,7 @@ export class LocalStorageService {
         const quartiersLocalStorage = localStorage.getItem('quartiers');
         if (quartiersLocalStorage === null) {
             // Si les quartiers n'existent pas encore dans le local storage
-            this.http.get<any[]>(this.API_URL).subscribe(
+            this.http.get<any[]>(`${this.API_URL}/quartiers`).subscribe(
                 data => {
                     localStorage.setItem('quartiers', JSON.stringify(data));
                     console.log(
@@ -144,7 +150,7 @@ export class LocalStorageService {
             // Les quartiers existent dans le local storage
             console.log('Quartiers déjà chargés depuis le local storage');
             const quartiersServeurPromise = this.http
-                .get<any[]>(this.API_URL)
+                .get<any[]>(`${this.API_URL}/quartiers`)
                 .toPromise();
             const quartiersLocalStorageParsed = JSON.parse(
                 quartiersLocalStorage
@@ -176,7 +182,7 @@ export class LocalStorageService {
         const missionsLocalStorage = localStorage.getItem('missions');
         if (missionsLocalStorage === null) {
             // Si les missions n'existent pas encore dans le local storage
-            this.http.get<any[]>(this.API_URL).subscribe(
+            this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(
                 data => {
                     localStorage.setItem('missions', JSON.stringify(data));
                     console.log(
@@ -193,7 +199,7 @@ export class LocalStorageService {
             // Les missions existent dans le local storage
             console.log('Missions déjà chargés depuis le local storage');
             const missionsServeurPromise = this.http
-                .get<any[]>(this.API_URL)
+                .get<any[]>(`${this.API_URL}/missions`)
                 .toPromise();
             const missionsLocalStorageParsed = JSON.parse(missionsLocalStorage);
             missionsServeurPromise

@@ -23,6 +23,13 @@ import { LocalStorageService } from '../../services/localstorage/local-storage.s
     providers: [MessageService, ConfirmationService],
 })
 export class AgentsComponent implements OnInit {
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
+        private _localStorageService: LocalStorageService
+    ) {}
     private apiUrl: string | undefined;
 
     agents: any[] = [];
@@ -62,13 +69,6 @@ export class AgentsComponent implements OnInit {
         formations: new FormArray([]),
     });
 
-    constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
-        private confirmationService: ConfirmationService,
-        private fb: FormBuilder,
-        private _localStorageService: LocalStorageService
-    ) {}
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;

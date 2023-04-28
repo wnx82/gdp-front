@@ -2,20 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-
+import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+    dataLoaded = false; // flag to keep track of whether data is loaded or not
+
     agentCount = 0; // Initialise la propriété agentCount à zéro
     ruesCount = 0; // Initialise la propriété agentCount à zéro
     missionsCount = 0; // Initialise la propriété agentCount à zéro
     lastUpdate: Date = new Date(); // initialisation de la propriété
     constructor(
         private http: HttpClient,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private _localStorageService: LocalStorageService
     ) {}
     readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
@@ -29,6 +32,10 @@ export class DashboardComponent implements OnInit {
         this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
             this.missionsCount = missions.length;
         });
+        setTimeout(() => {
+            this._localStorageService.getAll();
+            this.dataLoaded = true; //
+        }, 500);
     }
 
     clearAll() {
