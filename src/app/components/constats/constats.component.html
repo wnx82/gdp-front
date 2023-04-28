@@ -92,60 +92,71 @@
             <div class="p-grid">
 
                 <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <p-fieldset>
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center text-primary">
+                                <span class="pi pi-info-circle mr-2"></span>
+                                <span class="font-bold text-lg">Informations</span>
+                            </div>
+                        </ng-template>
 
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
-                                [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
-                                [showButtonBar]="true">
-                            </p-calendar>
-                            <label for="date">Date de début : </label>
-                        </span>
-                    </div>
-
-                    <div class="p-col-12 p-md-6">
-                        <label for="agents">Agents: </label>
-                        <p-multiSelect [options]="this.agents" formControlName="agents"
-                            defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
-                            <ng-template let-agent pTemplate="agent">
-                                <div class="flex align-items-center">
-                                    <span>{{ agent.label }}</span>
-                                </div>
-                            </ng-template>
-                        </p-multiSelect>
-
-                    </div>
-
-
-                    <div class="p-col-12 p-md-6">
-                        <div class="p-inputgroup">
-                            <label for="agents">AV/PV </label>
-                            <p-toggleButton [(ngModel)]="checked" onLabel="PV" offLabel="AV"
-                                formControlName="pv"></p-toggleButton>
-                            <!-- <input type="text" id="pv" name="pv" formControlName="pv" pInputText> -->
-                            <!-- <label for="pv">PV</label> -->
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
+                                    [showButtonBar]="true">
+                                </p-calendar>
+                                <label for="date">Date de début : </label>
+                            </span>
                         </div>
-                    </div>
 
-                    <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
-                        <label for="agents">Rue: </label>
-                        <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
-                            [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue"
-                            optionValue="_id">
-                            <ng-template let-nom pTemplate="item">
-                                <div class="let-nom">
-                                    <div>{{nom.nomComplet}}</div>
-                                </div>
-                            </ng-template>
-                        </p-dropdown>
-                        <span class="p-float-label">
-                            <input pInputText formControlName="numero" />
-                            <label htmlFor="numero">Numéro</label>
-                        </span>
+                        <div class="p-col-12 p-md-6">
+                            <label for="agents">Agents: </label>
+                            <p-multiSelect [options]="this.agents" formControlName="agents"
+                                defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
+                                <ng-template let-agent pTemplate="agent">
+                                    <div class="flex align-items-center">
+                                        <span>{{ agent.label }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+
+                        </div>
 
 
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-inputgroup">
+                                <label for="agents">AV/PV </label>
+                                <p-toggleButton [(ngModel)]="checked" onLabel="PV" offLabel="AV"
+                                    formControlName="pv"></p-toggleButton>
+                                <!-- <input type="text" id="pv" name="pv" formControlName="pv" pInputText> -->
+                                <!-- <label for="pv">PV</label> -->
+                            </div>
+                        </div>
 
-                    </div>
+                        <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
+                            <label for="agents">Rue: </label>
+                            <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
+                                filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                formControlName="rue" optionValue="_id">
+                                <ng-template let-nom pTemplate="item">
+                                    <div class="let-nom">
+                                        <div>{{nom.nomComplet}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <span class="p-float-label">
+                                <input pInputText formControlName="numero" />
+                                <label htmlFor="numero">Numéro</label>
+                            </span>
+                            <span class="p-float-label">
+                                <input type="text" id="annexes" name="annexes" formControlName="annexes" pInputText>
+                                <label for="annexes">Annexes</label>
+                            </span>
+                        </div>
+                    </p-fieldset>
+
+
 
                     <div class="card flex justify-content-center">
                         <p-accordion [multiple]="true">
@@ -279,10 +290,7 @@
                                 </span>
                             </p-accordionTab>
                         </p-accordion>
-                        <span class="p-float-label">
-                            <input type="text" id="annexes" name="annexes" formControlName="annexes" pInputText>
-                            <label for="annexes">Annexes</label>
-                        </span>
+
 
                     </div>
                     <div class="p-d-flex p-jc-between">

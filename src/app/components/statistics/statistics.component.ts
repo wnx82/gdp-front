@@ -23,6 +23,7 @@ export class StatisticsComponent {
     readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
         this.lastUpdate = new Date();
+
         this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
             this.agentCount = agents.length;
         });

@@ -52,6 +52,7 @@ export class MissionsComponent implements OnInit {
             detail: error.message,
         });
     }
+
     get() {
         this.http.get<any[]>(`${this.API_URL}`).subscribe({
             next: data => {

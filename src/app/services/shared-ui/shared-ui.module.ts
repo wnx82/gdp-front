@@ -23,7 +23,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { AccordionModule } from 'primeng/accordion';
 import { SkeletonModule } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
-
+import { FieldsetModule } from 'primeng/fieldset';
 @NgModule({
     declarations: [],
     exports: [
@@ -51,6 +51,7 @@ import { MessageService } from 'primeng/api';
         ToggleButtonModule,
         AccordionModule,
         SkeletonModule,
+        FieldsetModule,
     ],
     providers: [MessageService],
 })

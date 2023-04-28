@@ -130,76 +130,90 @@
         style="margin-top: 3px;" (click)="toggleAdd()"></button>
 
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        [modal]="true" [maximizable]="true" [closable]="true" [dismissableMask]="true" (onHide)="cancel()"
+        [style]="{width: '600px'}">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-                    <div class="p-field">
+
+                    <p-fieldset>
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center text-primary">
+                                <span class="pi pi-user mr-2"></span>
+                                <span class="font-bold text-lg">User Details</span>
+                            </div>
+                        </ng-template>
+
                         <span class="p-float-label">
-                            <input type="number" id="matricule" name="matricule" formControlName="matricule"
-                                [value]="selectedAgent.matricule" required="Veuillez saisir le matricule" pInputText>
+                            <input type="number" pInputText pKeyFilter="int" placeholder="Matricule"
+                                formControlName="matricule" required="Veuillez saisir le matricule" />
+                            <!-- <input type="number" id="matricule" name="matricule" formControlName="matricule"
+                                    [value]="selectedAgent.matricule" required="Veuillez saisir le matricule"
+                                    pInputText> -->
                             <label for="matricule">Matricule</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
-                            <input type="text" id="lastname" name="lastname" formControlName="lastname"
-                                [value]="selectedAgent.lastname" pInputText>
+                            <input type="text" formControlName="lastname" [value]="selectedAgent.lastname" pInputText>
                             <label for="lastname">Nom</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
-                            <input type="text" id="firstname" name="firstname" formControlName="firstname"
-                                [value]="selectedAgent.firstname" pInputText>
+                            <input type="text" pInputText formControlName="firstname" />
+                            <!-- <input type="text" id="firstname" name="firstname" formControlName="firstname"
+                                    [value]="selectedAgent.firstname" pInputText> -->
                             <label for="firstname">Prénom</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
                             <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
                                 pInputText>
                             <label for="tel">Téléphone</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
                             <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
                                 dateFormat="dd/mm/yy"></p-calendar>
                             <label for="birthday">Date de naissance</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
                             <input type="email" id="email" name="email" formControlName="email" required
                                 [value]="selectedAgent.email" pInputText>
                             <label for="email">Email</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
-                            <input type="password" id="password" name="password" formControlName="password" required
-                                [value]="selectedAgent.password" pInputText>
+                            <!-- <input type="password" id="password" name="password" formControlName="password" required
+                                    [value]="selectedAgent.password" pInputText> -->
+                            <p-password formControlName="password" required [toggleMask]="true"></p-password>
                             <label for="password">Mot de passe</label>
                         </span>
-                    </div>
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
                             <input type="number" id="userAccess" name="userAccess" formControlName="userAccess" required
                                 [value]="selectedAgent.userAccess" pInputText min="0" max="10"
                                 title="Veuillez saisir un nombre entre 0 et 10">
                             <label for="userAccess">Niveau d'accès utilisateur</label>
                         </span>
-                    </div>
 
-                    <div class="p-field">
+
+
                         <span class="p-float-label">
                             <input type="text" id="iceContact" name="iceContact" formControlName="iceContact" required
                                 [value]="selectedAgent.iceContact" pInputText>
                             <label for="iceContact">Contact en cas d'urgence</label>
                         </span>
-                    </div>
+
+                    </p-fieldset>
                     <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
                         <label for="formations">Formations</label>
                         <ng-container *ngFor="let formation of selectedAgent.formations.controls; let i = index">
@@ -214,9 +228,15 @@
                             label="Ajouter une formation"></button>
                     </div>
 
-
                     <div formGroupName="adresse">
-                        <div class="p-field">
+                        <p-fieldset>
+                            <ng-template pTemplate="header">
+                                <div class="flex align-items-center text-primary">
+                                    <span class="pi pi-home mr-2"></span>
+                                    <span class="font-bold text-lg">Adresse</span>
+                                </div>
+                            </ng-template>
+
                             <span class="p-float-label">
                                 <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
                                                     [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
@@ -238,8 +258,8 @@
 
 
                             </span>
-                        </div>
-                        <div class="p-field">
+
+
                             <span class="p-float-label">
                                 <input type="text" formControlName="numero" pInputText>
                                 <!-- <input type="text" id="numero" name="numero"
@@ -247,7 +267,8 @@
                                                     pInputText> -->
                                 <label for="numero">Numéro</label>
                             </span>
-                        </div>
+
+                        </p-fieldset>
                     </div>
                 </div>
             </div>

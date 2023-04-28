@@ -6,6 +6,9 @@
 </head>
 
 <body>
+    <div>
+        <app-statistics></app-statistics>
+    </div>
     <h1>Stats</h1>
     <div class="card">
 
@@ -23,7 +26,7 @@
                 Nombres de rues : {{ ruesCount }}<br>
                 Nombres de vehicules : {{ vehiculesCount }}<br>
             </div>
-            <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
+            <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
         </div>
     </div>
 

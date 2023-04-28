@@ -107,6 +107,7 @@ export class HabitationsComponent implements OnInit {
             detail: error.message,
         });
     }
+
     getSeverity(localite: string): string {
         switch (localite) {
             case 'Dottignies':
