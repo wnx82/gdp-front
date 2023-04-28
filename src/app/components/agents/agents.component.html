@@ -143,72 +143,76 @@
                                 <span class="font-bold text-lg">User Details</span>
                             </div>
                         </ng-template>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="number" id="matricule" name="matricule" formControlName="matricule"
-                                    [value]="selectedAgent.matricule" required="Veuillez saisir le matricule"
-                                    pInputText>
-                                <label for="matricule">Matricule</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="lastname" name="lastname" formControlName="lastname"
-                                    [value]="selectedAgent.lastname" pInputText>
-                                <label for="lastname">Nom</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="firstname" name="firstname" formControlName="firstname"
-                                    [value]="selectedAgent.firstname" pInputText>
-                                <label for="firstname">Prénom</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
-                                    pInputText>
-                                <label for="tel">Téléphone</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
-                                    dateFormat="dd/mm/yy"></p-calendar>
-                                <label for="birthday">Date de naissance</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="email" id="email" name="email" formControlName="email" required
-                                    [value]="selectedAgent.email" pInputText>
-                                <label for="email">Email</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="password" id="password" name="password" formControlName="password" required
-                                    [value]="selectedAgent.password" pInputText>
-                                <label for="password">Mot de passe</label>
-                            </span>
-                        </div>
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="number" id="userAccess" name="userAccess" formControlName="userAccess"
-                                    required [value]="selectedAgent.userAccess" pInputText min="0" max="10"
-                                    title="Veuillez saisir un nombre entre 0 et 10">
-                                <label for="userAccess">Niveau d'accès utilisateur</label>
-                            </span>
-                        </div>
 
-                        <div class="p-field">
-                            <span class="p-float-label">
-                                <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
-                                    required [value]="selectedAgent.iceContact" pInputText>
-                                <label for="iceContact">Contact en cas d'urgence</label>
-                            </span>
-                        </div>
+                        <span class="p-float-label">
+                            <input type="number" pInputText pKeyFilter="int" placeholder="Matricule"
+                                formControlName="matricule" required="Veuillez saisir le matricule" />
+                            <!-- <input type="number" id="matricule" name="matricule" formControlName="matricule"
+                                    [value]="selectedAgent.matricule" required="Veuillez saisir le matricule"
+                                    pInputText> -->
+                            <label for="matricule">Matricule</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <input type="text" class="p-inputtext-lg" formControlName="lastname"
+                                [value]="selectedAgent.lastname" pInputText>
+                            <label for="lastname">Nom</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="firstname" />
+                            <!-- <input type="text" id="firstname" name="firstname" formControlName="firstname"
+                                    [value]="selectedAgent.firstname" pInputText> -->
+                            <label for="firstname">Prénom</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
+                                pInputText>
+                            <label for="tel">Téléphone</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
+                                dateFormat="dd/mm/yy"></p-calendar>
+                            <label for="birthday">Date de naissance</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <input type="email" id="email" name="email" formControlName="email" required
+                                [value]="selectedAgent.email" pInputText>
+                            <label for="email">Email</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <!-- <input type="password" id="password" name="password" formControlName="password" required
+                                    [value]="selectedAgent.password" pInputText> -->
+                            <p-password formControlName="password" required [toggleMask]="true"></p-password>
+                            <label for="password">Mot de passe</label>
+                        </span>
+
+
+                        <span class="p-float-label">
+                            <input type="number" id="userAccess" name="userAccess" formControlName="userAccess" required
+                                [value]="selectedAgent.userAccess" pInputText min="0" max="10"
+                                title="Veuillez saisir un nombre entre 0 et 10">
+                            <label for="userAccess">Niveau d'accès utilisateur</label>
+                        </span>
+
+
+
+                        <span class="p-float-label">
+                            <input type="text" id="iceContact" name="iceContact" formControlName="iceContact" required
+                                [value]="selectedAgent.iceContact" pInputText>
+                            <label for="iceContact">Contact en cas d'urgence</label>
+                        </span>
+
                     </p-fieldset>
                     <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
                         <label for="formations">Formations</label>
@@ -232,9 +236,9 @@
                             </div>
                         </ng-template>
                         <div formGroupName="adresse">
-                            <div class="p-field">
-                                <span class="p-float-label">
-                                    <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+
+                            <span class="p-float-label">
+                                <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
                                                     [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
                                                     (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
                                                     [ngModelOptions]="{standalone: true}">
@@ -242,28 +246,28 @@
                                                         {{ item }}
                                                     </ng-template>
                                                 </p-autoComplete> -->
-                                    <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
-                                        filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
-                                        formControlName="rue" optionValue="_id">
-                                        <ng-template let-nom pTemplate="item">
-                                            <div class="let-nom">
-                                                <div>{{nom.nomComplet}}</div>
-                                            </div>
-                                        </ng-template>
-                                    </p-dropdown>
+                                <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
+                                    filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                    formControlName="rue" optionValue="_id">
+                                    <ng-template let-nom pTemplate="item">
+                                        <div class="let-nom">
+                                            <div>{{nom.nomComplet}}</div>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
 
 
-                                </span>
-                            </div>
-                            <div class="p-field">
-                                <span class="p-float-label">
-                                    <input type="text" formControlName="numero" pInputText>
-                                    <!-- <input type="text" id="numero" name="numero"
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" formControlName="numero" pInputText>
+                                <!-- <input type="text" id="numero" name="numero"
                                                     [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
                                                     pInputText> -->
-                                    <label for="numero">Numéro</label>
-                                </span>
-                            </div>
+                                <label for="numero">Numéro</label>
+                            </span>
+
                         </div>
                     </p-fieldset>
                 </div>

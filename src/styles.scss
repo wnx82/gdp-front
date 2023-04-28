@@ -47,6 +47,14 @@ body {
         padding: 1rem 1.5rem;
     }
 }
+
+span.p-float-label {
+    margin-bottom: 20px;
+}
+
+p-fieldset {
+    margin: 20px;
+}
 @media (max-width: 768px) {
     .p-dialog {
         width: 90vw;
