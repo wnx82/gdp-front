@@ -1,0 +1,302 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cet agent ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteAgent(selectedAgent._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des agents</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les agents supprimés"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+    <p-table #dataTableAgents [value]="agents" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableAgents)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableAgents.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:5%">Picture</th>
+                <th style="width:10%">Matricule</th>
+                <th style="width:10%">Nom</th>
+                <th style="width:10%">Prénom</th>
+
+                <th style="width:10%"></th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-agent>
+            <tr>
+                <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td> -->
+                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td>
+
+                <td>{{ agent.matricule }}</td>
+                <td>{{ agent.lastname | uppercase }}</td>
+                <td>{{ agent.firstname }}</td>
+
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectAgent(agent); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteAgent(agent._id)"></button>
+                </td>
+
+
+
+
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
+    </p-table>
+    <!-- <ng-container *ngFor="let agent of agents">
+        <div class="card-deck">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <p-card header="A{{agent.matricule}}" subheader="{{agent.firstname}} {{agent.lastname}}"
+                    [style]="{width: '360px'}" styleClass="p-card-shadow card-content">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" src="{{agent.picture}}" style="max-width: 50%; height: auto;">
+                    </ng-template>
+                    <p style="font-size: 16px;">id: {{agent._id}}</p>
+                    <p style="font-size: 16px;">Tél: {{agent.tel}}</p>
+                    <p style="font-size: 16px; margin-bottom: 10px;">Email: {{agent.email}}</p>
+                    <p style="font-size: 16px; margin-bottom: 10px;">Date de naissance: {{agent.birthday | date:
+                        'dd/MM/yyyy'}}</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
+                        repudiandae
+                        numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam
+                        perferendis
+                        esse,
+                        cupiditate neque quas!</p>
+                    <ng-template pTemplate="footer">
+
+                        <button pButton pRipple type="button" label="Modifier" class="p-button-primary p-button-sm"
+                            icon="pi pi-pencil" style="margin-right: 5px;"
+                            (click)="selectAgent(agent); toggleEdit()"></button>
+                        <button pButton pRipple type="button" label="Supprimer" class="p-button-danger p-button-sm"
+                            icon="pi pi-trash" (click)="deleteAgent(agent._id)"></button>
+                    </ng-template>
+                </p-card>
+            </div>
+        </div>
+    </ng-container> -->
+    <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
+        style="margin-top: 3px;" (click)="toggleAdd()"></button>
+
+    <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+
+                    <p-fieldset>
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center text-primary">
+                                <span class="pi pi-user mr-2"></span>
+                                <span class="font-bold text-lg">User Details</span>
+                            </div>
+                        </ng-template>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="number" id="matricule" name="matricule" formControlName="matricule"
+                                    [value]="selectedAgent.matricule" required="Veuillez saisir le matricule"
+                                    pInputText>
+                                <label for="matricule">Matricule</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="lastname" name="lastname" formControlName="lastname"
+                                    [value]="selectedAgent.lastname" pInputText>
+                                <label for="lastname">Nom</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="firstname" name="firstname" formControlName="firstname"
+                                    [value]="selectedAgent.firstname" pInputText>
+                                <label for="firstname">Prénom</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
+                                    pInputText>
+                                <label for="tel">Téléphone</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
+                                    dateFormat="dd/mm/yy"></p-calendar>
+                                <label for="birthday">Date de naissance</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="email" id="email" name="email" formControlName="email" required
+                                    [value]="selectedAgent.email" pInputText>
+                                <label for="email">Email</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="password" id="password" name="password" formControlName="password" required
+                                    [value]="selectedAgent.password" pInputText>
+                                <label for="password">Mot de passe</label>
+                            </span>
+                        </div>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="number" id="userAccess" name="userAccess" formControlName="userAccess"
+                                    required [value]="selectedAgent.userAccess" pInputText min="0" max="10"
+                                    title="Veuillez saisir un nombre entre 0 et 10">
+                                <label for="userAccess">Niveau d'accès utilisateur</label>
+                            </span>
+                        </div>
+
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
+                                    required [value]="selectedAgent.iceContact" pInputText>
+                                <label for="iceContact">Contact en cas d'urgence</label>
+                            </span>
+                        </div>
+                    </p-fieldset>
+                    <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
+                        <label for="formations">Formations</label>
+                        <ng-container *ngFor="let formation of selectedAgent.formations.controls; let i = index">
+                            <div class="p-inputgroup">
+                                <input type="text" id="formations_{{ i }}" name="formations_{{ i }}"
+                                    [formControlName]="i" [value]="formation.value" pInputText>
+                                <button type="button" (click)="removeFormation(i)" pButton icon="pi pi-trash"
+                                    class="p-button-danger"></button>
+                            </div>
+                        </ng-container>
+                        <button type="button" (click)="addFormation()" pButton icon="pi pi-plus"
+                            label="Ajouter une formation"></button>
+                    </div>
+
+                    <p-fieldset>
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center text-primary">
+                                <span class="pi pi-home mr-2"></span>
+                                <span class="font-bold text-lg">Adresse</span>
+                            </div>
+                        </ng-template>
+                        <div formGroupName="adresse">
+                            <div class="p-field">
+                                <span class="p-float-label">
+                                    <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+                                                    [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
+                                                    (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                    <ng-template let-item pTemplate="item">
+                                                        {{ item }}
+                                                    </ng-template>
+                                                </p-autoComplete> -->
+                                    <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
+                                        filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                        formControlName="rue" optionValue="_id">
+                                        <ng-template let-nom pTemplate="item">
+                                            <div class="let-nom">
+                                                <div>{{nom.nomComplet}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+
+
+                                </span>
+                            </div>
+                            <div class="p-field">
+                                <span class="p-float-label">
+                                    <input type="text" formControlName="numero" pInputText>
+                                    <!-- <input type="text" id="numero" name="numero"
+                                                    [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
+                                                    pInputText> -->
+                                    <label for="numero">Numéro</label>
+                                </span>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+
+            <!-- <div class="p-field">
+                        <span class="p-float-label">
+                            <p-autoComplete [(ngModel)]="selectedAgent.adresse" [dropdown]="true"
+                                [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
+                                (onSelect)="selectedAgent.rue = $event" placeholder="Rue"
+                                [ngModelOptions]="{standalone: true}">
+                                <ng-template let-item pTemplate="item">
+                                    {{ item }}
+                                </ng-template>
+                            </p-autoComplete>
+                        </span>
+                    </div>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input type="text" id="numero" name="numero"
+                                [value]="selectedAgent?.adresse?.[0]?.numero || null" pInputText>
+                            <label for="numero">Numéro</label>
+                        </span>
+                    </div> -->
+
+
+
+            <div class="p-d-flex p-jc-between">
+                <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
+
+                <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                    icon="pi pi-times" (click)="cancel()"></button>
+            </div>
+        </form>
+    </p-dialog>

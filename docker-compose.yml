@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: gdp-front
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - 4200:4200

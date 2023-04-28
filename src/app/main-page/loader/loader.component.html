@@ -1,0 +1,30 @@
+<div class="row" id="loader">
+
+    <div class="col d-flex justify-content-center">
+        <div class="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        //('#loader').hide;
+        $('#loader').css('display', 'none');
+        $('#container-table').css('display', 'block')
+        // document.getElementById("loader").style.display = "none";
+        //$('#loader, #container-table').toggle();
+    }
+
+    window.onbeforeunload = function () {
+        //$('#loader').show;
+        $('#loader').css('display', 'block');
+        $('#container-table').css('display', 'none')
+        // $('#container-table').hide;
+        // document.getElementById("loader").style.display = "block";
+        //$('#loader, #container-table').toggle();
+    }
+
+
+</script>
