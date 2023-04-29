@@ -83,6 +83,11 @@ export const navbarData: INavbarData[] = [
         label: 'Media',
     },
     {
+        routeLink: 'messages',
+        icon: 'fal fa-message',
+        label: 'Messages',
+    },
+    {
         routeLink: 'settings',
         icon: 'fal fa-cog',
         label: 'Settings',

@@ -27,6 +27,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
 
+import { RippleModule } from 'primeng/ripple';
 @NgModule({
     declarations: [],
     exports: [
@@ -57,6 +58,7 @@ import { ChipsModule } from 'primeng/chips';
         FieldsetModule,
         ChipModule,
         ChipsModule,
+        RippleModule,
     ],
     providers: [MessageService],
 })

@@ -85,6 +85,9 @@ Une date de présentation de l’application reste à définir et comptera pour 
 -   [**Listing Emojis**](emoji.md)
 -   [**csv2json**](https://csvjson.com/csv2json)
 -   [**Learn JWT**](https://medium.com/front-end-weekly/learn-using-jwt-with-passport-authentication-9761539c4314)
+-   [**Message Service**](https://stackblitz.com/edit/angular-8-communicating-between-components?file=app%2F_services%2Fmessage.service.ts)
+-   [**Component Interaction**](https://angular.io/guide/component-interaction)
+-   [**Angular Bearer Token with HttpClient**](https://stackblitz.com/edit/angular-bearer-token?file=src%2Fapp%2Fapp.component.ts)
 
 ## ✍️ Notes!
 

@@ -24,6 +24,7 @@ import { UploadComponent } from './services/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
+import { MessageServiceComponent } from './components/message-service/message-service.component';
 // import { ButtonModule } from 'primeng/button';
 // import { PaginatorModule } from 'primeng/paginator';
 // import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
@@ -43,6 +44,7 @@ import { MessagesModule } from 'primeng/messages';
         RegistrationComponent,
         ToUpperCasePipe,
         UploadComponent,
+        MessageServiceComponent,
     ],
     imports: [
         BrowserModule,

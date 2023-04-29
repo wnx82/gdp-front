@@ -5,6 +5,7 @@ import { RegistrationComponent } from './services/registration/registration.comp
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { UploadComponent } from './services/upload/upload.component';
+import { MessageServiceComponent } from './components/message-service/message-service.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -43,6 +44,7 @@ const routes: Routes = [
             ),
     },
     { path: 'media', component: UploadComponent },
+    { path: 'messages', component: MessageServiceComponent },
     // {
     //     path: 'media',
     //     loadChildren: () =>
@@ -105,7 +107,7 @@ const routes: Routes = [
             ),
     },
     {
-        path: 'app',
+        path: 'habitations/details',
         loadChildren: () =>
             import(
                 './components/habitations/details-habitation/details-habitation.module'
