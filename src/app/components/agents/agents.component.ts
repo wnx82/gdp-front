@@ -41,8 +41,9 @@ export class AgentsComponent implements OnInit {
                 Validators.pattern(/^\d+$/),
             ]),
             matricule: new FormControl('', [
+                Validators.minLength(3),
                 Validators.required,
-                Validators.pattern(/^\d+$/),
+                // Validators.pattern(/^\d+$/),
             ]),
             firstname: new FormControl(''),
             lastname: new FormControl(''),

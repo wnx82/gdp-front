@@ -131,7 +131,7 @@
 
     <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [maximizable]="true" [closable]="true" [dismissableMask]="true" (onHide)="cancel()"
-        [style]="{width: '600px'}">
+        [style]="{width: '500px'}">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
             <div class="p-grid">
@@ -148,11 +148,12 @@
 
                             <span class="p-float-label">
                                 <input type="number" id="matricule" pInputText pKeyFilter="int" placeholder="Matricule"
-                                    formControlName="matricule" required="Veuillez saisir le matricule" />
+                                    formControlName="matricule" required="Veuillez saisir le matricule" min="100"
+                                    max="999" />
                                 <label for="matricule">Matricule</label>
                                 <small
                                     *ngIf="dataForm.get('matricule')?.invalid && (dataForm.get('matricule')?.dirty || dataForm.get('matricule')?.touched)">
-                                    Le matricule doit être un nombre entier positif.
+                                    Le matricule doit être un nombre entier positif de minimum 3 chiffres.
                                 </small>
                             </span>
 
@@ -239,7 +240,7 @@
 
                             <span class="p-float-label">
                                 <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
-                                    required [value]="selectedAgent.iceContact" pInputText>
+                                    [value]="selectedAgent.iceContact" pInputText>
                                 <label for="iceContact">Contact en cas d'urgence</label>
                                 <small
                                     *ngIf="dataForm.get('iceContact')?.invalid && (dataForm.get('iceContact')?.dirty || dataForm.get('iceContact')?.touched)">
