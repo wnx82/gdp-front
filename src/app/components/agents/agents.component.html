@@ -135,110 +135,143 @@
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
             <div class="p-grid">
-                <div class="p-col-6">
+                <div class="field p-fluid mt-4">
+                    <div class="p-col-6">
 
-                    <p-fieldset>
-                        <ng-template pTemplate="header">
-                            <div class="flex align-items-center text-primary">
-                                <span class="pi pi-user mr-2"></span>
-                                <span class="font-bold text-lg">User Details</span>
-                            </div>
-                        </ng-template>
-
-                        <span class="p-float-label">
-                            <input type="number" pInputText pKeyFilter="int" placeholder="Matricule"
-                                formControlName="matricule" required="Veuillez saisir le matricule" />
-                            <!-- <input type="number" id="matricule" name="matricule" formControlName="matricule"
-                                    [value]="selectedAgent.matricule" required="Veuillez saisir le matricule"
-                                    pInputText> -->
-                            <label for="matricule">Matricule</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <input type="text" formControlName="lastname" [value]="selectedAgent.lastname" pInputText>
-                            <label for="lastname">Nom</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <input type="text" pInputText formControlName="firstname" />
-                            <!-- <input type="text" id="firstname" name="firstname" formControlName="firstname"
-                                    [value]="selectedAgent.firstname" pInputText> -->
-                            <label for="firstname">Prénom</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
-                                pInputText>
-                            <label for="tel">Téléphone</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
-                                dateFormat="dd/mm/yy"></p-calendar>
-                            <label for="birthday">Date de naissance</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <input type="email" id="email" name="email" formControlName="email" required
-                                [value]="selectedAgent.email" pInputText>
-                            <label for="email">Email</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <!-- <input type="password" id="password" name="password" formControlName="password" required
-                                    [value]="selectedAgent.password" pInputText> -->
-                            <p-password formControlName="password" required [toggleMask]="true"></p-password>
-                            <label for="password">Mot de passe</label>
-                        </span>
-
-
-                        <span class="p-float-label">
-                            <input type="number" id="userAccess" name="userAccess" formControlName="userAccess" required
-                                [value]="selectedAgent.userAccess" pInputText min="0" max="10"
-                                title="Veuillez saisir un nombre entre 0 et 10">
-                            <label for="userAccess">Niveau d'accès utilisateur</label>
-                        </span>
-
-
-
-                        <span class="p-float-label">
-                            <input type="text" id="iceContact" name="iceContact" formControlName="iceContact" required
-                                [value]="selectedAgent.iceContact" pInputText>
-                            <label for="iceContact">Contact en cas d'urgence</label>
-                        </span>
-
-                    </p-fieldset>
-                    <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
-                        <label for="formations">Formations</label>
-                        <ng-container *ngFor="let formation of selectedAgent.formations.controls; let i = index">
-                            <div class="p-inputgroup">
-                                <input type="text" id="formations_{{ i }}" name="formations_{{ i }}"
-                                    [formControlName]="i" [value]="formation.value" pInputText>
-                                <button type="button" (click)="removeFormation(i)" pButton icon="pi pi-trash"
-                                    class="p-button-danger"></button>
-                            </div>
-                        </ng-container>
-                        <button type="button" (click)="addFormation()" pButton icon="pi pi-plus"
-                            label="Ajouter une formation"></button>
-                    </div>
-
-                    <div formGroupName="adresse">
                         <p-fieldset>
                             <ng-template pTemplate="header">
                                 <div class="flex align-items-center text-primary">
-                                    <span class="pi pi-home mr-2"></span>
-                                    <span class="font-bold text-lg">Adresse</span>
+                                    <span class="pi pi-user mr-2"></span>
+                                    <span class="font-bold text-lg">User Details</span>
                                 </div>
                             </ng-template>
 
                             <span class="p-float-label">
-                                <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+                                <input type="number" id="matricule" pInputText pKeyFilter="int" placeholder="Matricule"
+                                    formControlName="matricule" required="Veuillez saisir le matricule" />
+                                <label for="matricule">Matricule</label>
+                                <small
+                                    *ngIf="dataForm.get('matricule')?.invalid && (dataForm.get('matricule')?.dirty || dataForm.get('matricule')?.touched)">
+                                    Le matricule doit être un nombre entier positif.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" formControlName="lastname" [value]="selectedAgent.lastname"
+                                    pInputText>
+                                <label for="lastname">Nom</label>
+                                <small
+                                    *ngIf="dataForm.get('lastname')?.invalid && (dataForm.get('lastname')?.dirty || dataForm.get('lastname')?.touched)">
+                                    Le nom est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" pInputText formControlName="firstname" />
+                                <label for="firstname">Prénom</label>
+                                <small
+                                    *ngIf="dataForm.get('firstname')?.invalid && (dataForm.get('firstname')?.dirty || dataForm.get('firstname')?.touched)">
+                                    Le prénom est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
+                                    pInputText>
+                                <label for="tel">Téléphone</label>
+                                <small
+                                    *ngIf="dataForm.get('tel')?.invalid && (dataForm.get('tel')?.dirty || dataForm.get('tel')?.touched)">
+                                    Le téléphone est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
+                                    dateFormat="dd/mm/yy"></p-calendar>
+                                <label for="birthday">Date de naissance</label>
+                                <small
+                                    *ngIf="dataForm.get('birthday')?.invalid && (dataForm.get('birthday')?.dirty || dataForm.get('birthday')?.touched)">
+                                    La date de naissance est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="email" id="email" name="email" formControlName="email" required
+                                    [value]="selectedAgent.email" pInputText>
+                                <label for="email">Email</label>
+                                <small
+                                    *ngIf="dataForm.get('email')?.invalid && (dataForm.get('email')?.dirty || dataForm.get('email')?.touched)">
+                                    L'email est obligatoire et doit être une adresse email valide.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <p-password formControlName="password" required [toggleMask]="true"></p-password>
+                                <label for="password">Mot de passe</label>
+                                <small
+                                    *ngIf="dataForm.get('password')?.invalid && (dataForm.get('password')?.dirty || dataForm.get('password')?.touched)">
+                                    Le mot de passe est obligatoire et doit contenir au moins 8 caractères dont une
+                                    majuscule, une minuscule et un
+                                    chiffre.
+                                </small>
+                            </span>
+
+
+
+                            <span class="p-float-label">
+                                <input type="number" id="userAccess" name="userAccess" formControlName="userAccess"
+                                    required [value]="selectedAgent.userAccess" pInputText min="0" max="10"
+                                    title="Veuillez saisir un nombre entre 0 et 10">
+                                <label for="userAccess">Niveau d'accès utilisateur</label>
+                                <small
+                                    *ngIf="dataForm.get('userAccess')?.invalid && (dataForm.get('userAccess')?.dirty || dataForm.get('userAccess')?.touched)">
+                                    Le niveau d'accès doit être un nombre entier entre 0 et 10.
+                                </small>
+                            </span>
+
+
+
+                            <span class="p-float-label">
+                                <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
+                                    required [value]="selectedAgent.iceContact" pInputText>
+                                <label for="iceContact">Contact en cas d'urgence</label>
+                                <small
+                                    *ngIf="dataForm.get('iceContact')?.invalid && (dataForm.get('iceContact')?.dirty || dataForm.get('iceContact')?.touched)">
+                                    Le contact en cas d'urgence est obligatoire.
+                                </small>
+                            </span>
+                        </p-fieldset>
+                        <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
+                            <label for="formations">Formations</label>
+                            <ng-container *ngFor="let formation of selectedAgent.formations.controls; let i = index">
+                                <div class="p-inputgroup">
+                                    <input type="text" id="formations_{{ i }}" name="formations_{{ i }}"
+                                        [formControlName]="i" [value]="formation.value" pInputText>
+                                    <button type="button" (click)="removeFormation(i)" pButton icon="pi pi-trash"
+                                        class="p-button-danger"></button>
+                                </div>
+                            </ng-container>
+                            <button type="button" (click)="addFormation()" pButton icon="pi pi-plus"
+                                label="Ajouter une formation"></button>
+                        </div>
+
+                        <div formGroupName="adresse">
+                            <p-fieldset>
+                                <ng-template pTemplate="header">
+                                    <div class="flex align-items-center text-primary">
+                                        <span class="pi pi-home mr-2"></span>
+                                        <span class="font-bold text-lg">Adresse</span>
+                                    </div>
+                                </ng-template>
+
+                                <span class="p-float-label">
+                                    <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
                                                     [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
                                                     (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
                                                     [ngModelOptions]="{standalone: true}">
@@ -246,29 +279,30 @@
                                                         {{ item }}
                                                     </ng-template>
                                                 </p-autoComplete> -->
-                                <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
-                                    filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
-                                    formControlName="rue" optionValue="_id">
-                                    <ng-template let-nom pTemplate="item">
-                                        <div class="let-nom">
-                                            <div>{{nom.nomComplet}}</div>
-                                        </div>
-                                    </ng-template>
-                                </p-dropdown>
+                                    <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
+                                        filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
+                                        formControlName="rue" optionValue="_id">
+                                        <ng-template let-nom pTemplate="item">
+                                            <div class="let-nom">
+                                                <div>{{nom.nomComplet}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
 
 
-                            </span>
+                                </span>
 
 
-                            <span class="p-float-label">
-                                <input type="text" formControlName="numero" pInputText>
-                                <!-- <input type="text" id="numero" name="numero"
+                                <span class="p-float-label">
+                                    <input type="text" formControlName="numero" pInputText>
+                                    <!-- <input type="text" id="numero" name="numero"
                                                     [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
                                                     pInputText> -->
-                                <label for="numero">Numéro</label>
-                            </span>
+                                    <label for="numero">Numéro</label>
+                                </span>
 
-                        </p-fieldset>
+                            </p-fieldset>
+                        </div>
                     </div>
                 </div>
             </div>

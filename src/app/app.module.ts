@@ -23,6 +23,7 @@ import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
 import { UploadComponent } from './services/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
 // import { ButtonModule } from 'primeng/button';
 // import { PaginatorModule } from 'primeng/paginator';
 // import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng
@@ -54,7 +55,7 @@ import { MessageService } from 'primeng/api';
         ReactiveFormsModule,
         FormlyModule.forRoot(),
         FormlyBootstrapModule,
-
+        MessagesModule,
         SharedUiModule,
     ],
     // providers: [MessageService],
