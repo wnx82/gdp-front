@@ -57,7 +57,12 @@
                 <td>{{ mission.horaire }}</td>
                 <td>{{ mission.priority }}</td>
                 <td>{{ mission.contact }}</td>
-                <td>{{ mission.visibility }}</td>
+                <td>
+                    <p-chip [ngClass]="{'p-chip-success': mission.visibility, 'p-chip-danger': !mission.visibility}">
+                        {{ mission.visibility ? 'oui' : 'non' }}
+                    </p-chip>
+
+                </td>
 
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
@@ -86,53 +91,53 @@
             <div class="p-grid">
                 <div class="p-col-6">
 
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="title" name="title" formControlName="title" pInputText
-                                [value]="selectedData.title">
-                            <label for="title">Titre</label>
-                        </span>
-                        <small
-                            *ngIf="dataForm.controls['title'].invalid && (dataForm.controls['title'].dirty || dataForm.controls['title'].touched)"
-                            class="p-error">Le champ "Titre" est obligatoire.</small>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
-                                formControlName="description" [value]="selectedData.description"></textarea>
-                            <label for="description">Description</label>
-                        </span>
-                    </div>
 
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="category" name="category" formControlName="category"
-                                [value]="selectedData.category" pInputText>
-                            <label for="category">Catégorie</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="horaire" name="horaire" formControlName="horaire"
-                                [value]="selectedData.horaire" pInputText>
-                            <label for="horaire">Horaire</label>
-                        </span>
-                    </div>
+                    <span class="p-float-label">
+                        <input type="text" id="title" name="title" formControlName="title" pInputText
+                            [value]="selectedData.title">
+                        <label for="title">Titre</label>
+                    </span>
+                    <small
+                        *ngIf="dataForm.controls['title'].invalid && (dataForm.controls['title'].dirty || dataForm.controls['title'].touched)"
+                        class="p-error">Le champ "Titre" est obligatoire.</small>
 
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="number" id="priority" name="priority" formControlName="priority"
-                                [value]="selectedData.priority" pInputText>
-                            <label for="priority">Priorité</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="contact" name="contact" formControlName="contact"
-                                [value]="selectedData.contact" pInputText>
-                            <label for="contact">Contact</label>
-                        </span>
-                    </div><!-- <div class="p-field">
+
+                    <span class="p-float-label">
+                        <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
+                            formControlName="description" [value]="selectedData.description"></textarea>
+                        <label for="description">Description</label>
+                    </span>
+
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="category" name="category" formControlName="category"
+                            [value]="selectedData.category" pInputText>
+                        <label for="category">Catégorie</label>
+                    </span>
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="horaire" name="horaire" formControlName="horaire"
+                            [value]="selectedData.horaire" pInputText>
+                        <label for="horaire">Horaire</label>
+                    </span>
+
+
+
+                    <span class="p-float-label">
+                        <input type="number" id="priority" name="priority" formControlName="priority"
+                            [value]="selectedData.priority" pInputText>
+                        <label for="priority">Priorité</label>
+                    </span>
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="contact" name="contact" formControlName="contact"
+                            [value]="selectedData.contact" pInputText>
+                        <label for="contact">Contact</label>
+                    </span>
+                    <!-- <div class="p-field">
                                         <span class="p-float-label">
                                             <input type="text" id="annexes" name="annexes" formControlName="annexes"
                                                 [value]="selectedData.annexes" pInputText>
@@ -140,10 +145,13 @@
                                         </span>
                                     </div> -->
                     <div class="p-field-checkbox">
-                        <input type="checkbox" id="visibility" name="visibility" formControlName="visibility">
+                        <!-- <input type="checkbox" id="visibility" name="visibility" formControlName="visibility"> -->
+                        <p-checkbox formControlName="visibility" [binary]="true" inputId="binary"></p-checkbox>
                         <label for="visibility">Visible</label>
 
                     </div>
+
+
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                             class="p-button-sm p-button-success"

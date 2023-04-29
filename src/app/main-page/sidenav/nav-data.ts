@@ -121,12 +121,12 @@ export const navbarData: INavbarData[] = [
                 label: 'Liste des infractions',
             },
             {
-                routeLink: 'quartiers',
-                label: 'Liste des quartiers',
-            },
-            {
                 routeLink: 'missions',
                 label: 'Liste des missions',
+            },
+            {
+                routeLink: 'quartiers',
+                label: 'Liste des quartiers',
             },
             {
                 routeLink: 'rues',

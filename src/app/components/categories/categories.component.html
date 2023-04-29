@@ -54,12 +54,12 @@
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" formControlName="title" required pInputText [value]="selectedData.title">
-                            <label for="title">Titre</label>
-                        </span>
-                    </div>
+
+                    <span class="p-float-label">
+                        <input type="text" formControlName="title" required pInputText [value]="selectedData.title">
+                        <label for="title">Titre</label>
+                    </span>
+
 
                 </div>
                 <div class="p-d-flex p-jc-between">

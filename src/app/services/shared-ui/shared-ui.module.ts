@@ -24,6 +24,8 @@ import { AccordionModule } from 'primeng/accordion';
 import { SkeletonModule } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ChipModule } from 'primeng/chip';
+import { ChipsModule } from 'primeng/chips';
 @NgModule({
     declarations: [],
     exports: [
@@ -52,6 +54,8 @@ import { FieldsetModule } from 'primeng/fieldset';
         AccordionModule,
         SkeletonModule,
         FieldsetModule,
+        ChipModule,
+        ChipsModule,
     ],
     providers: [MessageService],
 })

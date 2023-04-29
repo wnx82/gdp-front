@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
-import { StatisticsComponent } from 'src/app/components/statistics/statistics.component';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',

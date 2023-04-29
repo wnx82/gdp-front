@@ -88,24 +88,24 @@
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="category" name="category" formControlName="category" required
-                                pInputText [value]="selectedData.category">
-                            <label for="category">category</label>
-                        </span>
-                        <span class="p-float-label">
-                            <input type="text" id="priority" name="priority" formControlName="priority" pInputText
-                                [value]="selectedData.priority">
-                            <label for="priority">Priorité</label>
-                        </span>
 
-                        <span class="p-float-label">
-                            <input type="text" id="list" name="list" formControlName="list" pInputText
-                                [value]="selectedData.list">
-                            <label for="list">Liste</label>
-                        </span>
-                    </div>
+                    <span class="p-float-label">
+                        <input type="text" id="category" name="category" formControlName="category" required pInputText
+                            [value]="selectedData.category">
+                        <label for="category">category</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input type="text" id="priority" name="priority" formControlName="priority" pInputText
+                            [value]="selectedData.priority">
+                        <label for="priority">Priorité</label>
+                    </span>
+
+                    <span class="p-float-label">
+                        <input type="text" id="list" name="list" formControlName="list" pInputText
+                            [value]="selectedData.list">
+                        <label for="list">Liste</label>
+                    </span>
+
 
                 </div>
                 <div class="p-d-flex p-jc-between">
