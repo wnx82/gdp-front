@@ -12,6 +12,10 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
+import { Quartier } from 'src/app/interfaces/Quartier.interface';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { Mission } from 'src/app/interfaces/Mission.interface';
+import { Observable, map } from 'rxjs';
 
 @Component({
     selector: 'app-quartiers',
@@ -25,11 +29,12 @@ export class QuartiersComponent implements OnInit {
         private messageService: MessageService,
         private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private getDataService: GetDataService
     ) {}
     private apiUrl: string | undefined;
     readonly API_URL = `${environment.apiUrl}/quartiers`;
-    quartiers: any[] = [];
+    quartiers: Quartier[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
@@ -42,11 +47,13 @@ export class QuartiersComponent implements OnInit {
     });
     selectedMission: any;
     storedValue: any;
-    missions: any[] = [];
+    missions: Mission[] = [];
+    missions$: Observable<Mission[]> = this.getDataService.missions$;
 
     ngOnInit(): void {
         this.get();
-        this._localStorageService.getMissions();
+        // console.log(this.missions$);
+        // this._localStorageService.getMissions();
     }
     clear(table: Table) {
         table.clear();
@@ -58,15 +65,27 @@ export class QuartiersComponent implements OnInit {
             detail: error.message,
         });
     }
-    findMissionById(missionId: string): string {
-        const mission = this.missions.find(m => m._id === missionId);
-        return mission ? mission.title : '';
+    // findMissionById(missionId: number): string {
+    //     const mission: Mission | undefined = this.missions$.find(
+    //         m => m._id === missionId
+    //     );
+    //     console.log(mission?.title);
+    //     // console.log(mission.title);
+    //     return mission ? mission.title : '';
+    // }
+    findMissionById(missionId: number): Observable<string> {
+        return this.missions$.pipe(
+            map(missions => missions.find(m => m._id === missionId)),
+            map(mission => (mission ? mission.title : ''))
+        );
     }
+
     get() {
-        this.http.get<any[]>(`${this.API_URL}`).subscribe({
+        this.http.get<Quartier[]>(`${this.API_URL}`).subscribe({
             next: data => {
                 // console.log(data);
                 this.quartiers = data.filter(quartier => !quartier.deletedAt);
+                // console.log(this.quartiers);
             },
             error: error => {
                 this.messageService.add({
@@ -78,26 +97,28 @@ export class QuartiersComponent implements OnInit {
         });
     }
     add(quartier: any) {
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
-            next: data => {
-                this.quartiers.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Rue ajoutée',
-                });
-                this.dataForm.reset();
-                this.get();
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
+        this.http
+            .post<Quartier>(`${this.API_URL}`, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    this.quartiers.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Rue ajoutée',
+                    });
+                    this.dataForm.reset();
+                    this.get();
+                },
+                error: error => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    });
+                },
+            });
     }
     edit(id: number, quartier: any) {
         console.log(quartier);
@@ -119,7 +140,7 @@ export class QuartiersComponent implements OnInit {
             // Ajouter les autres champs de la quartier ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Quartier>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.quartiers.findIndex(r => r._id === data._id);
                 this.quartiers[index] = data;
@@ -162,9 +183,9 @@ export class QuartiersComponent implements OnInit {
         });
     }
     delete(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Quartier>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.quartiers = this.quartiers.filter(r => r.id !== id);
+                this.quartiers = this.quartiers.filter(r => r._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',

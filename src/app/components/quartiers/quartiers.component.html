@@ -47,7 +47,17 @@
                         </tr>
                     </table>
                 </td> -->
+
                 <td>
+                    <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
+                        <tr *ngFor="let missionId of donnee.missions">
+                            <!-- <td>{{ missionId }}</td> -->
+                            <td>{{ findMissionById(missionId) | async }}</td> <!-- Use the async pipe -->
+                        </tr>
+                    </table>
+                </td>
+
+                <!-- <td>
                     <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
                         <tr *ngFor="let missionId of donnee.missions">
                             <script>
@@ -59,7 +69,7 @@
                             </ng-container>
                         </tr>
                     </table>
-                </td>
+                </td> -->
 
                 <td>
 
@@ -99,10 +109,22 @@
                     <div class="p-field">
                         <label for="missions">Missions</label>
                         <select id="missions" name="missions" formControlName="missions" multiple>
-                            <option *ngFor="let mission of missions" [ngValue]="mission._id">{{mission.title}}</option>
+                            <ng-container *ngIf="missions$ | async as missions">
+                                <!-- Use async pipe to subscribe to the missions$ Observable -->
+                                <option *ngFor="let mission of missions" [ngValue]="mission._id">{{mission.title}}
+                                </option>
+                                <!-- Display the options using ngFor directive -->
+                            </ng-container>
                         </select>
                     </div>
-
+                    <!-- <div class="p-field">
+                        <label for="missions">Missions</label>
+                        <p-multiSelect id="missions" name="missions" formControlName="missions"
+                            [options]="missions$ | async" [optionLabel]=" 'title' " [optionValue]=" '_id' "
+                            [defaultLabel]="'Select a mission'" [showHeader]="false" [showToggleAll]="false"
+                            [panelStyle]="{ 'max-height': '250px' }" [scrollHeight]="'250px'">
+                        </p-multiSelect>
+                    </div> -->
                     <!-- <div class="p-field">
                         <label for="missions">Missions</label>
                         <p-multiSelect [options]="missions" [defaultLabel]="'Sélectionner les missions...'"

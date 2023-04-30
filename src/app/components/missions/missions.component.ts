@@ -9,7 +9,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-
+import { Mission } from 'src/app/interfaces/Mission.interface';
 @Component({
     selector: 'app-missions',
     templateUrl: './missions.component.html',
@@ -17,7 +17,7 @@ import { ConfirmationService } from 'primeng/api';
     providers: [MessageService, ConfirmationService],
 })
 export class MissionsComponent implements OnInit {
-    missions: any[] = [];
+    missions: Mission[] = [];
     selectedData: any = {};
     isAdding = false;
     isEditing = false;
@@ -54,7 +54,7 @@ export class MissionsComponent implements OnInit {
     }
 
     get() {
-        this.http.get<any[]>(`${this.API_URL}`).subscribe({
+        this.http.get<Mission[]>(`${this.API_URL}`).subscribe({
             next: data => {
                 this.missions = data.filter(mission => !mission.deletedAt);
             },
@@ -120,7 +120,7 @@ export class MissionsComponent implements OnInit {
         };
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Mission>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.missions.findIndex(r => r._id === data._id);
                 this.missions[index] = data;
@@ -156,9 +156,9 @@ export class MissionsComponent implements OnInit {
         });
     }
     deleteData(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Mission>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.missions = this.missions.filter(m => m.id !== id);
+                this.missions = this.missions.filter(m => m._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',

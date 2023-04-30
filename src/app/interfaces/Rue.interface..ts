@@ -1,10 +1,10 @@
-export interface Rues {
+export interface Rue {
     _id: number;
     nom: string;
     denomination: string;
     nomComplet: string;
     quartier: string;
-    cp: string;
+    cp: number;
     localite: string;
     codeRue: string;
     traductionNl: string;
@@ -13,4 +13,7 @@ export interface Rues {
     yMin: string;
     yMax: string;
     idTronconCentral: string;
+    createdAt?: string;
+    updatedAt?: string;
+    deletedAt?: string;
 }

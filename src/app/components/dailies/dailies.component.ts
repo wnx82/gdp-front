@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import {
     FormArray,
@@ -99,7 +99,7 @@ export class DailiesComponent implements OnInit {
         // this.getDataService.getQuartiers().subscribe(quartiers => {
         //     this.myQuartiers = quartiers;
         // });
-        console.log('myQuartiers', this.quartiers$);
+        // console.log('myQuartiers', this.quartiers$);
     }
     private handleError(error: any): void {
         this.messageService.add({
@@ -108,7 +108,18 @@ export class DailiesComponent implements OnInit {
             detail: error.message,
         });
     }
-
+    findAgentById(agentId: number): Observable<string> {
+        return this.agents$.pipe(
+            map(agents => agents.find(a => a._id === agentId)),
+            map(agent => (agent ? agent.matricule.toString() : '')) // Convert matricule to string
+        );
+    }
+    findQuartierById(quartierId: number): Observable<string> {
+        return this.quartiers$.pipe(
+            map(quartiers => quartiers.find(a => a._id === quartierId)),
+            map(quartier => (quartier ? quartier.title : '')) // Convert matricule to string
+        );
+    }
     get() {
         this.http.get<any[]>(this.API_URL).subscribe({
             next: data => {

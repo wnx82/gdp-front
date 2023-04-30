@@ -11,7 +11,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
-
+import { Rue } from 'src/app/interfaces/Rue.interface.';
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -20,7 +20,7 @@ import { LocalStorageService } from '../../services/localstorage/local-storage.s
 })
 export class RuesComponent implements OnInit {
     private apiUrl: string | undefined;
-    rues: any[] = [];
+    rues: Rue[] = [];
     quartiers: any[] = [];
     localiteList = [
         { label: 'Mouscron', value: 'Mouscron', cp: '7700' },
@@ -107,7 +107,7 @@ export class RuesComponent implements OnInit {
     }
 
     get() {
-        this.http.get<any[]>(`${this.API_URL}`).subscribe({
+        this.http.get<Rue[]>(`${this.API_URL}`).subscribe({
             next: data => {
                 this.rues = data.filter(rue => !rue.deletedAt);
             },
@@ -130,7 +130,7 @@ export class RuesComponent implements OnInit {
     }
 
     addRue(rue: any) {
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
+        this.http.post<Rue>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.rues.push(data);
                 this.isAdding = false;
@@ -187,7 +187,7 @@ export class RuesComponent implements OnInit {
             // Ajouter les autres champs de la rue ici si nécessaire
         };
         const url = `${this.API_URL}/${id}`;
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Rue>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.rues.findIndex(r => r._id === data._id);
                 this.rues[index] = data;
@@ -221,10 +221,10 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-    deleteRue(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+    deleteRue(_id: number) {
+        this.http.delete<any>(`${this.API_URL}/${_id}`).subscribe({
             next: () => {
-                this.rues = this.rues.filter(r => r.id !== id);
+                this.rues = this.rues.filter(r => r._id !== _id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',

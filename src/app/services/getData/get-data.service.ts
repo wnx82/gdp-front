@@ -4,8 +4,10 @@ import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { merge, Subject } from 'rxjs';
 import { map, takeUntil, catchError, scan } from 'rxjs/operators';
-
-import { Agent } from 'src/app/interfaces/agents';
+import { Agent } from 'src/app/interfaces/Agent.interface';
+import { Mission } from 'src/app/interfaces/Mission.interface';
+import { Quartier } from 'src/app/interfaces/Quartier.interface';
+import { Rue } from 'src/app/interfaces/Rue.interface.';
 
 @Injectable({
     providedIn: 'root',
@@ -18,8 +20,8 @@ export class GetDataService {
     }
     private myData = new BehaviorSubject<string>('Initial value');
     private myAgents = new BehaviorSubject<Agent[]>([]);
-    private myMissions = new BehaviorSubject<any[]>([]);
-    private myQuartiers = new BehaviorSubject<any[]>([]);
+    private myMissions = new BehaviorSubject<Mission[]>([]);
+    private myQuartiers = new BehaviorSubject<Quartier[]>([]);
     private apiUrl: string | undefined;
     readonly API_URL = `${environment.apiUrl}/dailies`;
 
@@ -40,9 +42,9 @@ export class GetDataService {
         return this.agents$;
     }
     //Listing des missions
-    public missions$: Observable<any[]> = this.myMissions.asObservable();
+    public missions$: Observable<Mission[]> = this.myMissions.asObservable();
     private getMissionsFromApi() {
-        this.http.get<any[]>(`${environment.apiUrl}/missions`).subscribe({
+        this.http.get<Mission[]>(`${environment.apiUrl}/missions`).subscribe({
             next: data => {
                 this.myMissions.next(
                     data.filter(quartier => !quartier.deletedAt)
@@ -54,13 +56,13 @@ export class GetDataService {
         });
     }
     // Expose la propriété missions$ publique de la classe
-    get missions(): Observable<any[]> {
+    get missions(): Observable<Mission[]> {
         return this.missions$;
     }
     //Listing des quartiers
-    public quartiers$: Observable<any[]> = this.myQuartiers.asObservable();
+    public quartiers$: Observable<Quartier[]> = this.myQuartiers.asObservable();
     private getQuartierFromApi() {
-        this.http.get<any[]>(`${environment.apiUrl}/quartiers`).subscribe({
+        this.http.get<Quartier[]>(`${environment.apiUrl}/quartiers`).subscribe({
             next: data => {
                 this.myQuartiers.next(
                     data.filter(quartier => !quartier.deletedAt)
@@ -72,7 +74,7 @@ export class GetDataService {
         });
     }
     // Expose la propriété quartiers$ publique de la classe
-    get quartiers(): Observable<any[]> {
+    get quartiers(): Observable<Quartier[]> {
         return this.quartiers$;
     }
 

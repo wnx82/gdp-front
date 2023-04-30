@@ -15,7 +15,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
-import { Agent } from 'src/app/interfaces/agents';
+import { Agent } from 'src/app/interfaces/Agent.interface';
 
 @Component({
     selector: 'app-agents',
