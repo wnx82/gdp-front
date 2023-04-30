@@ -35,17 +35,17 @@
 
     <p-table #dataTableHabitations [value]="habitations" [paginator]="true" [rows]="itemsPerPage"
         [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nomComplet', 'quartier', 'localite']">
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nomComplet', 'quartier', 'localite','debut','fin']">
         <ng-template pTemplate="caption">
             <div class="flex">
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
                     (click)="clear(dataTableHabitations)"></button>
                 <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
                     <input #searchInput pInputText type="text"
                         (input)="dataTableHabitations.filterGlobal(searchInput.value, 'contains')"
-                        placeholder="Search keyword" />
+                        placeholder="Rechercher mot-clé" />
                 </span>
             </div>
         </ng-template>
@@ -59,8 +59,12 @@
                 </th>
                 <th style="width:10%">Localité <p-columnFilter type="text" field="adresse.localite"></p-columnFilter>
                 </th>
-                <th style="width:10%">Date Début</th>
-                <th style="width:10%">Date Fin</th>
+                <th style="width:10%">Date Début <p-columnFilter type="date" field="debut" filterMatchMode="equals"
+                        filterDateFormat="dd-mm-yy"></p-columnFilter></th>
+
+                <th style="width:10%">Date Fin <p-columnFilter type="date" field="fin" filterMatchMode="equals"
+                        filterDateFormat="dd-mm-yy"></p-columnFilter></th>
+
                 <th style="width:10%">Actions</th>
             </tr>
         </ng-template>

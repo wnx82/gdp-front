@@ -26,12 +26,27 @@
         <div class="col-md-12">
 
             <div class="table-responsive">
-                <p-table [value]="donnees" [paginator]="true" [rows]="10">
+                <p-table #dataTableInfractions [value]="donnees" [paginator]="true" [rows]="10"
+                    [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+                    [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['category', 'Liste']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
+                                (click)="clear(dataTableInfractions)"></button>
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text"
+                                    (input)="dataTableInfractions.filterGlobal(searchInput.value, 'contains')"
+                                    placeholder="Rechercher mot-clé" />
+                            </span>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Category</th>
+                            <th>Category </th>
                             <th>Priorité</th>
-                            <th>Liste</th>
+                            <th>Liste </th>
                             <th></th>
                         </tr>
                     </ng-template>

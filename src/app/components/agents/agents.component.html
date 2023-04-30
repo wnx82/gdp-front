@@ -34,7 +34,7 @@
     </div>
     <p-table #dataTableAgents [value]="agents" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
         [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
         <ng-template pTemplate="caption">
             <div class="flex">

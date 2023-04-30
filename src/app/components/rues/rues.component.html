@@ -36,8 +36,8 @@
     </div>
     <p-table #dataTableRues [value]="rues" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nom', 'quartier']">
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nom', 'quartier','cp','localite']">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
@@ -53,14 +53,18 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:10%">Dénomination</th>
-                <th style="width:10%">Nom</th>
-                <th style="width:10%">Quartier</th>
-                <th style="width:10%">Code Postal</th>
-                <th style="width:10%">Localité</th>
-                <th style="width:10%"></th>
+                <th style="width:10%">Nom <p-columnFilter type="text" field="nom"></p-columnFilter>
+                </th>
+                <th style="width:10%">Quartier <p-columnFilter type="text" field="quartier"></p-columnFilter>
+                </th>
+                <th style="width:10%">Code Postal<p-columnFilter type="text" field="cp"></p-columnFilter></th>
 
+                <th style="width:10%">Localité <p-columnFilter type="text" field="localite"></p-columnFilter></th>
+
+                <th style="width:10%">Actions</th>
             </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-rue>
             <tr>
                 <td>{{ rue.denomination }}</td>
@@ -88,12 +92,7 @@
         <ng-template pTemplate="paginatorright">
             <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
         </ng-template>
-        <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
-        </ng-template>
-        <ng-template pTemplate="paginatorright">
-            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
-        </ng-template>
+
     </p-table>
 
 

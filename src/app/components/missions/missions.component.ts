@@ -9,6 +9,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { Mission } from 'src/app/interfaces/Mission.interface';
 @Component({
     selector: 'app-missions',
@@ -257,5 +258,8 @@ export class MissionsComponent implements OnInit {
 
     search() {
         this.get();
+    }
+    clear(table: Table) {
+        table.clear();
     }
 }

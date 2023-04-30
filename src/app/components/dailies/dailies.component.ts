@@ -17,6 +17,7 @@ import { LocalStorageService } from 'src/app/services/localstorage/local-storage
 import { SelectItemGroup } from 'primeng/api';
 
 import { BehaviorSubject } from 'rxjs';
+import 'add-to-calendar-button';
 
 interface Agent {
     matricule: string;
@@ -39,7 +40,7 @@ export class DailiesComponent implements OnInit {
     isEditing: boolean = false;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
-
+    blabla: string = 'coucou';
     groupedAgents: SelectItemGroup[] = [];
     selectedAgents: Agent[] = [];
     agentsBrut: any[] = [];
@@ -119,6 +120,26 @@ export class DailiesComponent implements OnInit {
             map(quartiers => quartiers.find(a => a._id === quartierId)),
             map(quartier => (quartier ? quartier.title : '')) // Convert matricule to string
         );
+    }
+    loading: boolean = false;
+    sendMail(dailiesId: number) {
+        this.loading = true;
+        const url = `${this.API_URL}/${dailiesId}/send`;
+        this.http.post<any>(url, {}).subscribe({
+            next: data => {},
+            error: error => {
+                this.handleError(error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                });
+            },
+        });
+        setTimeout(() => {
+            this.loading = false;
+            this.get();
+        }, 500);
     }
     get() {
         this.http.get<any[]>(this.API_URL).subscribe({

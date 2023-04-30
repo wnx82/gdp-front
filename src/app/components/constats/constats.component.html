@@ -33,7 +33,10 @@
         </div>
     </div>
 
-    <p-table [value]="constats" [paginator]="true" [rows]="10">
+    <p-table [value]="constats" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
         <ng-template pTemplate="header">
             <tr>
                 <th>Date</th>

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-infractions',
@@ -197,5 +197,8 @@ export class InfractionsComponent implements OnInit {
     toggleEdit() {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedData);
+    }
+    clear(table: Table) {
+        table.clear();
     }
 }
