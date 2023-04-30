@@ -3,19 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { ConstatsRoutingModule } from './constats-routing.module';
 import { ConstatsComponent } from './constats.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
+
+import { SharedUiModule } from 'src/app/services/shared-ui/shared-ui.module';
 
 @NgModule({
     declarations: [ConstatsComponent],
-    imports: [
-        CommonModule,
-        ConstatsRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        SharedUiModule,
-    ],
+    imports: [CommonModule, ConstatsRoutingModule, SharedUiModule],
 })
 export class ConstatsModule {}

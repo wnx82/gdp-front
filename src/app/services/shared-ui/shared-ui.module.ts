@@ -1,21 +1,24 @@
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+//PrimeNG
+
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
-import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
-import { NgModule } from '@angular/core';
 import { PaginatorModule } from 'primeng/paginator';
 import { PasswordModule } from 'primeng/password';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
@@ -26,39 +29,40 @@ import { MessageService } from 'primeng/api';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
-
 import { RippleModule } from 'primeng/ripple';
+
 @NgModule({
     declarations: [],
     exports: [
-        FormsModule,
-        ReactiveFormsModule,
+        AccordionModule,
         AutoCompleteModule,
         ButtonModule,
         CalendarModule,
         CardModule,
         CheckboxModule,
+        ChipModule,
+        ChipsModule,
         CommonModule,
         ConfirmDialogModule,
         DialogModule,
+        FieldsetModule,
+        FileUploadModule,
+        FormsModule,
+        HttpClientModule,
         InputTextareaModule,
         InputTextModule,
-        PaginatorModule,
-        PasswordModule,
-        TableModule,
-        ToastModule,
-        FileUploadModule,
-        MultiSelectModule,
-        TagModule,
         MessageModule,
         MessagesModule,
-        ToggleButtonModule,
-        AccordionModule,
-        SkeletonModule,
-        FieldsetModule,
-        ChipModule,
-        ChipsModule,
+        MultiSelectModule,
+        PaginatorModule,
+        PasswordModule,
+        ReactiveFormsModule,
         RippleModule,
+        SkeletonModule,
+        TableModule,
+        TagModule,
+        ToastModule,
+        ToggleButtonModule,
     ],
     providers: [MessageService],
 })

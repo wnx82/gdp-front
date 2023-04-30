@@ -88,6 +88,8 @@ Une date de présentation de l’application reste à définir et comptera pour 
 -   [**Message Service**](https://stackblitz.com/edit/angular-8-communicating-between-components?file=app%2F_services%2Fmessage.service.ts)
 -   [**Component Interaction**](https://angular.io/guide/component-interaction)
 -   [**Angular Bearer Token with HttpClient**](https://stackblitz.com/edit/angular-bearer-token?file=src%2Fapp%2Fapp.component.ts)
+-   [**Angular + Reactive Forms - Cross Field Validation Example**](https://stackblitz.com/edit/angular-reactive-forms-cross-field-validation-example?file=src%2Fapp%2Fapp.component.html)
+-   [**Angular 15 Auth Boilerplate - Sign Up with Verification, Login and Forgot Password (forked)**](https://stackblitz.com/edit/angular-15-signup-verification-boilerplate-g9nquv)
 
 ## ✍️ Notes!
 

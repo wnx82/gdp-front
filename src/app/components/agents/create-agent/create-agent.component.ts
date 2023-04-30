@@ -15,7 +15,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from 'src/app/services/localstorage/local-storage.service';
-
+import { Agent } from 'src/app/interfaces/agents';
 @Component({
     selector: 'app-create-agent',
     templateUrl: './create-agent.component.html',
@@ -89,7 +89,7 @@ export class CreateAgentComponent {
     dataForm!: FormGroup;
     submitted = false;
 
-    agents: any[] = [];
+    agents: Agent[] = [];
     filteredRues: any[] = [];
     selectedAgent: any = {
         birthday: new Date(),

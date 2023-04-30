@@ -1,1 +1,89 @@
-<p>dailies works!</p>
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des Dailies</h1>
+    <h1>Liste des agents</h1>
+    <div *ngIf="(agents$ | async) as agents">
+        <ul>
+            <li *ngFor="let agent of agents">
+                {{ agent._id }}
+                {{ agent.matricule }}
+                {{ agent.lastname }}
+                {{ agent.firstname }}
+
+        </ul>
+    </div>
+    <h1>Liste des missions</h1>
+    <div *ngIf="(missions$ | async) as missions">
+        <ul>
+            <li *ngFor="let mission of missions">
+                {{ mission._id }}
+                {{ mission.title }}
+                {{ mission.description }}
+                {{ mission.category }}
+                {{ mission.horaire }}
+                {{ mission.priority }}
+        </ul>
+    </div>
+    <h1>Liste des Quartiers</h1>
+    <div *ngIf="(quartiers$ | async) as quartiers">
+        <ul>
+            <li *ngFor="let quartier of quartiers">
+                {{ quartier.title }} :
+                <ul>
+                    <li *ngFor="let mission of quartier.missions">{{ mission }}</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+    <p-table [value]="donnees" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Date</th>
+                <th>Agents</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-donnee>
+            <tr>
+                <td>{{ donnee.date | date: 'yyyy-MM-dd'}}</td>
+                <td><ng-container *ngFor="let agent of donnee.agents">
+                        <p-tag [value]="agent"></p-tag>
+                    </ng-container></td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectData(donnee); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteDonnee(donnee._id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
+    </p-table>
+
+</div>

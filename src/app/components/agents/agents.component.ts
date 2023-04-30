@@ -15,6 +15,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
+import { Agent } from 'src/app/interfaces/agents';
 
 @Component({
     selector: 'app-agents',
@@ -85,7 +86,7 @@ export class AgentsComponent implements OnInit {
     //     formations: new FormArray([]),
     // });
     dataForm: FormGroup<any>;
-    agents: any[] = [];
+    agents: Agent[] = [];
     filteredRues: any[] = [];
     selectedAgent: any = {
         birthday: new Date(),
@@ -118,7 +119,7 @@ export class AgentsComponent implements OnInit {
 
     getAgents() {
         let url = `${this.API_URL}`;
-        this.http.get<any[]>(url).subscribe({
+        this.http.get<Agent[]>(url).subscribe({
             next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
                 console.log(this.agents);
@@ -182,7 +183,7 @@ export class AgentsComponent implements OnInit {
 
         const url = `${this.API_URL}/${this.selectedAgent._id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Agent>(url, this.dataForm.value).subscribe({
             // this.http.patch<any>(url, updatedAgent).subscribe({
             next: data => {
                 const index = this.agents.findIndex(a => a._id === data._id);
@@ -207,7 +208,7 @@ export class AgentsComponent implements OnInit {
         });
     }
 
-    onConfirmDelete(agent: any) {
+    onConfirmDelete(agent: Agent) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
             message: 'Voulez-vous vraiment supprimer cet agent ?',
@@ -220,7 +221,7 @@ export class AgentsComponent implements OnInit {
     }
 
     deleteAgent(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Agent>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.agents = this.agents.filter(a => a._id !== id);
                 this.messageService.add({
