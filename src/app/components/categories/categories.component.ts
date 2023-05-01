@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Categorie } from 'src/app/interfaces/Categorie.interface';
 
 @Component({
     selector: 'app-categories',
@@ -12,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class CategoriesComponent implements OnInit {
     private apiUrl: string | undefined;
-    donnees: any[] = [];
+    donnees: Categorie[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
@@ -37,7 +38,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     get() {
-        this.http.get<any[]>(this.API_URL).subscribe({
+        this.http.get<Categorie[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
             },
@@ -78,9 +79,9 @@ export class CategoriesComponent implements OnInit {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Categorie>(url, this.dataForm.value).subscribe({
             next: data => {
-                const index = this.donnees.findIndex(a => a.id === data.id);
+                const index = this.donnees.findIndex(a => a._id === data._id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
@@ -110,9 +111,9 @@ export class CategoriesComponent implements OnInit {
     }
 
     deleteDonnee(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Categorie>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.donnees = this.donnees.filter(a => a.id !== id);
+                this.donnees = this.donnees.filter(a => a._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
@@ -179,7 +180,7 @@ export class CategoriesComponent implements OnInit {
             },
         });
     }
-    selectData(donnee: any) {
+    selectData(donnee: Categorie) {
         this.selectedData = { ...donnee };
         this.dataForm.patchValue({
             title: donnee?.title,

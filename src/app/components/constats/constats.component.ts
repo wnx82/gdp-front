@@ -15,10 +15,9 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from 'src/app/services/localstorage/local-storage.service';
 import { SelectItemGroup } from 'primeng/api';
-
-interface Agent {
-    matricule: string;
-}
+import { Agent } from 'src/app/interfaces/Agent.interface';
+import { Constat } from 'src/app/interfaces/Constat.interface';
+import { Rue } from 'src/app/interfaces/Rue.interface.';
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -27,7 +26,7 @@ interface Agent {
 })
 export class ConstatsComponent implements OnInit {
     private apiUrl: string | undefined;
-    constats: any[] = [];
+    constats: Constat[] = [];
     filteredRues: any[] = [];
     selectedConstat: any = {};
     @ViewChild('table') table: Table | undefined;
@@ -135,7 +134,7 @@ export class ConstatsComponent implements OnInit {
         this.http.get<any[]>(url).subscribe({
             next: data => {
                 this.constats = data.filter(constat => !constat.deletedAt);
-                // console.log(this.constats);
+                console.log(this.constats);
             },
             error: error => {
                 this.messageService.add({
@@ -374,5 +373,9 @@ export class ConstatsComponent implements OnInit {
 
             .slice(0, 10)
             .map(rue => rue.nomComplet);
+    }
+
+    clear(table: Table) {
+        table.clear();
     }
 }

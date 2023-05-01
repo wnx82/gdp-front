@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Horaire } from 'src/app/interfaces/Horaire.interface';
 
 @Component({
     selector: 'app-horaires',
@@ -12,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class HorairesComponent implements OnInit {
     private apiUrl: string = environment.apiUrl;
-    donnees: any[] = [];
+    donnees: Horaire[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
@@ -37,7 +38,7 @@ export class HorairesComponent implements OnInit {
     }
 
     get() {
-        this.http.get<any[]>(this.API_URL).subscribe({
+        this.http.get<Horaire[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
             },
@@ -48,22 +49,24 @@ export class HorairesComponent implements OnInit {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
-            next: data => {
-                this.donnees.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Donnée ajoutée',
-                });
-                this.dataForm.reset();
-                this.get();
-            },
-            error: error => {
-                this.handleError(error);
-            },
-        });
+        this.http
+            .post<Horaire>(`${this.API_URL}`, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    this.donnees.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Donnée ajoutée',
+                    });
+                    this.dataForm.reset();
+                    this.get();
+                },
+                error: error => {
+                    this.handleError(error);
+                },
+            });
     }
 
     edit(id: number, donnee: any) {
@@ -73,9 +76,9 @@ export class HorairesComponent implements OnInit {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Horaire>(url, this.dataForm.value).subscribe({
             next: data => {
-                const index = this.donnees.findIndex(a => a.id === data.id);
+                const index = this.donnees.findIndex(a => a._id === data._id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
@@ -105,9 +108,9 @@ export class HorairesComponent implements OnInit {
     }
 
     deleteDonnee(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Horaire>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.donnees = this.donnees.filter(a => a.id !== id);
+                this.donnees = this.donnees.filter(a => a._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',

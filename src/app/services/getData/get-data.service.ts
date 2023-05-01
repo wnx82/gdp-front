@@ -22,6 +22,7 @@ export class GetDataService {
     private myAgents = new BehaviorSubject<Agent[]>([]);
     private myMissions = new BehaviorSubject<Mission[]>([]);
     private myQuartiers = new BehaviorSubject<Quartier[]>([]);
+    private myRues = new BehaviorSubject<Rue[]>([]);
     private apiUrl: string | undefined;
     readonly API_URL = `${environment.apiUrl}/dailies`;
 
@@ -76,6 +77,22 @@ export class GetDataService {
     // Expose la propriété quartiers$ publique de la classe
     get quartiers(): Observable<Quartier[]> {
         return this.quartiers$;
+    }
+    //Listing des Rues
+    public rues$: Observable<Rue[]> = this.myRues.asObservable();
+    private getRueFromApi() {
+        this.http.get<Rue[]>(`${environment.apiUrl}/rues`).subscribe({
+            next: data => {
+                this.myRues.next(data.filter(quartier => !quartier.deletedAt));
+            },
+            error: error => {
+                console.log('Error fetching rues: ', error);
+            },
+        });
+    }
+    // Expose la propriété rues$ publique de la classe
+    get rues(): Observable<Rue[]> {
+        return this.rues$;
     }
 
     updateData(newData: string) {

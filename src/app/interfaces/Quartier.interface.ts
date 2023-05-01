@@ -2,10 +2,9 @@ import { Mission } from './Mission.interface';
 
 export interface Quartier {
     _id: number;
-
-    title: string;
+    title: string | null;
     missions: Mission[];
-    createdAt?: string;
-    updatedAt?: string;
-    deletedAt?: string;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    deletedAt?: string | null;
 }

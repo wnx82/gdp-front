@@ -1,21 +1,21 @@
 export interface Agent {
     _id: number;
-    email: string;
-    password: string;
-    userAccess: number;
-    matricule: number;
-    firstname?: string;
-    lastname?: string;
-    birthday?: Date;
-    tel?: string;
-    iceContact?: string;
+    email: string | null;
+    password: string | null;
+    userAccess: number | null;
+    matricule: number | null;
+    firstname?: string | null;
+    lastname?: string | null;
+    birthday?: Date | null;
+    tel?: string | null;
+    iceContact?: string | null;
     adresse?: {
-        rue?: string;
-        numero?: string;
+        rue?: string | null;
+        numero?: string | null;
     };
-    picture?: string;
+    picture?: string | null;
     formations?: string[];
-    createdAt?: string;
-    updatedAt?: string;
-    deletedAt?: string;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    deletedAt?: string | null;
 }

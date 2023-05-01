@@ -1,13 +1,13 @@
 export interface Mission {
     _id: number;
-    title: string;
-    description: string;
-    category: string;
-    horaire: string;
-    contact: string;
-    priority: string;
-    visibility: boolean;
-    createdAt?: string;
-    updatedAt?: string;
-    deletedAt?: string;
+    title: string | null;
+    description: string | null;
+    category: string | null;
+    horaire: string | null;
+    contact: string | null;
+    priority: string | null;
+    visibility: boolean | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    deletedAt?: string | null;
 }

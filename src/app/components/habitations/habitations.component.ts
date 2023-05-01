@@ -13,7 +13,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
-import { Habitation, Rue } from './habitations.interface';
+import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
 
 @Component({
     selector: 'app-habitations',
@@ -24,7 +24,7 @@ import { Habitation, Rue } from './habitations.interface';
 export class HabitationsComponent implements OnInit {
     private apiUrl: string | undefined;
     // habitations: Habitation[] = [];
-    habitations: any[] = [];
+    habitations: Habitation[] = [];
     filteredRues: any[] = [];
     selectedData: any = {};
     selectedHabitation: any = {};
@@ -81,7 +81,7 @@ export class HabitationsComponent implements OnInit {
 
     getHabitations() {
         let url = `${this.API_URL}`;
-        this.http.get<any[]>(url).subscribe({
+        this.http.get<Habitation[]>(url).subscribe({
             next: data => {
                 this.habitations = data.filter(
                     habitation => !habitation.deletedAt
@@ -128,7 +128,7 @@ export class HabitationsComponent implements OnInit {
         // console.log(habitation);
         console.log(this.dataForm.value);
 
-        this.http.post<any>(url, this.dataForm.value).subscribe({
+        this.http.post<Habitation>(url, this.dataForm.value).subscribe({
             // this.dataForm.value.post<any>(url, habitation).subscribe({
             // this.http.post<any>(url, habitation).subscribe({
             next: data => {
@@ -178,7 +178,7 @@ export class HabitationsComponent implements OnInit {
 
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Habitation>(url, this.dataForm.value).subscribe({
             // this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {
                 const index = this.habitations.findIndex(
@@ -205,7 +205,7 @@ export class HabitationsComponent implements OnInit {
         });
     }
 
-    onConfirmDelete(habitation: any) {
+    onConfirmDelete(habitation: Habitation) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
             message: 'Voulez-vous vraiment supprimer cet habitation ?',

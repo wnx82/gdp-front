@@ -33,19 +33,37 @@
         </div>
     </div>
 
-    <p-table [value]="constats" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    <p-table #dataTableConstats [value]="constats" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['agents', 'nomComplet']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableConstats)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableConstats.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Rechercher mot-clé" />
+                </span>
+            </div>
+        </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>Date</th>
-                <th>Agents</th>
-                <th>Pv</th>
-                <th>Lieu</th>
-                <th>Action</th>
+                <th style="width:20%">Date</th>
+                <th style="width:20%">Agents<p-columnFilter type="text"
+                        field="dataTableConstats.agents"></p-columnFilter></th>
+                <th style="width:20%">Pv</th>
+                <th style="width:30%">Lieu<p-columnFilter type="text"
+                        field="dataTableConstats.nomComplet"></p-columnFilter>
+                </th>
+                <th style="width:30%">Action</th>
+
             </tr>
         </ng-template>
+
+
         <ng-template pTemplate="body" let-constat>
             <tr>
                 <td>{{ constat.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>

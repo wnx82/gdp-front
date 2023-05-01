@@ -76,7 +76,8 @@ export class QuartiersComponent implements OnInit {
     findMissionById(missionId: number): Observable<string> {
         return this.missions$.pipe(
             map(missions => missions.find(m => m._id === missionId)),
-            map(mission => (mission ? mission.title : ''))
+            // map(mission => (mission ? mission.title : ''))
+            map(mission => (mission ? mission.title : '')!)
         );
     }
 

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
 import { MessageService } from 'primeng/api';
 import {
     FormArray,
@@ -137,7 +136,7 @@ export class AgentsComponent implements OnInit {
     addAgent(agent: any) {
         let url = `${this.API_URL}`;
         console.log(this.dataForm.value);
-        this.http.post<any>(url, this.dataForm.value).subscribe({
+        this.http.post<Agent>(url, this.dataForm.value).subscribe({
             next: data => {
                 this.agents.push(data);
                 this.isAdding = false;
@@ -289,7 +288,7 @@ export class AgentsComponent implements OnInit {
             },
         });
     }
-    selectAgent(agent: any) {
+    selectAgent(agent: Agent) {
         this.selectedAgent = { ...agent };
         console.log("Sélection de l'agent", this.selectedAgent);
         this.dataForm.patchValue({

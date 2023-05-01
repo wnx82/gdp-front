@@ -19,12 +19,9 @@ import { SelectItemGroup } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
 import 'add-to-calendar-button';
 
-interface Agent {
-    matricule: string;
-}
-
+import { Agent } from 'src/app/interfaces/Agent.interface';
+import { Dailies } from 'src/app/interfaces/Dailies.interface';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
-
 @Component({
     selector: 'app-dailies',
     templateUrl: './dailies.component.html',
@@ -34,13 +31,12 @@ import { GetDataService } from 'src/app/services/getData/get-data.service';
 export class DailiesComponent implements OnInit {
     @ViewChild('table') table: Table | undefined;
     private apiUrl: string | undefined;
-    donnees: any[] = [];
+    donnees: Dailies[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
-    blabla: string = 'coucou';
     groupedAgents: SelectItemGroup[] = [];
     selectedAgents: Agent[] = [];
     agentsBrut: any[] = [];
@@ -67,7 +63,7 @@ export class DailiesComponent implements OnInit {
         private getDataService: GetDataService
     ) {}
     storedValue: any;
-    rues: any[] = [];
+
     readonly API_URL = `${environment.apiUrl}/dailies`;
 
     agents$ = this.getDataService.agents$;
@@ -76,7 +72,7 @@ export class DailiesComponent implements OnInit {
 
     ngOnInit(): void {
         this.get();
-        this.http.get<any[]>(`${environment.apiUrl}/agents`).subscribe(
+        this.http.get<Agent[]>(`${environment.apiUrl}/agents`).subscribe(
             data => {
                 this.agents = data.map(agent => ({
                     value: agent._id,
@@ -112,13 +108,14 @@ export class DailiesComponent implements OnInit {
     findAgentById(agentId: number): Observable<string> {
         return this.agents$.pipe(
             map(agents => agents.find(a => a._id === agentId)),
-            map(agent => (agent ? agent.matricule.toString() : '')) // Convert matricule to string
+            map(agent => (agent?.matricule ? agent.matricule.toString() : '')) // Convert matricule to string
         );
     }
     findQuartierById(quartierId: number): Observable<string> {
         return this.quartiers$.pipe(
             map(quartiers => quartiers.find(a => a._id === quartierId)),
-            map(quartier => (quartier ? quartier.title : '')) // Convert matricule to string
+            map(quartier => (quartier ? quartier.title : '')!)
+            // Convert matricule to string
         );
     }
     loading: boolean = false;
@@ -142,7 +139,7 @@ export class DailiesComponent implements OnInit {
         }, 500);
     }
     get() {
-        this.http.get<any[]>(this.API_URL).subscribe({
+        this.http.get<Dailies[]>(this.API_URL).subscribe({
             next: data => {
                 console.log(data);
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
@@ -152,38 +149,40 @@ export class DailiesComponent implements OnInit {
             },
         });
     }
-    add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
-            next: data => {
-                this.donnees.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Donnée ajoutée',
-                });
-                this.dataForm.reset();
-                this.get();
-            },
-            error: error => {
-                this.handleError(error);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
+    add(donnee: Dailies) {
+        this.http
+            .post<Dailies>(`${this.API_URL}`, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    this.donnees.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Donnée ajoutée',
+                    });
+                    this.dataForm.reset();
+                    this.get();
+                },
+                error: error => {
+                    this.handleError(error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    });
+                },
+            });
     }
 
-    edit(id: number, donnee: any) {
+    edit(id: number, donnee: Dailies) {
         if (!donnee) {
             console.error('Données invalides', donnee);
             return;
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Dailies>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
@@ -215,7 +214,7 @@ export class DailiesComponent implements OnInit {
     }
 
     deleteDonnee(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Dailies>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.donnees = this.donnees.filter(a => a.id !== id);
                 this.messageService.add({

@@ -68,22 +68,24 @@ export class MissionsComponent implements OnInit {
     add(donnee: any) {
         console.log(this.dataForm.value);
         const visibility = this.dataForm?.get('visibility')?.value ?? true;
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
-            next: data => {
-                this.missions.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Mission ajoutée',
-                });
-                this.dataForm.reset();
-                this.get();
-            },
-            error: error => {
-                this.handleError(error);
-            },
-        });
+        this.http
+            .post<Mission>(`${this.API_URL}`, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    this.missions.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Mission ajoutée',
+                    });
+                    this.dataForm.reset();
+                    this.get();
+                },
+                error: error => {
+                    this.handleError(error);
+                },
+            });
     }
 
     edit(id: number, donnee: any) {

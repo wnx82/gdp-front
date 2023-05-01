@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Table, TableModule } from 'primeng/table';
-
+import { Infraction } from 'src/app/interfaces/Infraction.interface';
 @Component({
     selector: 'app-infractions',
     templateUrl: './infractions.component.html',
@@ -13,11 +13,8 @@ import { Table, TableModule } from 'primeng/table';
 })
 export class InfractionsComponent implements OnInit {
     private apiUrl: string = environment.apiUrl;
-    donnees: any[] = [];
+    donnees: Infraction[] = [];
     selectedData: any = {};
-    outerData: any[] = [
-        // Données du tableau externe ici
-    ];
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDialog = false;
@@ -43,7 +40,7 @@ export class InfractionsComponent implements OnInit {
     }
 
     get() {
-        this.http.get<any[]>(this.API_URL).subscribe({
+        this.http.get<Infraction[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
                 // console.log(this.donnees);
@@ -58,7 +55,7 @@ export class InfractionsComponent implements OnInit {
     }
 
     add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, donnee).subscribe({
+        this.http.post<Infraction>(`${this.API_URL}`, donnee).subscribe({
             next: data => {
                 this.donnees.push(data);
                 this.isAdding = false;
@@ -83,9 +80,9 @@ export class InfractionsComponent implements OnInit {
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<any>(url, donnee).subscribe({
+        this.http.patch<Infraction>(url, donnee).subscribe({
             next: data => {
-                const index = this.donnees.findIndex(a => a.id === data.id);
+                const index = this.donnees.findIndex(a => a._id === data._id);
                 this.donnees[index] = data;
                 this.selectedData = {};
                 this.isEditing = false;
@@ -115,9 +112,9 @@ export class InfractionsComponent implements OnInit {
     }
 
     deleteDonnee(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Infraction>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.donnees = this.donnees.filter(a => a.id !== id);
+                this.donnees = this.donnees.filter(a => a._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
