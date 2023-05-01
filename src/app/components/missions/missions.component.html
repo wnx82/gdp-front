@@ -73,10 +73,8 @@
                 <td>{{ mission.priority }}</td>
                 <td>{{ mission.contact }}</td>
                 <td>
-                    <p-chip [ngClass]="{'p-chip-success': mission.visibility, 'p-chip-danger': !mission.visibility}">
-                        {{ mission.visibility ? 'oui' : 'non' }}
-                    </p-chip>
-
+                    <p-tag [value]="mission.visibility ? 'Oui' : 'Non'"
+                        [severity]="mission.visibility ? 'success' : 'danger'"></p-tag>
                 </td>
 
                 <td>
@@ -159,12 +157,12 @@
                                             <label for="annexes">Annexes</label>
                                         </span>
                                     </div> -->
-                    <div class="p-field-checkbox">
-                        <!-- <input type="checkbox" id="visibility" name="visibility" formControlName="visibility"> -->
+                    <div class="mb-2">
                         <p-checkbox formControlName="visibility" [binary]="true" inputId="binary"></p-checkbox>
-                        <label for="visibility">Visible</label>
-
+                        <label for="visibility" class="ml-2">Visible</label>
                     </div>
+
+
 
 
                     <div class="p-d-flex p-jc-between">

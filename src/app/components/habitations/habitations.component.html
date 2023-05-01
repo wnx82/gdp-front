@@ -101,7 +101,7 @@
         </ng-template>
     </p-table><p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
         [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
-        [style]="{width: '600px'}" [dismissableMask]="true" (onHide)="cancel()">
+        [style]="{width: '800px'}" [dismissableMask]="true" (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addHabitation(dataForm.value) : editHabitation(selectedHabitation._id, dataForm.value)">
             <div class="p-grid">

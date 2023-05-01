@@ -120,7 +120,20 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-
+    getSeverity(localite: string): string {
+        switch (localite) {
+            case 'Dottignies':
+                return 'warning';
+            case 'Luingne':
+                return 'danger';
+            case 'Herseaux':
+                return 'info';
+            case 'Mouscron':
+                return 'success';
+            default:
+                return 'success';
+        }
+    }
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',

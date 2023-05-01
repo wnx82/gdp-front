@@ -34,3 +34,14 @@
 .col-md-12 button {
     margin-right: 10px;
 }
+
+.p-chip-success {
+  /* background-color: #a5d6a7; */
+  color: #2e7d32;
+}
+
+.p-chip-error {
+  background-color: #ef9a9a;
+  color: #c62828;
+}
+

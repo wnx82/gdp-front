@@ -71,7 +71,8 @@
                 <td>{{ rue.nom }}</td>
                 <td>{{ rue.quartier }}</td>
                 <td>{{ rue.cp }}</td>
-                <td>{{ rue.localite }}</td>
+                <td> <p-tag [value]="rue.localite" [severity]="getSeverity(rue.localite)"></p-tag></td>
+                <!-- <td>{{ rue.localite }}</td> -->
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(rue); toggleEdit()"></button>

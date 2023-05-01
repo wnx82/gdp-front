@@ -67,7 +67,8 @@ export class MissionsComponent implements OnInit {
 
     add(donnee: any) {
         console.log(this.dataForm.value);
-        const visibility = this.dataForm?.get('visibility')?.value ?? true;
+        this.dataForm?.get('visibility')?.value ?? false;
+
         this.http
             .post<Mission>(`${this.API_URL}`, this.dataForm.value)
             .subscribe({
