@@ -113,6 +113,13 @@ const routes: Routes = [
                 './components/habitations/details-habitation/details-habitation.module'
             ).then(m => m.DetailsHabitationModule),
     },
+    {
+        path: 'validations',
+        loadChildren: () =>
+            import('./components/validations/validations.module').then(
+                m => m.ValidationsModule
+            ),
+    },
 ];
 
 @NgModule({

@@ -178,7 +178,7 @@ export class ConstatsComponent implements OnInit {
 
         const url = `${this.API_URL}/${this.selectedConstat._id}`;
 
-        this.http.patch<any>(url, this.dataForm.value).subscribe({
+        this.http.patch<Constat>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.constats.findIndex(a => a._id === data._id);
                 this.constats[index] = data;

@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { merge, Subject } from 'rxjs';
 import { map, takeUntil, catchError, scan } from 'rxjs/operators';
 import { Agent } from 'src/app/interfaces/Agent.interface';
+import { Habitation } from 'src/app/interfaces/Habitation.interface';
 import { Mission } from 'src/app/interfaces/Mission.interface';
 import { Quartier } from 'src/app/interfaces/Quartier.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
@@ -15,11 +16,14 @@ import { Rue } from 'src/app/interfaces/Rue.interface.';
 export class GetDataService {
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
+        this.getHabitationsFromApi();
         this.getMissionsFromApi();
         this.getQuartierFromApi();
+        this.getRueFromApi();
     }
     private myData = new BehaviorSubject<string>('Initial value');
     private myAgents = new BehaviorSubject<Agent[]>([]);
+    private myHabitations = new BehaviorSubject<Habitation[]>([]);
     private myMissions = new BehaviorSubject<Mission[]>([]);
     private myQuartiers = new BehaviorSubject<Quartier[]>([]);
     private myRues = new BehaviorSubject<Rue[]>([]);
@@ -42,13 +46,34 @@ export class GetDataService {
     get agents(): Observable<Agent[]> {
         return this.agents$;
     }
+    //Listing des habitations
+    public habitations$: Observable<Habitation[]> =
+        this.myHabitations.asObservable();
+    private getHabitationsFromApi() {
+        this.http
+            .get<Habitation[]>(`${environment.apiUrl}/habitations`)
+            .subscribe({
+                next: data => {
+                    this.myHabitations.next(
+                        data.filter(habitation => !habitation.deletedAt)
+                    );
+                },
+                error: error => {
+                    console.log('Error fetching habitations: ', error);
+                },
+            });
+    }
+    // Expose la propriété habitations$ publique de la classe
+    get habitations(): Observable<Habitation[]> {
+        return this.habitations$;
+    }
     //Listing des missions
     public missions$: Observable<Mission[]> = this.myMissions.asObservable();
     private getMissionsFromApi() {
         this.http.get<Mission[]>(`${environment.apiUrl}/missions`).subscribe({
             next: data => {
                 this.myMissions.next(
-                    data.filter(quartier => !quartier.deletedAt)
+                    data.filter(mission => !mission.deletedAt)
                 );
             },
             error: error => {

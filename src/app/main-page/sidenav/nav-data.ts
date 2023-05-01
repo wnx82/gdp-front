@@ -138,6 +138,10 @@ export const navbarData: INavbarData[] = [
                 label: 'Liste des rues',
             },
             {
+                routeLink: 'validations',
+                label: 'Liste des validations',
+            },
+            {
                 routeLink: 'vehicules',
                 label: 'Liste des vehicules',
             },
