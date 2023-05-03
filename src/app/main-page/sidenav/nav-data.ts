@@ -98,9 +98,14 @@ export const navbarData: INavbarData[] = [
             //     label: 'Profile',
             // },
             {
+                routeLink: 'api',
+                label: 'Api',
+            },
+            {
                 routeLink: 'agents',
                 label: 'Liste des agents',
             },
+
             {
                 routeLink: 'categories',
                 label: 'Liste des categories',

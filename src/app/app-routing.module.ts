@@ -120,6 +120,11 @@ const routes: Routes = [
                 m => m.ValidationsModule
             ),
     },
+    {
+        path: 'api',
+        loadChildren: () =>
+            import('./components/api/api.module').then(m => m.ApiModule),
+    },
 ];
 
 @NgModule({
