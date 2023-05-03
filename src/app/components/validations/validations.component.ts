@@ -14,7 +14,7 @@ import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
 import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
-import { Validation } from 'src/app/interfaces/validation.interface';
+import { Validation } from 'src/app/interfaces/Validation.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
@@ -39,7 +39,7 @@ export class ValidationsComponent implements OnInit {
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
-        agent: new FormControl('', [Validators.required]),
+        agents: new FormControl('', [Validators.required]),
         habitation: new FormControl('', [Validators.required]),
         note: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
@@ -94,6 +94,7 @@ export class ValidationsComponent implements OnInit {
             },
         });
     }
+
     clear(table: Table) {
         table.clear();
     }
@@ -170,7 +171,7 @@ export class ValidationsComponent implements OnInit {
 
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<Validation>(url, this.dataForm.value).subscribe({
+        this.http.patch<any>(url, this.dataForm.value).subscribe({
             // this.http.patch<any>(url, updatedValidation).subscribe({
             next: data => {
                 const index = this.validations.findIndex(
@@ -279,11 +280,11 @@ export class ValidationsComponent implements OnInit {
         });
     }
 
-    selectValidation(validation: any) {
+    selectValidation(validation: Validation) {
         this.selectedValidation = { ...validation };
-        // console.log('sélection de la validation', this.selectedValidation);
+        console.log('sélection de la validation', this.selectedValidation);
         this.dataForm.patchValue({
-            agent: validation?.agent,
+            agents: validation?.agent,
             habitation: validation?.habitation,
             note: validation?.note,
             date: validation?.date,

@@ -99,7 +99,9 @@
         <ng-template pTemplate="paginatorright">
             <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
         </ng-template>
-    </p-table><p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
+    </p-table>
+
+    <p-dialog header="{{isAdding ? 'Ajouter une habitation' : 'Modifier une habitation'}}"
         [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
         [style]="{width: '800px'}" [dismissableMask]="true" (onHide)="cancel()">
         <form [formGroup]="dataForm"

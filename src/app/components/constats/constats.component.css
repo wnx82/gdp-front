@@ -27,9 +27,7 @@
     box-shadow: 0 0 5px #007ad9;
 }
 
-p-tag {
-  margin-right: 10px;
-}
+
 
 
 .ui-tag-success {
@@ -41,7 +39,9 @@ p-tag {
   background-color: #EF5350; /* Couleur de fond pour danger */
   color: #FFFFFF; /* Couleur du texte pour danger */
 }
-
+p-tag {
+  margin-right: 10px;
+}
 .col-md-12 button {
     margin-right: 10px;
 }
