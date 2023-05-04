@@ -15,6 +15,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 import { Agent } from 'src/app/interfaces/Agent.interface';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
 
 @Component({
     selector: 'app-agents',
@@ -28,7 +29,8 @@ export class AgentsComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
-        private _localStorageService: LocalStorageService
+        private _localStorageService: LocalStorageService,
+        private getDataService: GetDataService
     ) {
         this.dataForm = this.fb.group({
             email: new FormControl('', [Validators.required, Validators.email]),
@@ -100,12 +102,17 @@ export class AgentsComponent implements OnInit {
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;
     date!: Date;
-
+    rues$ = this.getDataService.rues$;
     ngOnInit() {
         this.getAgents();
-        this.rues = this._localStorageService.getRues();
-
-        // this.loadRues();
+        this.rues$.subscribe(
+            rues => {
+                this.rues = rues;
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
 
     private handleError(error: any): void {
@@ -330,32 +337,6 @@ export class AgentsComponent implements OnInit {
     clear(table: Table) {
         table.clear();
     }
-    // filterRues(event: any) {
-    //     const query = event.query.toLowerCase();
-    //     this.filteredRues = this.rues
-    //         .filter(
-    //             rue =>
-    //                 typeof rue.nomComplet === 'string' &&
-    //                 rue.nomComplet.toLowerCase().includes(query)
-    //         )
-
-    //         .sort((a, b) => {
-    //             const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-    //             const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-    //             if (aIndex < bIndex) {
-    //                 return -1;
-    //             }
-    //             if (aIndex > bIndex) {
-    //                 return 1;
-    //             }
-    //             // Si les deux rues ont la même position de la requête,
-    //             // on les trie par ordre alphabétique
-    //             return a.nomComplet.localeCompare(b.nomComplet);
-    //         })
-
-    //         .slice(0, 10)
-    //         .map(rue => rue.nomComplet);
-    // }
 
     addFormation(): void {
         // this.dataForm.formations.push(this.dataForm.control(''));

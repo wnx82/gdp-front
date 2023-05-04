@@ -13,8 +13,10 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
-import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
-
+import { Habitation } from 'src/app/interfaces/Habitation.interface';
+import { Rue } from 'src/app/interfaces/Rue.interface.';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { map } from 'rxjs/operators';
 @Component({
     selector: 'app-habitations',
     templateUrl: './habitations.component.html',
@@ -22,15 +24,24 @@ import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
     providers: [MessageService, ConfirmationService],
 })
 export class HabitationsComponent implements OnInit {
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService,
+        private _localStorageService: LocalStorageService,
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
+        private getDataService: GetDataService
+    ) {}
     private apiUrl: string | undefined;
+    readonly API_URL = `${environment.apiUrl}/habitations`;
     // habitations: Habitation[] = [];
     habitations: Habitation[] = [];
-    filteredRues: any[] = [];
+    rues: Rue[] = [];
     selectedData: any = {};
     selectedHabitation: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-    itemsPerPage: number = 10;
+
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
@@ -51,32 +62,27 @@ export class HabitationsComponent implements OnInit {
         vehicule: new FormControl(''),
         googlemap: new FormControl(''),
     });
-    // mesures = [
-    //     "Système d'alarme : Oui",
-    //     'Eclairage extérieur : Oui',
-    //     "Minuterie d'éclairage : Oui",
-    //     'Société gardiennage : Non',
-    //     'Chien : Non',
-    //     "Présence d'un tiers : Non",
-    //     'Autres : volets roulants programmables, éclairage programmé entrée et chambres',
-    // ];
-    constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
-        private _localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService,
-        private fb: FormBuilder
-    ) {}
-    storedValue: any;
-    rues: any[] = [];
-    readonly API_URL = `${environment.apiUrl}/habitations`;
-    date!: Date;
-    dates!: Date;
-    selectedQuartier: any;
-    selectedLocalite: any;
+
+    // storedValue: any;
+    // date!: Date;
+    // dates!: Date;
+    // selectedQuartier: any;
+    // selectedLocalite: any;
+
+    rues$ = this.getDataService.rues$;
+    habitations$ = this.getDataService.habitations$;
+
     ngOnInit() {
         this.getHabitations();
-        this.rues = this._localStorageService.getRues();
+        // this.rues = this._localStorageService.getRues();
+        this.rues$.subscribe(
+            rues => {
+                this.rues = rues;
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
 
     getHabitations() {
@@ -86,7 +92,7 @@ export class HabitationsComponent implements OnInit {
                 this.habitations = data.filter(
                     habitation => !habitation.deletedAt
                 );
-                console.log(this.habitations); // log each habitation
+                // console.log(this.habitations); // log each habitation
             },
             error: error => {
                 this.messageService.add({
@@ -351,32 +357,32 @@ export class HabitationsComponent implements OnInit {
         // console.log(this.selectedHabitation);
     }
 
-    filterRues(event: any) {
-        const query = event.query.toLowerCase();
-        this.filteredRues = this.rues
-            .filter(
-                rue =>
-                    typeof rue.nomComplet === 'string' &&
-                    rue.nomComplet.toLowerCase().includes(query)
-            )
+    // filterRues(event: any) {
+    //     const query = event.query.toLowerCase();
+    //     this.filteredRues = this.rues
+    //         .filter(
+    //             rue =>
+    //                 typeof rue.nomComplet === 'string' &&
+    //                 rue.nomComplet.toLowerCase().includes(query)
+    //         )
 
-            .sort((a, b) => {
-                const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-                const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-                if (aIndex < bIndex) {
-                    return -1;
-                }
-                if (aIndex > bIndex) {
-                    return 1;
-                }
-                // Si les deux rues ont la même position de la requête,
-                // on les trie par ordre alphabétique
-                return a.nomComplet.localeCompare(b.nomComplet);
-            })
+    //         .sort((a, b) => {
+    //             const aIndex = a.nomComplet.toLowerCase().indexOf(query);
+    //             const bIndex = b.nomComplet.toLowerCase().indexOf(query);
+    //             if (aIndex < bIndex) {
+    //                 return -1;
+    //             }
+    //             if (aIndex > bIndex) {
+    //                 return 1;
+    //             }
+    //             // Si les deux rues ont la même position de la requête,
+    //             // on les trie par ordre alphabétique
+    //             return a.nomComplet.localeCompare(b.nomComplet);
+    //         })
 
-            .slice(0, 10)
-            .map(rue => rue.nomComplet);
-    }
+    //         .slice(0, 10)
+    //         .map(rue => rue.nomComplet);
+    // }
 
     // addMesures() {
     //     const mesuresArray = this.selectedHabitation?.mesures || []; // Récupérer la liste de mesures

@@ -33,8 +33,8 @@
         </div>
     </div>
 
-    <p-table #dataTableHabitations [value]="habitations" [paginator]="true" [rows]="itemsPerPage"
-        [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+    <p-table #dataTableHabitations [value]="habitations" [paginator]="true" [rows]=10 [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
         [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nomComplet', 'quartier', 'localite','debut','fin']">
         <ng-template pTemplate="caption">

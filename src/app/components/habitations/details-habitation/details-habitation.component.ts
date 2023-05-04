@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
+import { Habitation } from 'src/app/interfaces/Habitation.interface';
 @Component({
     selector: 'app-details-habitation',
     templateUrl: './details-habitation.component.html',

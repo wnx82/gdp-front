@@ -1,4 +1,8 @@
+import { Rue } from './Rue.interface.';
+
 export interface Habitation {
+    // numero: any;
+    // nomComplet: any;
     _id: number;
     adresse?: {
         rue: Rue | null;
@@ -20,13 +24,4 @@ export interface Habitation {
     createdAt: string | null;
     updatedAt: string | null;
     deletedAt: string | null;
-}
-
-export interface Rue {
-    _id?: string | null;
-    nom?: string | null;
-    nomComplet?: string | null;
-    denomination?: string | null;
-    codePostal?: string | null;
-    ville?: string | null;
 }

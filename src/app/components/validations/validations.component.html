@@ -40,8 +40,9 @@
 
     <p-table #dataTableValidations [value]="validations" [paginator]="true" [rows]="itemsPerPage"
         [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nomComplet', 'quartier', 'localite', 'date']">
+        currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['habitation.adresse.rue', 'habitation.adresse.localite', 'date']">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
@@ -49,57 +50,53 @@
                 <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
                     <input #searchInput pInputText type="text" (input)="
-                            dataTableValidations.filterGlobal(
-                                searchInput.value,
-                                'contains'
-                            )
-                        " placeholder="Rechercher mot-clé" />
+                        dataTableValidations.filterGlobal(
+                            searchInput.value,
+                            'contains'
+                        )
+                    " placeholder="Rechercher mot-clé" />
                 </span>
             </div>
         </ng-template>
 
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 10%">ID</th>
                 <th style="width: 10%">Habitation</th>
                 <th style="width: 10%">
                     Agent
-                    <p-columnFilter type="text" field="agent"></p-columnFilter>
+                    <p-columnFilter type="text" field="agents.matricule"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
                     Localité
-                    <p-columnFilter type="text" field="habitation?.localite"></p-columnFilter>
+                    <p-columnFilter type="text" field="habitation.adresse.localite"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
                     Date vérification
                     <p-columnFilter type="date" field="date" filterMatchMode="equals"
-                        filterDateFormat="dd-mm-yy"></p-columnFilter>
+                        filterDateFormat="yyyy-MM-dd"></p-columnFilter>
                 </th>
-
                 <th style="width: 10%">Actions</th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-validation>
             <tr>
+                <td>{{ validation._id }}</td>
                 <td>
-                    {{ validation.habitation?.rue }}
-                    {{ validation.habitation?.numero }}
+                    {{ validation.habitation.adresse.rue }},
+                    {{ validation.habitation.adresse.numero }}
                 </td>
                 <td>
-                    <ng-container *ngFor="let agent of validation.agents">
-                        <!-- <p-tag>{{ findAgentById(agent) | async }}</p-tag> -->
-                        <p-tag>{{ agent }}</p-tag>
+                    <ng-container *ngFor="let matricule of validation.agents.matricule">
+                        <p-tag>{{ matricule }}</p-tag>
                     </ng-container>
                 </td>
-
                 <td>
-                    <!-- <p-tag [value]="warning" [severity]="danger"></p-tag> -->
-
-                    <p-tag [value]="validation?.habitation?.localite" [severity]="
-                            getSeverity(validation?.habitation?.localite)
-                        "></p-tag>
+                    <p-tag [value]="validation.habitation.adresse.localite"
+                        [severity]="getSeverity(validation.habitation.adresse.localite)"></p-tag>
                 </td>
-                <td>{{ validation.date | date : 'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ validation.date | date:'yyyy-MM-dd HH:mm' }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectValidation(validation); toggleEdit()"></button>
@@ -112,64 +109,48 @@
             <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">
-            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
-        </ng-template>
-    </p-table>
+        </ng-template></p-table>
 
     <p-dialog header="{{
-            isAdding ? 'Ajouter une validation' : 'Modifier une validation'
-        }}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
+isAdding ? 'Ajouter une validation' : 'Modifier une validation'
+}}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
         [style]="{ width: '800px' }" [dismissableMask]="true" (onHide)="cancel()">
-        <form [formGroup]="dataForm">
+        <!-- <form [formGroup]="dataForm"> -->
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addValidation(dataForm.value) : editValidation(selectedValidation._id, dataForm.value)">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div style="
-                            display: flex;
-                            flex-wrap: wrap;
-                            align-items: stretch;
-                            justify-content: center;
-                        ">
+                display: flex;
+                flex-wrap: wrap;
+                align-items: stretch;
+                justify-content: center;
+            ">
                         <div style="flex: 1; margin-right: 10px">
-                            <div formGroupName="adresse" style="height: 100%">
-                                <p-fieldset>
-                                    <ng-template pTemplate="header">
-                                        <div class="flex align-items-center text-primary">
-                                            <span class="pi pi-home mr-2"></span>
-                                            <span class="font-bold text-lg">Adresse</span>
-                                        </div>
-                                    </ng-template>
-                                    <span class="p-float-label">
-                                        <!-- <p-autoComplete [(ngModel)]="selectValidation.adresse" [dropdown]="true"
-                                        [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
-                                        (onSelect)="selectValidation.rue = $event" placeholder="Rue"
-                                        [ngModelOptions]="{standalone: true}">
-                                        <ng-template let-item pTemplate="item">
-                                            {{ item }}
-                                        </ng-template>
-                                    </p-autoComplete> -->
-                                        <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
-                                            filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
-                                            formControlName="rue" optionValue="_id">
-                                            <ng-template let-nom pTemplate="item">
-                                                <div class="let-nom">
-                                                    <div>
-                                                        {{ nom.nomComplet }}
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-                                        </p-dropdown>
-                                    </span>
 
-                                    <span class="p-float-label">
-                                        <input type="text" id="numero" name="numero" formControlName="numero"
-                                            pInputText />
-                                        <!-- <input type="text" id="numero" name="numero"
-                                        [value]="selectValidation?.adresse?.[0]?.numero || null" formControlName="?numero"
-                                        pInputText> -->
-                                        <label for="numero">Numéro</label>
-                                    </span>
-                                </p-fieldset>
-                            </div>
+                            <p-fieldset>
+                                <ng-template pTemplate="header">
+                                    <div class="flex align-items-center text-primary">
+                                        <span class="pi pi-home mr-2"></span>
+                                        <span class="font-bold text-lg">Habitation</span>
+                                    </div>
+                                </ng-template>
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="this.habitations" optionLabel="label" [filter]="true"
+                                        filterBy="label" [showClear]="true" placeholder="Sélectionnez une habitation"
+                                        formControlName="habitation" optionValue="_id">
+                                        <ng-template let-adresse pTemplate="item">
+                                            <div class="let-adresse">
+                                                <div>
+                                                    {{ adresse.label }}
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </span>
+
+                            </p-fieldset>
+
                         </div>
                     </div>
                     <p-fieldset>
@@ -178,7 +159,34 @@
                                 <span class="pi pi-info-circle mr-2"></span>
                                 <span class="font-bold text-lg">Informations</span>
                             </div>
+
                         </ng-template>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
+                                    [showButtonBar]="true">
+                                </p-calendar>
+                                <label for="date">Date : </label>
+                            </span>
+                        </div>
+
+                        <div class="p-col-12 p-md-6">
+                            <label for="agents">Agents: </label>
+                            <p-multiSelect [options]="this.agents" formControlName="agents"
+                                defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
+                                <ng-template let-agent pTemplate="agent">
+                                    <div class="flex align-items-center">
+                                        <span>{{ agent.label }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </div>
+                        <span class="p-float-label">
+                            <input type="text" formControlName="note" pInputText>
+                            <label for="note">Note</label>
+                        </span>
+
                     </p-fieldset>
                 </div>
             </div>
@@ -193,4 +201,3 @@
             </div>
         </form>
     </p-dialog>
-</div>

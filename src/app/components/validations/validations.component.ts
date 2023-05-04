@@ -13,11 +13,13 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 
-import { Habitation, Rue } from 'src/app/interfaces/Habitation.interface';
+import { Habitation } from 'src/app/interfaces/Habitation.interface';
 import { Validation } from 'src/app/interfaces/Validation.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { Rue } from 'src/app/interfaces/Rue.interface.';
+import { Agent } from 'src/app/interfaces/Agent.interface';
 
 @Component({
     selector: 'app-validations',
@@ -26,10 +28,18 @@ import { GetDataService } from 'src/app/services/getData/get-data.service';
     providers: [MessageService, ConfirmationService],
 })
 export class ValidationsComponent implements OnInit {
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService,
+        private _localStorageService: LocalStorageService,
+        private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
+        private getDataService: GetDataService
+    ) {}
     private apiUrl: string | undefined;
-    // validations: Habitation[] = [];
+    readonly API_URL = `${environment.apiUrl}/validations`;
     validations: Validation[] = [];
-    habitations: Habitation[] = [];
+
     filteredRues: any[] = [];
     selectedValidation: any = {};
 
@@ -39,41 +49,54 @@ export class ValidationsComponent implements OnInit {
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
-        agents: new FormControl('', [Validators.required]),
+        agents: new FormControl(''),
         habitation: new FormControl('', [Validators.required]),
-        note: new FormControl('', [Validators.required]),
-        date: new FormControl('', [Validators.required]),
+        note: new FormControl(''),
+        date: new FormControl(''),
     });
-    // mesures = [
-    //     "Système d'alarme : Oui",
-    //     'Eclairage extérieur : Oui',
-    //     "Minuterie d'éclairage : Oui",
-    //     'Société gardiennage : Non',
-    //     'Chien : Non',
-    //     "Présence d'un tiers : Non",
-    //     'Autres : volets roulants programmables, éclairage programmé entrée et chambres',
-    // ];
-    constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
-        private _localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService,
-        private fb: FormBuilder,
-        private getDataService: GetDataService
-    ) {}
-    storedValue: any;
-    rues: any[] = [];
-    readonly API_URL = `${environment.apiUrl}/validations`;
-
+    agents: any[] = [];
+    habitations: any[] = [];
+    rues: Rue[] = [];
     agents$ = this.getDataService.agents$;
-    habitation$ = this.getDataService.habitations$;
-    date!: Date;
-    dates!: Date;
-    selectedQuartier: any;
-    selectedLocalite: any;
+    habitations$ = this.getDataService.habitations$;
+    rues$ = this.getDataService.rues$;
+
     ngOnInit() {
         this.getValidations();
-        // this.rues = this._localStorageService.getRues();
+        this.habitations$.subscribe(
+            habitations => {
+                this.habitations = habitations.map(habitation => ({
+                    value: habitation._id,
+                    label: habitation.adresse?.nomComplet,
+                    numero: habitation.adresse?.numero,
+                }));
+                console.log(this.habitations);
+            },
+            error => {
+                console.error(error);
+            }
+        );
+        this.rues$.subscribe(
+            rues => {
+                this.rues = rues;
+            },
+            error => {
+                console.error(error);
+            }
+        );
+        this.agents$.subscribe(
+            agents => {
+                // this.agents = agents;
+                this.agents = agents.map(agent => ({
+                    value: agent._id,
+                    label: agent.matricule,
+                }));
+                // console.log(this.agents);
+            },
+            error => {
+                console.error(error);
+            }
+        );
     }
 
     getValidations() {
@@ -83,7 +106,7 @@ export class ValidationsComponent implements OnInit {
                 this.validations = data.filter(
                     validation => !validation.deletedAt
                 );
-                console.log(this.validations); // log each validation
+                // console.log(this.validations); // log each validation
             },
             error: error => {
                 this.messageService.add({
@@ -105,18 +128,7 @@ export class ValidationsComponent implements OnInit {
             detail: error.message,
         });
     }
-    findAgentById(agentId: number): Observable<string> {
-        return this.agents$.pipe(
-            map(agents => agents.find(a => a._id === agentId)),
-            map(agent => (agent?.matricule ? agent.matricule.toString() : '')) // Convert matricule to string
-        );
-    }
-    findHabitationById(agentId: number): Observable<string> {
-        return this.agents$.pipe(
-            map(agents => agents.find(a => a._id === agentId)),
-            map(agent => (agent?.matricule ? agent.matricule.toString() : '')) // Convert matricule to string
-        );
-    }
+
     getSeverity(localite: string): string {
         switch (localite) {
             case 'Dottignies':
@@ -280,7 +292,7 @@ export class ValidationsComponent implements OnInit {
         });
     }
 
-    selectValidation(validation: Validation) {
+    selectValidation(validation: any) {
         this.selectedValidation = { ...validation };
         console.log('sélection de la validation', this.selectedValidation);
         this.dataForm.patchValue({
@@ -308,41 +320,4 @@ export class ValidationsComponent implements OnInit {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedValidation);
     }
-
-    filterRues(event: any) {
-        const query = event.query.toLowerCase();
-        this.filteredRues = this.rues
-            .filter(
-                rue =>
-                    typeof rue.nomComplet === 'string' &&
-                    rue.nomComplet.toLowerCase().includes(query)
-            )
-
-            .sort((a, b) => {
-                const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-                const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-                if (aIndex < bIndex) {
-                    return -1;
-                }
-                if (aIndex > bIndex) {
-                    return 1;
-                }
-                // Si les deux rues ont la même position de la requête,
-                // on les trie par ordre alphabétique
-                return a.nomComplet.localeCompare(b.nomComplet);
-            })
-
-            .slice(0, 10)
-            .map(rue => rue.nomComplet);
-    }
-
-    // addMesures() {
-    //     const mesuresArray = this.selectedValidation?.mesures || []; // Récupérer la liste de mesures
-    //     const mesuresFormArray = this.dataForm.get('mesures') as FormArray; // Obtenir la référence au FormArray
-
-    //     // Ajouter chaque élément de mesures au FormArray
-    //     for (const mesure of mesuresArray) {
-    //         mesuresFormArray.push(new FormControl(mesure));
-    //     }
-    // }
 }

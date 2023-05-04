@@ -1,4 +1,5 @@
 export interface Validation {
+    label: string | null;
     _id: number;
     agent?: string | null;
     habitation?: string | null;
