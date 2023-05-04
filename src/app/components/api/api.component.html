@@ -1,6 +1,23 @@
-<p>api works!</p>
-<div *ngIf="logs !== null">
-    <ul>
-        <li *ngFor="let log of logs">{{ log }}</li>
-    </ul>
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette habitation ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="onConfirm()"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+
+<div class="p-d-flex p-jc-between p-ai-center">
+    <form>
+        <button pButton label="Supprimer" class="p-button-danger mb-4" (click)="confirmDeleteLogs()"></button>
+        <!-- <p-confirmDialog #confirmDelete></p-confirmDialog> -->
+    </form>
+
+    <div *ngIf="logs !== null">
+        <ul>
+            <li *ngFor="let log of logs">{{ log }}</li>
+        </ul>
+    </div>
 </div>

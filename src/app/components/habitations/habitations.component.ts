@@ -214,7 +214,7 @@ export class HabitationsComponent implements OnInit {
     onConfirmDelete(habitation: Habitation) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
-            message: 'Voulez-vous vraiment supprimer cet habitation ?',
+            message: 'Voulez-vous vraiment supprimer cette habitations ?',
             header: 'Confirmation de suppression',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {

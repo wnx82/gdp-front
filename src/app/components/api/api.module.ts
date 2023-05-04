@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
+import { SharedUiModule } from 'src/app/services/shared-ui/shared-ui.module';
 
 @NgModule({
     declarations: [ApiComponent],
-    imports: [CommonModule, ApiRoutingModule],
+    imports: [CommonModule, ApiRoutingModule, SharedUiModule],
 })
 export class ApiModule {}
