@@ -101,6 +101,10 @@ export class AgentsComponent implements OnInit {
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;
+    environment = {
+        production: false,
+        apiUrl: 'http://localhost:3003', // Définissez l'URL de votre backend ici
+    };
     date!: Date;
     rues$ = this.getDataService.rues$;
     ngOnInit() {

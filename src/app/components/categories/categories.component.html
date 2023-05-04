@@ -27,7 +27,7 @@
         [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
         <ng-template pTemplate="header">
             <tr>
-                <th>Nom</th>
+                <th pSortableColumn="title" style="width:10%">Nom<p-sortIcon field="title"></p-sortIcon>
                 <th>Action</th>
             </tr>
         </ng-template>

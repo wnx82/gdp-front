@@ -7,6 +7,7 @@
         <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
     </p-footer>
 </p-dialog>
+<!-- <img src="{{environment.apiUrl }}/images/admin.png" alt="Description de l'image"> -->
 
 <p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
     <div class="confirmation-dialog-content">
@@ -50,20 +51,28 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th style="width:5%">Picture</th>
-                <th style="width:10%">Matricule</th>
-                <th style="width:10%">Nom</th>
-                <th style="width:10%">Prénom</th>
-                <th style="width:10%">Niveau</th>
+
+                <th style="width:5%"></th>
+                <th pSortableColumn="matricule" style="width:10%">Matricule<p-sortIcon field="matricule"></p-sortIcon>
+                </th>
+
+                <th pSortableColumn="lastname" style="width:10%">Nom<p-sortIcon field="lastname"></p-sortIcon></th>
+                <th pSortableColumn="firstname" style="width:10%">Prénom<p-sortIcon field="firstname"></p-sortIcon></th>
+                <th pSortableColumn="userAccess" style="width:10%">Niveau<p-sortIcon field="userAccess"></p-sortIcon>
+                </th>
 
                 <th style="width:10%"></th>
-
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
                 <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td> -->
-                <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td>
+                <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td> -->
+                <td>
+                    <img [src]="agent.picture ? agent.picture : (agent.userAccess < 1 ? environment.apiUrl + '/images/admin.png' : environment.apiUrl + '/images/user.png')"
+                        [alt]="agent.matricule" width="25" />
+                </td>
+
 
                 <td>A{{ agent.matricule }}</td>
                 <td>{{ agent.lastname | uppercase }}</td>
