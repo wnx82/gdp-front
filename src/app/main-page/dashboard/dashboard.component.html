@@ -8,9 +8,7 @@
 
 <body>
     <button pButton type="button" label="Clear All" (click)="clearAll()"></button>
-    <div>
-        <app-statistics></app-statistics>
-    </div>
+
     <h1>Dashboard</h1>
     <div *ngIf="!dataLoaded">
         <div class="card"><p-skeleton width="100%" height="400px"></p-skeleton></div>
@@ -18,18 +16,10 @@
         <div class="card"><p-skeleton width="100%" height="400px"></p-skeleton></div>
     </div>
     <div *ngIf="dataLoaded">
-        <div class="card">
-            <!-- <app-statistics></app-statistics> -->
-            <div class="card-head">📊 Statistiques</div>
-            <div class="card-body">
-                <a no-open href="http://google.com/">Google!</a>
-                <div class="chart">Nombres d'agents : {{ agentCount }}<br>
-                    Nombres de rues : {{ ruesCount }}<br>
-                    Nombres de missions : {{ missionsCount }}<br>
-                </div>
-                <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy' }}</p>
-            </div>
-        </div>
+
+        <app-statistics></app-statistics>
+
+
         <div class="card">
             <div class="card-head">Top PV</div>
             <div class="card-body">
