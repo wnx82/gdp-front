@@ -86,7 +86,7 @@ export class ConstatsComponent implements OnInit {
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
-
+    statuses: any[] = [];
     ngOnInit() {
         this.getConstats();
         this.rues = this._localStorageService.getRues();
@@ -103,7 +103,12 @@ export class ConstatsComponent implements OnInit {
                 console.error(error);
             }
         );
+        this.statuses = [
+            { label: 'Avertissement', value: false },
+            { label: 'PV', value: true },
+        ];
     }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -290,6 +295,7 @@ export class ConstatsComponent implements OnInit {
             },
         });
     }
+
     selectConstat(constat: any) {
         this.selectedConstat = { ...constat };
         this.dataForm.patchValue({

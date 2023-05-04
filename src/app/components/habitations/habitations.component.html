@@ -54,7 +54,8 @@
 
         <ng-template pTemplate="header">
             <tr>
-                <th style="width:10%">Adresse</th>
+                <th style="width:10%">Adresse<p-columnFilter type="text" field="adresse.nomComplet"></p-columnFilter>
+                </th>
                 <th style="width:10%">Quartier <p-columnFilter type="text" field="adresse.quartier"></p-columnFilter>
                 </th>
                 <th style="width:10%">Localité <p-columnFilter type="text" field="adresse.localite"></p-columnFilter>

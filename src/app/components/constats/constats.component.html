@@ -36,7 +36,7 @@
     <p-table #dataTableConstats [value]="constats" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['agents', 'nomComplet', ]">
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['agents', 'adresse.nomComplet' ]">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
@@ -52,11 +52,16 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="date" style="width:20%">Date<p-sortIcon field="date"></p-sortIcon>
-                <th style="width:20%">Agents<p-columnFilter type="text"
-                        field="dataTableConstats.agents"></p-columnFilter></th>
+                <th style="width:20%">Agents<p-columnFilter type="text" field="agents"></p-columnFilter></th>
+                <th>
+                    PV<p-columnFilter type="boolean" field="pv"></p-columnFilter>
+                </th>
+
                 <th style="width:20%">Pv</th>
-                <th style="width:30%">Lieu<p-columnFilter type="text"
-                        field="dataTableConstats.nomComplet"></p-columnFilter>
+
+
+
+                <th style="width:30%">Lieu<p-columnFilter type="text" field="adresse.nomComplet"></p-columnFilter>
                 </th>
                 <th style="width:30%">Action</th>
 
@@ -73,7 +78,10 @@
                         <p-tag [value]="agent"></p-tag>
                     </ng-container>
                 </td>
-
+                <td>
+                    <i class="pi"
+                        [ngClass]="{ 'text-green-500 pi-check-circle': constat.pv, 'text-red-500 pi-times-circle': !constat.pv }"></i>
+                </td>
 
                 <!-- <td>{{ constat.agents }}</td> -->
                 <td>
@@ -81,7 +89,7 @@
                     <p-tag [value]="constat.pv ? 'Oui' : 'Non'" [severity]="constat.pv ? 'success' : 'danger'"></p-tag>
                 </td>
 
-                <td>{{ constat.adresse[0].nomComplet }}</td>
+                <td>{{ constat.adresse.nomComplet }}</td>
                 <td>
 
 
@@ -181,7 +189,7 @@
 
                     <div class="card flex justify-content-center">
                         <p-accordion [multiple]="true">
-                            <!-- <p-accordion [multiple]="true" [activeIndex]="[0]"> -->
+                            <!-- <p-accordion [multiple]="true" [activeIndex]=""> -->
                             <p-accordionTab header="Véhicule">
 
                                 <div formGroupName="vehicule" style="display: flex; flex-direction: column; gap: 20px;">
