@@ -21,7 +21,7 @@
 <p-toast></p-toast>
 <div class="container">
     <h1>Liste des agents</h1>
-
+    <!-- <img src="http://localhost:3003/images/admin.png" alt="Admin Image"> -->
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-primary" icon="pi pi-plus"
@@ -54,6 +54,7 @@
                 <th style="width:10%">Matricule</th>
                 <th style="width:10%">Nom</th>
                 <th style="width:10%">Prénom</th>
+                <th style="width:10%">Niveau</th>
 
                 <th style="width:10%"></th>
 
@@ -64,9 +65,10 @@
                 <!-- <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" class="shadow-4" /></td> -->
                 <td><img [src]="agent.picture" [alt]="agent.matricule" width="25" /></td>
 
-                <td>{{ agent.matricule }}</td>
+                <td>A{{ agent.matricule }}</td>
                 <td>{{ agent.lastname | uppercase }}</td>
                 <td>{{ agent.firstname }}</td>
+                <td>{{ agent.userAccess }}</td>
 
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
@@ -147,9 +149,14 @@
                             </ng-template>
 
                             <span class="p-float-label">
-                                <input type="number" id="matricule" pInputText pKeyFilter="int" placeholder="Matricule"
-                                    formControlName="matricule" required="Veuillez saisir le matricule" />
-                                <label for="matricule">Matricule</label>
+                                <div class="p-inputgroup">
+                                    <span class="p-inputgroup-addon">A</span>
+                                    <input type="number" id="matricule" pInputText pKeyFilter="int"
+                                        placeholder="Matricule" formControlName="matricule"
+                                        required="Veuillez saisir le matricule" />
+                                    <label for="matricule">Matricule</label>
+
+                                </div>
                                 <small
                                     *ngIf="dataForm.get('matricule')?.invalid && (dataForm.get('matricule')?.dirty || dataForm.get('matricule')?.touched)">
                                     Le matricule doit être un nombre entier positif.
@@ -238,14 +245,20 @@
 
 
                             <span class="p-float-label">
-                                <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
-                                    required [value]="selectedAgent.iceContact" pInputText>
-                                <label for="iceContact">Contact en cas d'urgence</label>
+                                <div class="p-inputgroup">
+                                    <span class="p-inputgroup-addon">
+                                        <i class="pi pi-user"></i>
+                                    </span>
+                                    <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
+                                        required [value]="selectedAgent.iceContact" pInputText>
+                                    <label for="iceContact">Contact en cas d'urgence</label>
+                                </div>
                                 <small
                                     *ngIf="dataForm.get('iceContact')?.invalid && (dataForm.get('iceContact')?.dirty || dataForm.get('iceContact')?.touched)">
                                     Le contact en cas d'urgence est obligatoire.
                                 </small>
                             </span>
+
                         </p-fieldset>
                         <div class="p-field" *ngIf="selectedAgent?.formations?.length > 0">
                             <label for="formations">Formations</label>

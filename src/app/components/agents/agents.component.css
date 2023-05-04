@@ -44,3 +44,13 @@
 .col-md-12 button {
     margin-right: 10px;
 }
+
+
+
+#matricule + label {
+  margin-left: 60px;
+}
+
+#iceContact + label {
+  margin-left: 60px;
+}
