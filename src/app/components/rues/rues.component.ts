@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
 @Component({
     selector: 'app-rues',
     templateUrl: './rues.component.html',
@@ -22,6 +23,7 @@ export class RuesComponent implements OnInit {
     private apiUrl: string | undefined;
     rues: Rue[] = [];
     quartiers: any[] = [];
+
     localiteList = [
         { label: 'Mouscron', value: 'Mouscron', cp: '7700' },
         { label: 'Luingne', value: 'Luingne', cp: '7700' },
@@ -29,8 +31,7 @@ export class RuesComponent implements OnInit {
         { label: 'Dottignies', value: 'Dottignies', cp: '7711' },
     ];
     cpList = [
-        { label: '7700', value: '7700', name: 'Mouscron' || 'Luingne' },
-
+        { label: '7700', value: '7700', name: 'Mouscron' },
         { label: '7712', value: '7712', name: 'Herseaux' },
         { label: '7711', value: '7711', name: 'Dottignies' },
     ];
@@ -80,17 +81,27 @@ export class RuesComponent implements OnInit {
         private messageService: MessageService,
         private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private getDataService: GetDataService
     ) {}
 
     storedValue: any;
 
     readonly API_URL = `${environment.apiUrl}/rues`;
-
+    quartiers$ = this.getDataService.quartiers$;
     ngOnInit(): void {
         this.get();
         // this.loadQuartiers();
-        this.quartiers = this._localStorageService.getQuartiers();
+        // this.quartiers = this._localStorageService.getQuartiers();
+        this.quartiers$.subscribe(
+            quartiers => {
+                this.quartiers = quartiers;
+                console.log(this.quartiers);
+            },
+            error => {
+                console.error(error);
+            }
+        );
         this.dataForm.get('localite')?.valueChanges.subscribe(value => {
             const codePostal = this.localiteList.find(
                 option => option.value === value
@@ -110,6 +121,7 @@ export class RuesComponent implements OnInit {
         this.http.get<Rue[]>(`${this.API_URL}`).subscribe({
             next: data => {
                 this.rues = data.filter(rue => !rue.deletedAt);
+                // console.log(this.rues);
             },
             error: error => {
                 this.messageService.add({
@@ -234,6 +246,7 @@ export class RuesComponent implements OnInit {
             },
         });
     }
+
     deleteRue(_id: number) {
         this.http.delete<any>(`${this.API_URL}/${_id}`).subscribe({
             next: () => {

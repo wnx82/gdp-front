@@ -15,6 +15,17 @@ export class ApiComponent implements OnInit {
     logs: string[] = [];
     displayConfirmationDelete = false;
 
+    displayedLogs: string[] = []; // Logs à afficher pour la page actuelle
+    itemsPerPage: number = 20; // Nombre de logs par page
+    firstItemIndex: number = 0; // Index du premier log sur la page actuelle
+
+    onPageChange(event: any) {
+        this.firstItemIndex = event.first;
+        this.displayedLogs = this.logs.slice(
+            event.first,
+            event.first + event.rows
+        );
+    }
     constructor(
         private http: HttpClient,
         private confirmationService: ConfirmationService,
@@ -28,12 +39,27 @@ export class ApiComponent implements OnInit {
         this.http.get<string[]>(this.API_URL).subscribe(
             data => {
                 this.logs = data;
+                this.getDisplayedLogs(); // Met à jour les logs paginés après la récupération
             },
             (error: HttpErrorResponse) => {
                 console.error('Error retrieving logs:', error);
                 console.error('Error message:', error.error);
             }
         );
+    }
+
+    getDisplayedLogs() {
+        const totalLogs = this.logs.length;
+        const lastItemIndex = this.firstItemIndex + this.itemsPerPage;
+        this.displayedLogs = this.logs.slice(
+            this.firstItemIndex,
+            lastItemIndex > totalLogs ? totalLogs : lastItemIndex
+        );
+
+        if (totalLogs >= 20 * this.itemsPerPage) {
+            //A 20 pages de logs, lancer delete
+            this.confirmDeleteLogs();
+        }
     }
 
     onConfirm() {
@@ -77,5 +103,12 @@ export class ApiComponent implements OnInit {
                 this.onReject();
             },
         });
+    }
+
+    getDisplayRange(): string {
+        const lastItemIndex = this.firstItemIndex + this.displayedLogs.length;
+        return `Affichage de ${
+            this.firstItemIndex + 1
+        } à ${lastItemIndex} sur ${this.logs.length} entrées`;
     }
 }

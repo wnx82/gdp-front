@@ -54,11 +54,14 @@
             <tr>
                 <th style="width:10%">Titre</th>
                 <th style="width:10%">Description</th>
-                <th style="width:10%">Catégorie</th>
+                <th pSortableColumn="category" style="width:10%">Catégorie<p-sortIcon field="category"></p-sortIcon>
+                </th>
                 <th style="width:10%">Horaire</th>
-                <th style="width:10%">Priorité</th>
+                <th pSortableColumn="priority" style="width:10%">Priorité<p-sortIcon field="priority"></p-sortIcon></th>
                 <th style="width:10%">Contact</th>
-                <th style="width:10%">Visible</th>
+                <th style="width:10%">
+                    Visible<p-columnFilter type="boolean" field="visibility"></p-columnFilter>
+                </th>
                 <th style="width:10%">Action</th>
 
 
@@ -73,8 +76,8 @@
                 <td>{{ mission.priority }}</td>
                 <td>{{ mission.contact }}</td>
                 <td>
-                    <p-tag [value]="mission.visibility ? 'Oui' : 'Non'"
-                        [severity]="mission.visibility ? 'success' : 'danger'"></p-tag>
+                    <i class="pi"
+                        [ngClass]="{ 'text-green-500 pi-check-circle': mission.visibility, 'text-red-500 pi-times-circle': !mission.visibility }"></i>
                 </td>
 
                 <td>

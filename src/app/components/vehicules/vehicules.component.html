@@ -27,9 +27,10 @@
         [rowsPerPageOptions]="[10, 25, 50]">
         <ng-template pTemplate="header">
             <tr>
-                <th>Marque</th>
-                <th>Modèle</th>
-                <th>Immatriculation</th>
+                <th pSortableColumn="marque" style="width:30%">Marque<p-sortIcon field="marque"></p-sortIcon></th>
+                <th pSortableColumn="modele" style="width:30%">Modèle<p-sortIcon field="modele"></p-sortIcon></th>
+                <th pSortableColumn="immatriculation" style="width:30%">Immatriculation<p-sortIcon
+                        field="immatriculation"></p-sortIcon></th>
                 <th>Actions</th>
             </tr>
         </ng-template>

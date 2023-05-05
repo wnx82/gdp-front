@@ -62,14 +62,16 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 10%">ID</th>
-                <th style="width: 10%">Habitation</th>
+                <th style="width: 10%">Habitation<p-columnFilter type="text" field="habitation.adresse.rue"
+                        matchMode="contains"></p-columnFilter></th>
                 <th style="width: 10%">
                     Agent
                     <p-columnFilter type="text" field="agents.matricule"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
                     Localité
-                    <p-columnFilter type="text" field="habitation.adresse.localite"></p-columnFilter>
+                    <p-columnFilter type="text" field="habitation.adresse.localite"
+                        matchMode="contains"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
                     Date vérification
@@ -89,7 +91,7 @@
                 </td>
                 <td>
                     <ng-container *ngFor="let matricule of validation.agents.matricule">
-                        <p-tag>{{ matricule }}</p-tag>
+                        <p-tag>A{{matricule }}</p-tag>
                     </ng-container>
                 </td>
                 <td>
@@ -136,9 +138,10 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                     </div>
                                 </ng-template>
                                 <span class="p-float-label">
-                                    <p-dropdown [options]="this.habitations" optionLabel="label" [filter]="true"
-                                        filterBy="label" [showClear]="true" placeholder="Sélectionnez une habitation"
-                                        formControlName="habitation" optionValue="_id">
+                                    <p-dropdown formControlName="habitation" [options]="habitations" optionLabel="label"
+                                        [filter]="true" filterBy="label" [showClear]="true"
+                                        placeholder="Sélectionnez une habitation" formControlName="habitation"
+                                        optionValue="value">
                                         <ng-template let-adresse pTemplate="item">
                                             <div class="let-adresse">
                                                 <div>
@@ -193,8 +196,7 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
 
             <div class="p-d-flex p-jc-between">
                 <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
-                    class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
-                    [disabled]="!dataForm.valid"></button>
+                    class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"></button>
 
                 <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                     icon="pi pi-times" (click)="cancel()"></button>

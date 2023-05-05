@@ -74,7 +74,12 @@
                 </td>
 
 
-                <td>A{{ agent.matricule }}</td>
+                <td>
+                    <p-tag>A{{ agent.matricule }}</p-tag>
+                    <!-- <p-tag [value]="'A' + agent.matricule"></p-tag> -->
+
+
+                </td>
                 <td>{{ agent.lastname | uppercase }}</td>
                 <td>{{ agent.firstname }}</td>
                 <td>{{ agent.userAccess }}</td>

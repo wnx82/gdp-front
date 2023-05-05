@@ -55,11 +55,52 @@
                 <th style="width:10%">Dénomination</th>
                 <th style="width:10%">Nom <p-columnFilter type="text" field="nom"></p-columnFilter>
                 </th>
-                <th style="width:10%">Quartier <p-columnFilter type="text" field="quartier"></p-columnFilter>
-                </th>
-                <th style="width:10%">Code Postal<p-columnFilter type="text" field="cp"></p-columnFilter></th>
+                <th style="width:10%">Quartier
+                    <p-columnFilter field="quartier" matchMode="contains" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-dropdown [options]="quartiers" optionLabel="title" (onChange)="filter($event.value)"
+                                placeholder="Tout" [showClear]="true">
+                                <ng-template let-option pTemplate="item">
+                                    <p-tag [value]="option.title"></p-tag>
+                                </ng-template>
+                            </p-dropdown>
+                        </ng-template>
+                    </p-columnFilter>
 
-                <th style="width:10%">Localité <p-columnFilter type="text" field="localite"></p-columnFilter></th>
+
+
+
+                    <!-- <th style="width:10%">Quartier <p-columnFilter type="text" field="quartier"></p-columnFilter> -->
+                </th>
+                <th style="width:10%">
+                    <p-columnFilter field="cp" matchMode="equals" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-dropdown [options]="cpList" optionLabel="label" (onChange)="filter($event.value)"
+                                placeholder="Tous" [showClear]="true">
+                                <ng-template let-option pTemplate="item">
+                                    <p-tag [value]="option.value"></p-tag>
+                                </ng-template>
+                            </p-dropdown>
+                        </ng-template>
+                    </p-columnFilter>
+
+                    <!-- Code Postal<p-columnFilter type="text" field="cp"></p-columnFilter> -->
+                </th>
+
+                <th style="width:10%">
+
+                    <p-columnFilter field="rue.localite" matchMode="equals" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-dropdown [options]="localiteList" optionLabel="label" (onChange)="filter($event.value)"
+                                placeholder="Tous" [showClear]="true">
+                                <ng-template let-option pTemplate="item">
+                                    <p-tag [value]="option.value" [severity]="getSeverity(option.value)"></p-tag>
+                                </ng-template>
+                            </p-dropdown>
+                        </ng-template>
+                    </p-columnFilter>
+
+                </th>
 
                 <th style="width:10%">Actions</th>
             </tr>
@@ -72,7 +113,7 @@
                 <td>{{ rue.quartier }}</td>
                 <td>{{ rue.cp }}</td>
                 <td> <p-tag [value]="rue.localite" [severity]="getSeverity(rue.localite)"></p-tag></td>
-                <!-- <td>{{ rue.localite }}</td> -->
+
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(rue); toggleEdit()"></button>
@@ -95,17 +136,6 @@
         </ng-template>
 
     </p-table>
-
-
-    <!-- 
-
-    <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-secondary" icon="pi pi-road"
-        style="margin-top: 3px;" (click)="toggleAdd()"></button> -->
-
-    <!-- 
-    <button pButton pRipple type="button" label="Ajouter une rue" class="p-button-secondary" icon="pi pi-road"
-        style="margin-top: 3px;" (click)="toggleAdd()"></button> -->
-
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
         [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
@@ -134,13 +164,7 @@
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
-                    <!-- <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
-                                [value]="denomination +' '+ nom" pInputText [(ngModel)]="nomComplet">
-                            <label for="nomComplet">Nom Complet</label>
-                        </span>
-                    </div> -->
+
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-dropdown formControlName="localite" [options]="localiteList" optionValue="value"
@@ -183,56 +207,12 @@
                         </span>
                     </div>
                 </div>
-                <!-- <div class="p-col-6">
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="xMin" name="xMin" formControlName="xMin"
-                                [value]="selectedData.xMin" required pInputText>
-                            <label for="xMin">X min</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="xMax" name="xMax" formControlName="xMax"
-                                [value]="selectedData.xMax" required pInputText>
-                            <label for="xMax">X max</label>
-                        </span>
-                    </div>
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="yMin" name="yMin" formControlName="yMin"
-                                [value]="selectedData.yMin" required pInputText>
-                            <label for="yMin">Y min</label>
-                        </span>
-                    </div>
-
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="yMax" name="yMax" formControlName="yMax"
-                                [value]="selectedData.yMax" required pInputText>
-                            <label for="yMax">Y max</label>
-                        </span>
-                    </div>
-
-                    <div class="p-field">
-                        <span class="p-float-label">
-                            <input type="text" id="idTronconCentral" name="idTronconCentral"
-                                formControlName="idTronconCentral"
-                                [value]="selectedData.idTronconCentral" required pInputText>
-                            <label for="idTronconCentral">ID troncon central</label>
-                        </span>
-                    </div> -->
-
-                <!-- </div> -->
 
 
                 <div class="p-d-flex p-jc-between">
                     <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
                         class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
                         [disabled]="!dataForm.valid"></button>
-                    <!-- <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success"
-                        icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}" [disabled]="!dataForm.valid"></button> -->
 
                     <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                         icon="pi pi-times" (click)="cancel()"></button>

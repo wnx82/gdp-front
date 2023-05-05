@@ -16,8 +16,12 @@
     </form>
 
     <div *ngIf="logs !== null">
+        <p>{{ getDisplayRange() }}</p>
+
         <ul>
-            <li *ngFor="let log of logs">{{ log }}</li>
+            <li *ngFor="let log of displayedLogs">{{ log }}</li>
         </ul>
+
+        <p-paginator [rows]="itemsPerPage" [totalRecords]="logs.length" [first]="firstItemIndex"
+            (onPageChange)="onPageChange($event)"></p-paginator>
     </div>
-</div>
