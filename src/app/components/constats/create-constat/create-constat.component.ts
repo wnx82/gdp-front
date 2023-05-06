@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
@@ -62,12 +62,14 @@ export class CreateConstatComponent implements OnInit {
     agentsBrut: any[] = [];
     agents: any[] = [];
     agentsNeed: any[] = [];
+    currentDate: any = Date;
 
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private getDataService: GetDataService
+        private getDataService: GetDataService,
+        private router: Router
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -133,14 +135,38 @@ export class CreateConstatComponent implements OnInit {
             },
         });
     }
+    getCurrentDate(): Date {
+        return new Date();
+    }
 
     cancel() {
         // this.selectedConstat = {};
         // this.isAdding = false;
         // this.isEditing = false;
+        this.dataForm.reset();
+        this.router.navigate(['constats']);
     }
 
     clear(table: Table) {
         table.clear();
+    }
+    resetForm() {
+        // Récupère la référence du formulaire
+        const form = this.dataForm;
+
+        // Réinitialise les valeurs du formulaire à leur valeur par défaut
+        form.reset();
+
+        // Marque tous les contrôles du formulaire comme "non modifiés"
+        form.markAsPristine();
+
+        // Marque tous les contrôles du formulaire comme "non touchés"
+        form.markAsUntouched();
+    }
+    fillWithCurrentDate() {
+        this.currentDate = new Date();
+        this.dataForm.patchValue({
+            date: this.currentDate,
+        });
     }
 }

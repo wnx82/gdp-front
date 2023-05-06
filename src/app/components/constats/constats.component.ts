@@ -19,6 +19,7 @@ import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Constat } from 'src/app/interfaces/Constat.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -84,7 +85,8 @@ export class ConstatsComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private _localStorageService: LocalStorageService,
-        private getDataService: GetDataService
+        private getDataService: GetDataService,
+        private router: Router
     ) {}
     storedValue: any;
     rues: any[] = [];
@@ -148,7 +150,7 @@ export class ConstatsComponent implements OnInit {
         this.http.get<any[]>(url).subscribe({
             next: data => {
                 this.constats = data.filter(constat => !constat.deletedAt);
-                console.log(this.constats);
+                // console.log(this.constats);
             },
             error: error => {
                 this.messageService.add({
@@ -161,7 +163,7 @@ export class ConstatsComponent implements OnInit {
     }
 
     addConstat(constat: any) {
-        console.log(this.dataForm.value);
+        // console.log(this.dataForm.value);
         this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.constats.push(data);
@@ -392,5 +394,12 @@ export class ConstatsComponent implements OnInit {
 
     clear(table: Table) {
         table.clear();
+    }
+    create() {
+        // this.selectedConstat = {};
+        // this.isAdding = false;
+        // this.isEditing = false;
+
+        this.router.navigate(['constats/create']);
     }
 }
