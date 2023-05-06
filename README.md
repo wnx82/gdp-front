@@ -101,7 +101,8 @@ Une date de présentation de l’application reste à définir et comptera pour 
     </code>
 
 -   protéger tous les dossiers autres que users grace à JWT une fois la phase déploiement lancée
--
+-   bug dans les recherches
+-   
 
 ## 🐛 Bugs!
 

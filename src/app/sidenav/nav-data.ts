@@ -10,36 +10,6 @@ export const navbarData: INavbarData[] = [
         routeLink: 'agents',
         icon: 'fal fa-users',
         label: 'Users',
-        items: [
-            {
-                routeLink: 'agents',
-                label: 'Level 1.1',
-                items: [
-                    {
-                        routeLink: 'agents',
-                        label: 'Level 2.1',
-                    },
-                    {
-                        routeLink: 'agents',
-                        label: 'Level 2.2',
-                        items: [
-                            {
-                                routeLink: 'agents',
-                                label: 'Level 3.1',
-                            },
-                            {
-                                routeLink: 'agents',
-                                label: 'Level 3.2',
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                routeLink: 'agents',
-                label: 'Level 1.2',
-            },
-        ],
     },
 
     {

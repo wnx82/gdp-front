@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { merge, Subject } from 'rxjs';
-import { map, takeUntil, catchError, scan } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Habitation } from 'src/app/interfaces/Habitation.interface';
 import { Mission } from 'src/app/interfaces/Mission.interface';
@@ -14,6 +13,14 @@ import { Rue } from 'src/app/interfaces/Rue.interface.';
     providedIn: 'root',
 })
 export class GetDataService {
+    private myAgents = new BehaviorSubject<Agent[]>([]);
+    private myHabitations = new BehaviorSubject<Habitation[]>([]);
+    private myMissions = new BehaviorSubject<Mission[]>([]);
+    private myQuartiers = new BehaviorSubject<Quartier[]>([]);
+    private myRues = new BehaviorSubject<Rue[]>([]);
+
+    readonly API_URL = `${environment.apiUrl}/dailies`;
+
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
         this.getHabitationsFromApi();
@@ -21,34 +28,28 @@ export class GetDataService {
         this.getQuartierFromApi();
         this.getRueFromApi();
     }
-    private myData = new BehaviorSubject<string>('Initial value');
-    private myAgents = new BehaviorSubject<Agent[]>([]);
-    private myHabitations = new BehaviorSubject<Habitation[]>([]);
-    private myMissions = new BehaviorSubject<Mission[]>([]);
-    private myQuartiers = new BehaviorSubject<Quartier[]>([]);
-    private myRues = new BehaviorSubject<Rue[]>([]);
-    private apiUrl: string | undefined;
-    readonly API_URL = `${environment.apiUrl}/dailies`;
 
-    //Listing des agents
-    public agents$: Observable<Agent[]> = this.myAgents.asObservable();
+    // Listing des agents
+    agents$: Observable<Agent[]> = this.myAgents
+        .asObservable()
+        .pipe(filter(agents => agents.length > 0));
+
     private getAgentsFromApi() {
         this.http.get<Agent[]>(`${environment.apiUrl}/agents`).subscribe({
             next: data => {
                 this.myAgents.next(data.filter(agent => !agent.deletedAt));
             },
             error: error => {
-                console.log('Error fetching agents: ', error);
+                console.error('Error fetching agents: ', error);
             },
         });
     }
-    // Expose la propriété missions$ publique de la classe
-    get agents(): Observable<Agent[]> {
-        return this.agents$;
-    }
-    //Listing des habitations
-    public habitations$: Observable<Habitation[]> =
-        this.myHabitations.asObservable();
+
+    // Listing des habitations
+    habitations$: Observable<Habitation[]> = this.myHabitations
+        .asObservable()
+        .pipe(filter(habitations => habitations.length > 0));
+
     private getHabitationsFromApi() {
         this.http
             .get<Habitation[]>(`${environment.apiUrl}/habitations`)
@@ -59,16 +60,16 @@ export class GetDataService {
                     );
                 },
                 error: error => {
-                    console.log('Error fetching habitations: ', error);
+                    console.error('Error fetching habitations: ', error);
                 },
             });
     }
-    // Expose la propriété habitations$ publique de la classe
-    get habitations(): Observable<Habitation[]> {
-        return this.habitations$;
-    }
-    //Listing des missions
-    public missions$: Observable<Mission[]> = this.myMissions.asObservable();
+
+    // Listing des missions
+    missions$: Observable<Mission[]> = this.myMissions
+        .asObservable()
+        .pipe(filter(missions => missions.length > 0));
+
     private getMissionsFromApi() {
         this.http.get<Mission[]>(`${environment.apiUrl}/missions`).subscribe({
             next: data => {
@@ -77,16 +78,16 @@ export class GetDataService {
                 );
             },
             error: error => {
-                console.log('Error fetching missions: ', error);
+                console.error('Error fetching missions: ', error);
             },
         });
     }
-    // Expose la propriété missions$ publique de la classe
-    get missions(): Observable<Mission[]> {
-        return this.missions$;
-    }
-    //Listing des quartiers
-    public quartiers$: Observable<Quartier[]> = this.myQuartiers.asObservable();
+
+    // Listing des quartiers
+    quartiers$: Observable<Quartier[]> = this.myQuartiers
+        .asObservable()
+        .pipe(filter(quartiers => quartiers.length > 0));
+
     private getQuartierFromApi() {
         this.http.get<Quartier[]>(`${environment.apiUrl}/quartiers`).subscribe({
             next: data => {
@@ -95,32 +96,24 @@ export class GetDataService {
                 );
             },
             error: error => {
-                console.log('Error fetching quartiers: ', error);
+                console.error('Error fetching quartiers: ', error);
             },
         });
     }
-    // Expose la propriété quartiers$ publique de la classe
-    get quartiers(): Observable<Quartier[]> {
-        return this.quartiers$;
-    }
-    //Listing des Rues
-    public rues$: Observable<Rue[]> = this.myRues.asObservable();
+
+    // Listing des Rues
+    rues$: Observable<Rue[]> = this.myRues
+        .asObservable()
+        .pipe(filter(rues => rues.length > 0));
+
     private getRueFromApi() {
         this.http.get<Rue[]>(`${environment.apiUrl}/rues`).subscribe({
             next: data => {
-                this.myRues.next(data.filter(quartier => !quartier.deletedAt));
+                this.myRues.next(data.filter(rue => !rue.deletedAt));
             },
             error: error => {
-                console.log('Error fetching rues: ', error);
+                console.error('Error fetching rues: ', error);
             },
         });
-    }
-    // Expose la propriété rues$ publique de la classe
-    get rues(): Observable<Rue[]> {
-        return this.rues$;
-    }
-
-    updateData(newData: string) {
-        this.myData.next(newData);
     }
 }

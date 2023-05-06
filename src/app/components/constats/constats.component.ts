@@ -18,6 +18,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Constat } from 'src/app/interfaces/Constat.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
 @Component({
     selector: 'app-constats',
     templateUrl: './constats.component.html',
@@ -66,9 +67,10 @@ export class ConstatsComponent implements OnInit {
         //     longitude: new FormControl(''),
         //     horodatage: new FormControl(''),
         // }),
-        infractions: new FormControl('', [Validators.required]),
+
+        infractions: new FormArray([]),
         notes: new FormControl(''),
-        annexes: new FormControl(''),
+        annexes: new FormArray([]),
     });
     checked: boolean = false;
     groupedAgents: SelectItemGroup[] = [];
@@ -81,28 +83,35 @@ export class ConstatsComponent implements OnInit {
         private http: HttpClient,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private _localStorageService: LocalStorageService
+        private _localStorageService: LocalStorageService,
+        private getDataService: GetDataService
     ) {}
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
+    rues$ = this.getDataService.rues$;
+    agents$ = this.getDataService.agents$;
     statuses: any[] = [];
     ngOnInit() {
         this.getConstats();
-        this.rues = this._localStorageService.getRues();
-        this.http.get<any[]>(`${environment.apiUrl}/agents`).subscribe(
-            data => {
-                this.agents = data.map(agent => ({
-                    value: agent._id,
-                    label: agent.matricule,
-                }));
-                // localStorage.setItem('agents', JSON.stringify(this.agents));
-                // console.log('Sauvegarde des agents dans le local storage');
+
+        this.rues$.subscribe(
+            rues => {
+                this.rues = rues;
+                // console.log(this.rues);
             },
             error => {
                 console.error(error);
             }
         );
+        //Récupérations des agents
+        this.agents$.subscribe(agents => {
+            this.agents = agents.map(agent => ({
+                value: agent._id,
+                label: agent.matricule,
+            }));
+            // console.log(this.agents);
+        });
         this.statuses = [
             { label: 'Avertissement', value: false },
             { label: 'PV', value: true },
