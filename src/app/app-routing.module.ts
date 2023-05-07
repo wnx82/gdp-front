@@ -125,6 +125,13 @@ const routes: Routes = [
         loadChildren: () =>
             import('./components/api/api.module').then(m => m.ApiModule),
     },
+    {
+        path: '**',
+        loadChildren: () =>
+            import('./components/not-found/not-found.module').then(
+                m => m.NotFoundModule
+            ),
+    },
 ];
 
 @NgModule({

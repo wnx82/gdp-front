@@ -365,41 +365,13 @@ export class ConstatsComponent implements OnInit {
         // console.log(this.selectedConstat);
     }
 
-    filterRues(event: any) {
-        const query = event.query.toLowerCase();
-        this.filteredRues = this.rues
-            .filter(
-                rue =>
-                    typeof rue.nomComplet === 'string' &&
-                    rue.nomComplet.toLowerCase().includes(query)
-            )
-
-            .sort((a, b) => {
-                const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-                const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-                if (aIndex < bIndex) {
-                    return -1;
-                }
-                if (aIndex > bIndex) {
-                    return 1;
-                }
-                // Si les deux rues ont la même position de la requête,
-                // on les trie par ordre alphabétique
-                return a.nomComplet.localeCompare(b.nomComplet);
-            })
-
-            .slice(0, 10)
-            .map(rue => rue.nomComplet);
-    }
-
     clear(table: Table) {
         table.clear();
     }
+    // create() {
+    //     this.router.navigate(['constats/create']);
+    // }
     create() {
-        // this.selectedConstat = {};
-        // this.isAdding = false;
-        // this.isEditing = false;
-
-        this.router.navigate(['constats/create']);
+        this.router.navigate(['/constats/create']);
     }
 }

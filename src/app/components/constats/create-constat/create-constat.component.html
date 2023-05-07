@@ -37,11 +37,6 @@
                         class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus" style="margin-top: 3px;"
                         (click)="fillWithCurrentDate()"></button>
 
-
-
-
-
-
                     <div class="p-col-12 p-md-6">
                         <label for="agents">Agents: </label>
                         <p-multiSelect [options]="this.agents" formControlName="agents"
@@ -55,7 +50,6 @@
 
                     </div>
 
-
                     <div class="p-col-12 p-md-6">
 
                         <label for="agents">AV/PV </label>
@@ -65,7 +59,6 @@
 
                     </div>
                     <br>
-
                     <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
                         <label for="agents">Rue: </label>
                         <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
@@ -223,20 +216,19 @@
                         </div>
                     </ng-template>
                     <span class="p-float-label">
-                        <input type="text" id="infractions" name="infractions" formControlName="infractions" pInputText>
-                        <label for="infractions">Infractions</label>
-                    </span>
-                    <p-message severity="error"
-                        *ngIf="dataForm.get('infractions')?.invalid && dataForm.get('infractions')?.dirty">Les
-                        infractions sont obligatoires.</p-message>
-                    <span class="p-float-label">
-                        <input type="text" id="notes" name="notes" formControlName="notes" pInputText>
-                        <label for="notes">Notes</label>
+                        <input pInputText formControlName="infractions" />
+                        <label htmlFor="infractions">Infractions</label>
                     </span>
                     <span class="p-float-label">
-                        <input type="text" id="annexes" name="annexes" formControlName="annexes" pInputText>
-                        <label for="annexes">Annexes</label>
+                        <input pInputText formControlName="notes" />
+                        <label htmlFor="notes">Notes</label>
                     </span>
+                    <span class="p-float-label">
+                        <input pInputText formControlName="annexes" />
+                        <label htmlFor="annexes">Annexes</label>
+                    </span>
+
+
                 </p-fieldset>
 
                 <div class="p-d-flex p-jc-between">
