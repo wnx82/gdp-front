@@ -160,14 +160,20 @@
                                         <p-calendar formControlName="birthday" [showIcon]="true"
                                             [dateFormat]="'dd/mm/yy'" class="p-datepicker-today">
                                         </p-calendar>
-                                        <label for="date">Date de début : </label>
+
                                         <label for="birthday">Date de naissance</label>
                                     </span>
 
 
                                     <span class="p-float-label">
-                                        <input type="text" id="nationalNumber" name="nationalNumber"
-                                            formControlName="nationalNumber" pInputText>
+
+                                        <p-inputMask mask="99.99.99-999.99" formControlName="nationalNumber"
+                                            placeholder="99.99.99-999.99"></p-inputMask>
+
+                                        <!-- <input type="text" id="nationalNumber" name="nationalNumber"
+                                            formControlName="nationalNumber" pInputText> -->
+
+
                                         <label for="nationalNumber">Numéro national</label>
                                     </span>
 
@@ -216,18 +222,31 @@
                         </div>
                     </ng-template>
                     <span class="p-float-label">
-                        <input pInputText formControlName="infractions" />
-                        <label htmlFor="infractions">Infractions</label>
+                        <p-dropdown [options]="categories" [showClear]="true" [filter]="true"
+                            (onChange)="onCategoryChange($event.value)"></p-dropdown>
+                        <label htmlFor="categories">Catégorie</label>
                     </span>
+                    <div *ngIf="selectedCategory">
+                        <span class="p-float-label">
+                            <p-multiSelect formControlName="infractions" [options]="selectedInfractions"
+                                [defaultLabel]="'Sélectionner une ou plusieurs infractions'"
+                                display="chip"></p-multiSelect>
+                            <label htmlFor="infractions">Infraction</label>
+                        </span>
+                    </div>
                     <span class="p-float-label">
+
                         <input pInputText formControlName="notes" />
                         <label htmlFor="notes">Notes</label>
                     </span>
                     <span class="p-float-label">
-                        <input pInputText formControlName="annexes" />
+                        <p-chips formControlName="annexes"></p-chips>
+
                         <label htmlFor="annexes">Annexes</label>
                     </span>
+                    <div>
 
+                    </div>
 
                 </p-fieldset>
 

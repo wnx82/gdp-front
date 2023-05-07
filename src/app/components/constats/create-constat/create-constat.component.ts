@@ -27,7 +27,7 @@ export class CreateConstatComponent implements OnInit {
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
-        pv: new FormControl('', [Validators.required]),
+        pv: new FormControl(false, [Validators.required]),
         vehicule: new FormGroup({
             marque: new FormControl(''),
             modele: new FormControl(''),
@@ -52,17 +52,22 @@ export class CreateConstatComponent implements OnInit {
             numero: new FormControl(''),
         }),
 
-        infractions: new FormArray([]),
+        // infractions: new FormArray([]),
+        infractions: new FormControl(''),
         notes: new FormControl(''),
-        annexes: new FormArray([]),
+        annexes: new FormControl(''),
     });
     checked: boolean = false;
     groupedAgents: SelectItemGroup[] = [];
     selectedAgents: Agent[] = [];
     agentsBrut: any[] = [];
     agents: any[] = [];
+    infractions: any[] = [];
     agentsNeed: any[] = [];
     currentDate: any = Date;
+    categories: any[] = [];
+    selectedCategory: any;
+    selectedInfractions: any[] = [];
 
     constructor(
         private http: HttpClient,
@@ -70,17 +75,22 @@ export class CreateConstatComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private getDataService: GetDataService,
         private router: Router
-    ) {}
+    ) {
+        this.selectedInfractions = []; // ou []
+    }
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
     statuses: any[] = [];
     rues$ = this.getDataService.rues$;
     agents$ = this.getDataService.agents$;
+    infractions$ = this.getDataService.infractions$;
     ngOnInit() {
+        this.dataForm.patchValue({ pv: false });
         //Récupération des agents
         // this.getConstats();
         //Récupération des rues
+
         this.rues$.subscribe(
             rues => {
                 this.rues = rues;
@@ -90,6 +100,54 @@ export class CreateConstatComponent implements OnInit {
                 console.error(error);
             }
         );
+        this.infractions$.subscribe(
+            infractions => {
+                this.infractions = infractions;
+                // console.log(this.infractions);
+                this.categories = this.infractions.map(
+                    infraction => infraction.category
+                );
+                // Tri des catégories par ordre croissant de priorité
+                this.categories = this.infractions
+                    .sort((a, b) => a.priority - b.priority)
+                    .map(infraction => infraction.category);
+
+                // console.log(this.categories);
+
+                this.selectedCategory = this.infractions.map(infraction => {
+                    return {
+                        label: infraction.category,
+                        value: infraction.list
+                            .map((item: string[]) => item[1])
+                            .join(', '),
+                    };
+                });
+                // Appeler onCategoryChange() avec "Arrêt et stationnement"
+                this.onCategoryChange('Arrêt et stationnement');
+                // console.log(this.selectedCategory);
+
+                // // Formatage des données pour le multiselect des infractions
+                // const infractionsList = this.infractions.reduce(
+                //     (list, infraction) => {
+                //         return list.concat(
+                //             infraction.list.map((item: string[]) => {
+                //                 return {
+                //                     label: item[1],
+                //                     value: item[0],
+                //                 };
+                //             })
+                //         );
+                //     },
+                //     []
+                // );
+
+                // console.log(infractionsList);
+            },
+            error => {
+                console.error(error);
+            }
+        );
+
         //Récupérations des agents
         this.agents$.subscribe(agents => {
             this.agents = agents.map(agent => ({
@@ -112,6 +170,24 @@ export class CreateConstatComponent implements OnInit {
             detail: error.message,
         });
     }
+    // onCategoryChange() {
+    //     this.selectedInfractions = [];
+    // }
+    onCategoryChange(category: string) {
+        this.selectedCategory = 'Arrêt et stationnement' ?? category;
+        const infractions = this.infractions.find(
+            infraction => infraction.category === this.selectedCategory
+        );
+        if (infractions) {
+            this.selectedInfractions = infractions.list.map(
+                (item: string[]) => {
+                    return { label: item[1], value: item[1] };
+                }
+            );
+        } else {
+            this.selectedInfractions = []; // Aucune infraction sélectionnée si la catégorie n'est pas trouvée
+        }
+    }
 
     addConstat(constat: any) {
         console.log(this.dataForm.value);
@@ -124,6 +200,11 @@ export class CreateConstatComponent implements OnInit {
                     detail: 'Constat ajouté',
                 });
                 this.dataForm.controls['date'].reset();
+                this.dataForm.controls['annexes'].reset();
+                this.dataForm.controls['infractions'].reset();
+                this.dataForm.controls['notes'].reset();
+                this.dataForm.controls['vehicule'].reset();
+                this.dataForm.controls['personne'].reset();
                 // this.dataForm.reset();
             },
             error: error => {

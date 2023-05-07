@@ -30,6 +30,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
 import { RippleModule } from 'primeng/ripple';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @NgModule({
     declarations: [],
@@ -63,6 +64,7 @@ import { RippleModule } from 'primeng/ripple';
         TagModule,
         ToastModule,
         ToggleButtonModule,
+        InputMaskModule,
     ],
     providers: [MessageService],
 })

@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Habitation } from 'src/app/interfaces/Habitation.interface';
+import { Infraction } from 'src/app/interfaces/Infraction.interface';
 import { Mission } from 'src/app/interfaces/Mission.interface';
 import { Quartier } from 'src/app/interfaces/Quartier.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
@@ -15,6 +16,7 @@ import { Rue } from 'src/app/interfaces/Rue.interface.';
 export class GetDataService {
     private myAgents = new BehaviorSubject<Agent[]>([]);
     private myHabitations = new BehaviorSubject<Habitation[]>([]);
+    private myInfractions = new BehaviorSubject<Infraction[]>([]);
     private myMissions = new BehaviorSubject<Mission[]>([]);
     private myQuartiers = new BehaviorSubject<Quartier[]>([]);
     private myRues = new BehaviorSubject<Rue[]>([]);
@@ -24,6 +26,7 @@ export class GetDataService {
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
         this.getHabitationsFromApi();
+        this.getInfractionsFromApi();
         this.getMissionsFromApi();
         this.getQuartierFromApi();
         this.getRueFromApi();
@@ -61,6 +64,25 @@ export class GetDataService {
                 },
                 error: error => {
                     console.error('Error fetching habitations: ', error);
+                },
+            });
+    }
+    // Listing des infractions
+    infractions$: Observable<Infraction[]> = this.myInfractions
+        .asObservable()
+        .pipe(filter(infractions => infractions.length > 0));
+
+    private getInfractionsFromApi() {
+        this.http
+            .get<Infraction[]>(`${environment.apiUrl}/infractions`)
+            .subscribe({
+                next: data => {
+                    this.myInfractions.next(
+                        data.filter(infraction => !infraction.deletedAt)
+                    );
+                },
+                error: error => {
+                    console.error('Error fetching infractions: ', error);
                 },
             });
     }
