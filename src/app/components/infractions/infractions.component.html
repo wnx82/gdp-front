@@ -44,8 +44,10 @@
                     </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Category </th>
-                            <th>Priorité</th>
+                            <th pSortableColumn="category" style="width:20%">Categorie<p-sortIcon
+                                    field="category"></p-sortIcon></th>
+                            <th pSortableColumn="priority" style="width:20%">Priorité<p-sortIcon
+                                    field="priority"></p-sortIcon></th>
                             <th>Liste </th>
                             <th></th>
                         </tr>
@@ -120,6 +122,39 @@
                             [value]="selectedData.list">
                         <label for="list">Liste</label>
                     </span>
+                    <p-table [value]="selectedData.list">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Article</th>
+                                <th>Description</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                            <tr>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" [(ngModel)]="row[0]">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{row[0]}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" [(ngModel)]="row[1]">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{row[1]}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
 
 
                 </div>

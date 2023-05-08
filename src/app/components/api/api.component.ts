@@ -16,7 +16,7 @@ export class ApiComponent implements OnInit {
     displayConfirmationDelete = false;
 
     displayedLogs: string[] = []; // Logs à afficher pour la page actuelle
-    itemsPerPage: number = 20; // Nombre de logs par page
+    itemsPerPage: number = 50; // Nombre de logs par page
     firstItemIndex: number = 0; // Index du premier log sur la page actuelle
 
     onPageChange(event: any) {

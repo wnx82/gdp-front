@@ -27,7 +27,7 @@
         [rowsPerPageOptions]="[10, 25, 50]">
         <ng-template pTemplate="header">
             <tr>
-                <th>Horaire</th>
+                <th pSortableColumn="horaire">Horaire<p-sortIcon field="horaire"></p-sortIcon></th>
                 <th>Action</th>
             </tr>
         </ng-template>

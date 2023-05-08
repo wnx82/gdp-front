@@ -11,6 +11,7 @@ export class StatisticsComponent {
     agentCount = 0; // Initialise la propriété agentCount à zéro
     categoriesCount = 0; // Initialise la propriété categoriesCount à zéro
     constatsCount = 0; // Initialise la propriété constatsCount à zéro
+    dailiesCount = 0; // Initialise la propriété dailiesCount à zéro
     horairesCount = 0; // Initialise la propriété horairesCount à zéro
     infractionsCount = 0; // Initialise la propriété infractionsCount à zéro
     missionsCount = 0; // Initialise la propriété missionsCount à zéro
@@ -34,6 +35,9 @@ export class StatisticsComponent {
             });
         this.http.get<any[]>(`${this.API_URL}/constats`).subscribe(constats => {
             this.constatsCount = constats.length;
+        });
+        this.http.get<any[]>(`${this.API_URL}/dailies`).subscribe(dailies => {
+            this.dailiesCount = dailies.length;
         });
         this.http.get<any[]>(`${this.API_URL}/horaires`).subscribe(horaires => {
             this.horairesCount = horaires.length;
