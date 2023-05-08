@@ -23,6 +23,24 @@ export class InfractionsComponent implements OnInit {
         priority: new FormControl(''),
         list: new FormControl(''),
     });
+
+    rowIndex: number | undefined;
+    editingRow: boolean = false;
+    newRow: boolean = false;
+    newArticle: string = '';
+    newDescription: string = '';
+    data = {
+        _id: '64588cd354484319a0ec01d3',
+        category: 'Déchets',
+        priority: 3,
+        list: [
+            ['Art. 126', 'Jets de déchets'],
+            ['Art. 158 b', "PAV (Point d'apport volontaire)"],
+            ['Art. 165', 'Dépôt sauvage'],
+        ],
+        createdAt: '2023-05-08T05:46:59.260Z',
+        updatedAt: '2023-05-08T05:46:59.260Z',
+    };
     constructor(
         private http: HttpClient,
         private messageService: MessageService
@@ -197,5 +215,34 @@ export class InfractionsComponent implements OnInit {
     }
     clear(table: Table) {
         table.clear();
+    }
+
+    //add /remove rows
+    addRow() {
+        this.newRow = true;
+    }
+
+    saveRow() {
+        if (this.newRow) {
+            this.data.list.push([this.newArticle, this.newDescription]);
+            this.newArticle = '';
+            this.newDescription = '';
+            this.newRow = false;
+        } else {
+            this.editingRow = false;
+        }
+    }
+
+    editRow(index: number) {
+        this.rowIndex = index;
+        this.editingRow = true;
+    }
+
+    saveEditedRow(index: number) {
+        this.editingRow = false;
+    }
+
+    deleteRow(index: number) {
+        this.data.list.splice(index, 1);
     }
 }

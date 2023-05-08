@@ -122,11 +122,12 @@
                             [value]="selectedData.list">
                         <label for="list">Liste</label>
                     </span>
-                    <p-table [value]="selectedData.list">
+                    <p-table [value]="data.list">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Article</th>
                                 <th>Description</th>
+                                <th></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -151,9 +152,15 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
+                                <td>
+                                    <button pButton type="button" icon="pi pi-pencil" (click)="editRow(row)"></button>
+                                    <button pButton type="button" icon="pi pi-trash" (click)="deleteRow(row)"></button>
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>
+                    <button pButton type="button" label="Ajouter" (click)="addRow()"></button>
+
 
 
 
@@ -171,4 +178,19 @@
         </form>
 
     </p-dialog>
+</div>
+
+<div *ngIf="newRow">
+    <form>
+        <div>
+            <label for="newArticle">Article</label>
+            <input id="newArticle" type="text" [(ngModel)]="newArticle">
+        </div>
+        <div>
+            <label for="newDescription">Description</label>
+            <input id="newDescription" type="text" [(ngModel)]="newDescription">
+        </div>
+        <button type="button" (click)="saveRow()">Enregistrer</button>
+        <button type="button" (click)="newRow = false">Annuler</button>
+    </form>
 </div>
