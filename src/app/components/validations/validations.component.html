@@ -61,7 +61,7 @@
 
         <ng-template pTemplate="header">
             <tr>
-                <th style="width: 10%">ID</th>
+
                 <th style="width: 10%">Habitation<p-columnFilter type="text" field="habitation.adresse.rue"
                         matchMode="contains"></p-columnFilter></th>
                 <th style="width: 10%">
@@ -74,17 +74,23 @@
                         matchMode="contains"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
+                    Note
+                    <p-columnFilter type="note" field="note" filterMatchMode="contains"
+                        filterDateFormat="yyyy-MM-dd"></p-columnFilter>
+                </th>
+                <th style="width: 10%">
                     Date vérification
                     <p-columnFilter type="date" field="date" filterMatchMode="equals"
                         filterDateFormat="yyyy-MM-dd"></p-columnFilter>
                 </th>
+
                 <th style="width: 10%">Actions</th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-validation>
             <tr>
-                <td>{{ validation._id }}</td>
+
                 <td>
                     {{ validation.habitation.adresse.rue }},
                     {{ validation.habitation.adresse.numero }}
@@ -98,6 +104,7 @@
                     <p-tag [value]="validation.habitation.adresse.localite"
                         [severity]="getSeverity(validation.habitation.adresse.localite)"></p-tag>
                 </td>
+                <td>{{ validation.note }}</td>
                 <td>{{ validation.date | date:'yyyy-MM-dd HH:mm' }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
@@ -172,6 +179,10 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                 </p-calendar>
                                 <label for="date">Date : </label>
                             </span>
+                            <button pButton pRipple type="button" label="Remplir avec la date actuelle"
+                                class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus"
+                                style="margin-top: 3px;" (click)="fillWithCurrentDate()"></button>
+
                         </div>
 
                         <div class="p-col-12 p-md-6">

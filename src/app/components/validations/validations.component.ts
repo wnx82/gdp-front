@@ -57,6 +57,7 @@ export class ValidationsComponent implements OnInit {
     agents: any[] = [];
     habitations: any[] = [];
     rues: Rue[] = [];
+    currentDate: any = Date;
     agents$ = this.getDataService.agents$;
     habitations$ = this.getDataService.habitations$;
     rues$ = this.getDataService.rues$;
@@ -319,5 +320,12 @@ export class ValidationsComponent implements OnInit {
     toggleEdit() {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedValidation);
+    }
+
+    fillWithCurrentDate() {
+        this.currentDate = new Date();
+        this.dataForm.patchValue({
+            date: this.currentDate,
+        });
     }
 }

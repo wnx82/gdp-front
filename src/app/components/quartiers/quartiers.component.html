@@ -1,6 +1,9 @@
 <p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
-        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+        <p>
+            Êtes-vous sûr de vouloir supprimer définitivement les données
+            supprimées?
+        </p>
     </div>
     <p-footer>
         <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
@@ -13,11 +16,11 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
-                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+                style="margin-top: 3px" (click)="toggleAdd()"></button>
             <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
-                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+                icon="pi pi-refresh" style="margin-top: 3px" (click)="confirmRestoreDeleted()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
-                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px" (click)="deleteDeleted()"></button>
         </div>
     </div>
 
@@ -31,9 +34,12 @@
                     (click)="clear(dataTableQuartiers)"></button>
                 <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
-                    <input #searchInput pInputText type="text"
-                        (input)="dataTableQuartiers.filterGlobal(searchInput.value, 'contains')"
-                        placeholder="Rechercher mot-clé" />
+                    <input #searchInput pInputText type="text" (input)="
+                            dataTableQuartiers.filterGlobal(
+                                searchInput.value,
+                                'contains'
+                            )
+                        " placeholder="Rechercher mot-clé" />
                 </span>
             </div>
         </ng-template>
@@ -47,54 +53,21 @@
         <ng-template pTemplate="body" let-donnee>
             <tr>
                 <td>{{ donnee.title }}</td>
-                <!-- <td>{{ donnee.missions }}</td> -->
-                <!-- <td>
-                    <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
-                        <tr *ngFor="let item of donnee.missions">
-                            <script>
-                                console.log(donnee.missions);
-                                console.log(item);
-                            </script>
-                            <ng-container *ngIf="findMissionById(item)">
-                                <td>{{ findMissionById(item) }}</td>
-
-                            </ng-container>
-                        </tr>
-                    </table>
-                </td> -->
 
                 <td>
                     <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
                         <tr *ngFor="let missionId of donnee.missions">
                             <!-- <td>{{ missionId }}</td> -->
-                            <td>{{ findMissionById(missionId) | async }}</td> <!-- Use the async pipe -->
+                            <td>{{ findMissionById(missionId) | async }}</td>
+                            <!-- Use the async pipe -->
                         </tr>
                     </table>
                 </td>
-
-                <!-- <td>
-                    <table class="table table-bordered" *ngIf="donnee.missions && donnee.missions.length">
-                        <tr *ngFor="let missionId of donnee.missions">
-                            <script>
-                                console.log(donnee.missions);
-                                console.log(missionId);
-                            </script>
-                            <ng-container *ngIf="findMissionById(missionId)">
-                                <td>{{ findMissionById(missionId) }}</td>
-                            </ng-container>
-                        </tr>
-                    </table>
-                </td> -->
-
                 <td>
-
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(donnee); toggleEdit()"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                         (click)="delete(donnee._id)"></button>
-
-
-
                 </td>
             </tr>
         </ng-template>
@@ -106,52 +79,38 @@
         </ng-template>
     </p-table>
 
-
-    <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
-
-        <form [formGroup]="dataForm"
-            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
+    <p-dialog header="{{ isAdding ? 'Ajouter une donnée' : 'Modifier une donnée' }}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData = {}"
+        [style]="{ 'width': '40%', 'height': '70%' }">
+        <form [formGroup]="dataForm" (ngSubmit)="
+                isAdding
+                    ? add(dataForm.value)
+                    : edit(selectedData._id, dataForm.value)
+            ">
             <div class="p-grid">
                 <div class="p-col-6">
                     <div class="p-field">
                         <span class="p-float-label">
                             <input type="text" id="title" name="title" formControlName="title" required pInputText
-                                [value]="selectedData.title">
+                                [value]="selectedData.title" />
                             <label for="title">Titre</label>
                         </span>
                     </div>
                     <div class="p-field">
-                        <label for="missions">Missions</label>
-                        <select id="missions" name="missions" formControlName="missions" multiple>
-                            <ng-container *ngIf="missions$ | async as missions">
-                                <!-- Use async pipe to subscribe to the missions$ Observable -->
-                                <option *ngFor="let mission of missions" [ngValue]="mission._id">{{mission.title}}
-                                </option>
-                                <!-- Display the options using ngFor directive -->
-                            </ng-container>
-                        </select>
-                    </div>
-                    <!-- <div class="p-field">
+
                         <label for="missions">Missions</label>
                         <p-multiSelect id="missions" name="missions" formControlName="missions"
-                            [options]="missions$ | async" [optionLabel]=" 'title' " [optionValue]=" '_id' "
-                            [defaultLabel]="'Select a mission'" [showHeader]="false" [showToggleAll]="false"
-                            [panelStyle]="{ 'max-height': '250px' }" [scrollHeight]="'250px'">
+                            [options]="(missions$ | async) || []" [optionLabel]="'title'"
+                            defaultLabel="Sélectionnez les missions" scrollHeight="250px" display="chip"
+                            [style]="{ 'max-width': '300px' }">
                         </p-multiSelect>
-                    </div> -->
-                    <!-- <div class="p-field">
-                        <label for="missions">Missions</label>
-                        <p-multiSelect [options]="missions" [defaultLabel]="'Sélectionner les missions...'"
-                            optionLabel="title" formControlName="missions"></p-multiSelect>
-                    </div> -->
 
+                    </div>
                 </div>
 
                 <div class="p-d-flex p-jc-between">
-
-                    <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                    <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                        class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
                         [disabled]="!dataForm.valid"></button>
 
                     <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
@@ -159,6 +118,5 @@
                 </div>
             </div>
         </form>
-
     </p-dialog>
 </div>

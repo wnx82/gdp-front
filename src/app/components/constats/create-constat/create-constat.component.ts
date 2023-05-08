@@ -174,7 +174,8 @@ export class CreateConstatComponent implements OnInit {
     //     this.selectedInfractions = [];
     // }
     onCategoryChange(category: string) {
-        this.selectedCategory = 'Arrêt et stationnement' ?? category;
+        this.selectedCategory = category;
+        // this.selectedCategory = 'Arrêt et stationnement' ?? category;
         const infractions = this.infractions.find(
             infraction => infraction.category === this.selectedCategory
         );

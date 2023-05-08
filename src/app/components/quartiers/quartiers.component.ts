@@ -107,7 +107,7 @@ export class QuartiersComponent implements OnInit {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Succès',
-                        detail: 'Rue ajoutée',
+                        detail: 'Quartier ajouté',
                     });
                     this.dataForm.reset();
                     this.get();
@@ -190,7 +190,7 @@ export class QuartiersComponent implements OnInit {
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
-                    detail: 'Rue effacée',
+                    detail: 'Quartier effacé',
                 });
                 this.get();
             },
