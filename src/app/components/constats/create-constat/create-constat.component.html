@@ -247,12 +247,14 @@
                     </div>
 
                 </p-fieldset>
+                <div class="button-container">
+                    <div class="p-d-flex p-jc-between">
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                        <button pButton pRipple type="submit" label="Ajouter" class="p-button-sm p-button-success"
+                            icon="pi pi-plus" [disabled]="!dataForm.valid"></button>
 
-                <div class="p-d-flex p-jc-between">
-                    <button pButton pRipple type="submit" label="Ajouter" class="p-button-sm p-button-success"
-                        icon="pi pi-plus" [disabled]="!dataForm.valid"></button>
-                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                        icon="pi pi-times" (click)="cancel()"></button>
+                    </div>
                 </div>
             </div>
         </div>

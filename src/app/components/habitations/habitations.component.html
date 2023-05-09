@@ -242,14 +242,16 @@
 
                 </div>
             </div>
+            <div class="button-container">
 
-            <div class="p-d-flex p-jc-between">
-                <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                    class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
-                    [disabled]="!dataForm.valid"></button>
+                <div class="p-d-flex p-jc-between">
+                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                        icon="pi pi-times" (click)="cancel()"></button>
+                    <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
+                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
+                        [disabled]="!dataForm.valid"></button>
 
-                <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                    icon="pi pi-times" (click)="cancel()"></button>
+                </div>
             </div>
         </form>
     </p-dialog>

@@ -81,13 +81,14 @@
 
     <p-dialog header="{{ isAdding ? 'Ajouter une donnée' : 'Modifier une donnée' }}" [(visible)]="isAdding || isEditing"
         [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData = {}"
-        [style]="{ 'width': '40%', 'height': '70%' }">
+        [style]="{width: '450px', 'height':' 65%'}">
+        <!-- [style]=" { 'width' : '40 %' , 'height' : '65%' }"> -->
         <form [formGroup]="dataForm" (ngSubmit)="
-                isAdding
-                    ? add(dataForm.value)
-                    : edit(selectedData._id, dataForm.value)
-            ">
-            <div class="p-grid">
+        isAdding
+            ? add(dataForm.value)
+            : edit(selectedData._id, dataForm.value)
+    ">
+            <div class="p-grid p-dir-col">
                 <div class="p-col-6">
                     <div class="p-field">
                         <span class="p-float-label">
@@ -97,26 +98,26 @@
                         </span>
                     </div>
                     <div class="p-field">
-
                         <label for="missions">Missions</label>
                         <p-multiSelect id="missions" name="missions" formControlName="missions"
                             [options]="(missions$ | async) || []" [optionLabel]="'title'"
-                            defaultLabel="Sélectionnez les missions" scrollHeight="250px" display="chip"
+                            defaultLabel="Sélectionnez les missions" scrollHeight="200px" display="chip"
                             [style]="{ 'max-width': '300px' }">
                         </p-multiSelect>
-
                     </div>
                 </div>
-
+            </div>
+            <div class="button-container mt-16">
                 <div class="p-d-flex p-jc-between">
+                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                        icon="pi pi-times" (click)="cancel()"></button>
                     <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
                         class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
                         [disabled]="!dataForm.valid"></button>
-
-                    <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                        icon="pi pi-times" (click)="cancel()"></button>
                 </div>
             </div>
         </form>
     </p-dialog>
+
+
 </div>

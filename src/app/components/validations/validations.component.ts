@@ -68,8 +68,11 @@ export class ValidationsComponent implements OnInit {
             habitations => {
                 this.habitations = habitations.map(habitation => ({
                     value: habitation._id,
-                    label: habitation.adresse?.nomComplet,
-                    numero: habitation.adresse?.numero,
+                    label:
+                        habitation.adresse?.nomComplet +
+                        ', ' +
+                        habitation.adresse?.numero,
+                    // numero: habitation.adresse?.numero,
                 }));
                 console.log(this.habitations);
             },
@@ -230,7 +233,7 @@ export class ValidationsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
-                    detail: 'Validation effacé',
+                    detail: 'Validation effacée',
                 });
                 this.getValidations();
             },

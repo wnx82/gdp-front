@@ -100,7 +100,7 @@
 
     <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
         [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
-        [style]="{width: '50vw'}" (onHide)="cancel()">
+        [style]="{width: '25vw'}" (onHide)="cancel()">
 
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
@@ -168,13 +168,15 @@
 
 
 
-                    <div class="p-d-flex p-jc-between">
-                        <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                            class="p-button-sm p-button-success"
-                            icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"></button>
-
-                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                            icon="pi pi-times" (click)="cancel()"></button>
+                    <div class="button-container">
+                        <div class="p-d-flex p-jc-between">
+                            <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                                icon="pi pi-times" (click)="cancel()"></button>
+                            <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                                class="p-button-sm p-button-success"
+                                icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
+                                [disabled]="!dataForm.valid"></button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -122,8 +122,8 @@
 
     <p-dialog header="{{
 isAdding ? 'Ajouter une validation' : 'Modifier une validation'
-}}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
-        [style]="{ width: '800px' }" [dismissableMask]="true" (onHide)="cancel()">
+}}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true" [dismissableMask]="true"
+        (onHide)="cancel()">
         <!-- <form [formGroup]="dataForm"> -->
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addValidation(dataForm.value) : editValidation(selectedValidation._id, dataForm.value)">
@@ -177,11 +177,15 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                     [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
                                     [showButtonBar]="true">
                                 </p-calendar>
+                                <button pButton pRipple type="button" label="Remplir avec la date actuelle"
+                                    class="p-button-secondary p-button-outlined ml-4" icon="pi pi-calendar-plus"
+                                    style="vertical-align: bottom;" (click)="fillWithCurrentDate()"></button>
+
+
                                 <label for="date">Date : </label>
+
+
                             </span>
-                            <button pButton pRipple type="button" label="Remplir avec la date actuelle"
-                                class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus"
-                                style="margin-top: 3px;" (click)="fillWithCurrentDate()"></button>
 
                         </div>
 
@@ -196,16 +200,18 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                 </ng-template>
                             </p-multiSelect>
                         </div>
-                        <span class="p-float-label">
-                            <input type="text" formControlName="note" pInputText>
+
+                        <span class="p-float-label mt-3">
+                            <textarea id="note" formControlName="note" rows="5" cols="30" pInputTextarea></textarea>
                             <label for="note">Note</label>
                         </span>
+
 
                     </p-fieldset>
                 </div>
             </div>
 
-            <div class="p-d-flex p-jc-between">
+            <div class="button-container">
                 <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
                     class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"></button>
 

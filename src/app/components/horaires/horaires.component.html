@@ -1,6 +1,9 @@
 <p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
     <div class="confirmation-dialog-content">
-        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+        <p>
+            Êtes-vous sûr de vouloir supprimer définitivement les données
+            supprimées?
+        </p>
     </div>
     <p-footer>
         <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
@@ -13,11 +16,11 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
-                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+                style="margin-top: 3px" (click)="toggleAdd()"></button>
             <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
-                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+                icon="pi pi-refresh" style="margin-top: 3px" (click)="confirmRestoreDeleted()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
-                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px" (click)="deleteDeleted()"></button>
         </div>
     </div>
 
@@ -27,7 +30,9 @@
         [rowsPerPageOptions]="[10, 25, 50]">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="horaire">Horaire<p-sortIcon field="horaire"></p-sortIcon></th>
+                <th pSortableColumn="horaire">
+                    Horaire<p-sortIcon field="horaire"></p-sortIcon>
+                </th>
                 <th>Action</th>
             </tr>
         </ng-template>
@@ -35,8 +40,6 @@
             <tr>
                 <td>{{ donnee.horaire }}</td>
                 <td>
-
-
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(donnee); toggleEdit()"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
@@ -52,35 +55,30 @@
         </ng-template>
     </p-table>
 
-
-
-    <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
-
-        <form [formGroup]="dataForm"
-            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
+    <p-dialog header="{{ isAdding ? 'Ajouter une donnée' : 'Modifier une donnée' }}" [(visible)]="isAdding || isEditing"
+        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData = {}">
+        <form [formGroup]="dataForm" (ngSubmit)="
+                isAdding
+                    ? add(dataForm.value)
+                    : edit(selectedData._id, dataForm.value)
+            ">
             <div class="p-grid">
                 <div class="p-col-6">
-
                     <span class="p-float-label">
                         <input type="text" id="horaire" name="horaire" formControlName="horaire" required pInputText
-                            [value]="selectedData.horaire">
+                            [value]="selectedData.horaire" />
                         <label for="horaire">Horaire</label>
                     </span>
-
-
                 </div>
-                <div class="p-d-flex p-jc-between">
 
-                    <button pButton pRipple type="submit" label="{{isAdding ? 'Ajouter' : 'Modifier'}}"
-                        class="p-button-sm p-button-success" icon="{{isAdding ? 'pi pi-plus' : 'pi pi-pencil'}}"
-                        [disabled]="!dataForm.valid"></button>
-
+                <div class="button-container">
                     <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
                         icon="pi pi-times" (click)="cancel()"></button>
+                    <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                        class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
+                        [disabled]="!dataForm.valid"></button>
                 </div>
             </div>
         </form>
-
     </p-dialog>
 </div>
