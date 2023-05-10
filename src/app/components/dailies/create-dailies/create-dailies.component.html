@@ -19,24 +19,21 @@
                     <ng-template pTemplate="header">
                         <div class="flex align-items-center text-primary">
                             <span class="pi pi-info-circle mr-2"></span>
-                            <span class="font-bold text-lg">Informations</span>
+                            <span class="font-bold text-lg">Informations fiche journalière</span>
                         </div>
                     </ng-template>
 
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
-                                [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
-                                [showButtonBar]="true">
+                                class="p-datepicker-today" [showButtonBar]="true">
                             </p-calendar>
                             <button pButton pRipple type="button" label="Remplir avec la date actuelle"
                                 class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus"
                                 style="margin-top: 3px;" (click)="fillWithCurrentDate()"></button>
-                            <label for="date">Date Dailies : </label>
+                            <label for="date">Date Dailie : </label>
                         </span>
                     </div>
-
-
 
                     <div class="p-col-12 p-md-6">
                         <label for="agents">Agents: </label>
@@ -48,10 +45,50 @@
                                 </div>
                             </ng-template>
                         </p-multiSelect>
+                    </div>
 
+                    <div class="p-col-12 p-md-6">
+                        <label for="horaires">Horaire: </label>
+                        <p-dropdown [options]="horaires" placeholder="Sélectionnez un horaire" [editable]="true"
+                            formControlName="horaire" selectedItemValue="horaire"></p-dropdown>
                     </div>
 
 
+                    <div class="p-col-12 p-md-6">
+                        <label for="vehicules">Véhicule: </label>
+                        <p-dropdown [options]="vehicules" placeholder="Sélectionnez un véhicule" [editable]="true"
+                            formControlName="vehicule" selectedItemValue="vehicule"></p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="quartiers">Quartier(s): </label>
+                        <p-multiSelect [options]="this.quartiers" formControlName="quartiers"
+                            defaultLabel="Sélectionnez un quartier" scrollHeight="250px" display="chip"
+                            formControlName="quartiers">
+                            <ng-template let-quartier pTemplate="quartier">
+                                <div class="flex align-items-center">
+                                    <span>{{ quartier.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="missions">Mission(s) supplémentaire(s): </label>
+                        <p-multiSelect [options]="this.missions" formControlName="missions"
+                            defaultLabel="Sélectionnez une mission" scrollHeight="250px" display="chip"
+                            formControlName="missions">
+                            <ng-template let-mission pTemplate="mission">
+                                <div class="flex align-items-center">
+                                    <span>{{ mission.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+                    <span class="p-float-label mt-3">
+                        <textarea id="notes" formControlName="notes" rows="5" cols="30" pInputTextarea></textarea>
+                        <label for="notes">Notes</label>
+                    </span>
                 </p-fieldset>
 
                 <div class="button-container">

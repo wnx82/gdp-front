@@ -24,12 +24,16 @@
     <p-table [value]="donnees" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]">
+        [rowsPerPageOptions]="[10, 25, 50]" sortField="date" [sortOrder]="-1">
         <ng-template pTemplate="header">
             <tr>
 
                 <th pSortableColumn="date" style="width:5%">Date<p-sortIcon field="date"></p-sortIcon></th>
-                <th style="width:5%">Agents</th>
+
+                <th style="width: 5%">
+                    Agents
+                    <p-columnFilter type="text" field="agents" matchMode="contains"></p-columnFilter>
+                </th>
                 <th style="width:5%">Horaire</th>
                 <th style="width:5%">Véhicule</th>
                 <th pSortableColumn="quartier" style="width:5%">Quartier<p-sortIcon field="quartier"></p-sortIcon></th>
@@ -42,10 +46,13 @@
         <ng-template pTemplate="body" let-donnee>
             <tr>
                 <td>{{ donnee.date | date: 'yyyy-MM-dd'}}</td>
+
+
                 <td><ng-container *ngFor="let agent of donnee.agents">
 
                         <p-tag>A{{findAgentById(agent) | async }}</p-tag>
-                    </ng-container></td>
+                    </ng-container>
+                </td>
                 <td>
                     {{ donnee.horaire }}
                     <div *ngIf="showHoraires">Heure de début : {{ extractHoraires(donnee.horaire).heure_debut }}</div>
@@ -72,13 +79,13 @@
                     </div>
                 </td>
                 <td>{{ donnee.sent | date: 'yyyy-MM-dd HH:mm'}}</td>
-                <td><add-to-calendar-button [attr.name]="donnee.date | date: 'yyyy-MM-dd'"
+                <!-- <td><add-to-calendar-button [attr.name]="donnee.date | date: 'yyyy-MM-dd'"
                         [attr.description]="findQuartierById(donnee.quartiers)" [attr.startDate]="donnee.date"
                         [attr.startTime]="extractHoraires(donnee.horaire).heure_debut"
                         [attr.endTime]="extractHoraires(donnee.horaire).heure_fin" timeZone="Europe/Brussels"
                         location="World Wide Web" options="['Outlook.com']" language="fr">
                     </add-to-calendar-button>
-                </td>
+                </td> -->
 
             </tr>
         </ng-template>

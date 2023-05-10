@@ -8,10 +8,10 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { SelectItemGroup } from 'primeng/api';
 import { Agent } from 'src/app/interfaces/Agent.interface';
-import { Rue } from 'src/app/interfaces/Rue.interface.';
 
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 import { Dailies } from 'src/app/interfaces/Dailies.interface';
+import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
 
 @Component({
     selector: 'app-create-dailies',
@@ -28,19 +28,21 @@ export class CreateDailiesComponent implements OnInit {
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
-        horaire: new FormControl('', [Validators.required]),
-        vehicule: new FormControl('', [Validators.required]),
-        quartiers: new FormControl('', [Validators.required]),
-        missions: new FormControl('', [Validators.required]),
-        notes: new FormControl('', [Validators.required]),
+        horaire: new FormControl(''),
+        vehicule: new FormControl(''),
+        quartiers: new FormControl(''),
+        missions: new FormControl(''),
+        notes: new FormControl(''),
     });
     checked: boolean = false;
     groupedAgents: SelectItemGroup[] = [];
     selectedAgents: Agent[] = [];
     agentsBrut: any[] = [];
     agents: any[] = [];
+    horaires: any[] = [];
     quartiers: any[] = [];
     missions: any[] = [];
+    vehicules: any[] = [];
 
     agentsNeed: any[] = [];
     currentDate: any = Date;
@@ -61,8 +63,10 @@ export class CreateDailiesComponent implements OnInit {
     readonly API_URL = `${environment.apiUrl}/dailies`;
     statuses: any[] = [];
     agents$ = this.getDataService.agents$;
+    horaires$ = this.getDataService.horaires$;
     quartiers$ = this.getDataService.quartiers$;
     missions$ = this.getDataService.missions$;
+    vehicules$ = this.getDataService.vehicules$;
 
     ngOnInit() {
         //Récupérations des agents
@@ -73,6 +77,15 @@ export class CreateDailiesComponent implements OnInit {
             }));
             // console.log(this.agents);
         });
+        this.horaires$.subscribe(
+            horaires => {
+                this.horaires = horaires.map(horaire => horaire.horaire);
+            },
+            error => {
+                console.error(error);
+            }
+        );
+
         this.quartiers$.subscribe(quartiers => {
             this.quartiers = quartiers.map(quartier => ({
                 value: quartier._id,
@@ -87,6 +100,14 @@ export class CreateDailiesComponent implements OnInit {
             }));
             // console.log(this.agents);
         });
+        this.vehicules$.subscribe(
+            vehicules => {
+                this.vehicules = vehicules.map(vehicule => vehicule.marque);
+            },
+            error => {
+                console.error(error);
+            }
+        );
 
         this.statuses = [
             { label: 'Avertissement', value: false },
@@ -107,6 +128,9 @@ export class CreateDailiesComponent implements OnInit {
 
     addDailie(dailies: any) {
         console.log(this.dataForm.value);
+        this.dataForm.controls['vehicule'].getRawValue()?.toString();
+        this.dataForm.controls['horaire'].getRawValue()?.toString();
+
         this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
             next: data => {
                 this.dailies.push(data);
@@ -115,7 +139,8 @@ export class CreateDailiesComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Dailie ajouté',
                 });
-                this.dataForm.controls['date'].reset();
+                // this.dataForm.controls['date'].reset();
+                this.dataForm.reset();
 
                 // this.dataForm.reset();
             },

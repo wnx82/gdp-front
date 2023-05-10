@@ -42,7 +42,8 @@
         [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées"
         [rowsPerPageOptions]="[10, 25, 50]"
-        [globalFilterFields]="['habitation.adresse.rue', 'habitation.adresse.localite', 'date']">
+        [globalFilterFields]="['habitation.adresse.rue', 'habitation.adresse.localite', 'date','agents.matricule']"
+        sortField="date" [sortOrder]="-1">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
@@ -65,8 +66,8 @@
                 <th style="width: 10%">Habitation<p-columnFilter type="text" field="habitation.adresse.rue"
                         matchMode="contains"></p-columnFilter></th>
                 <th style="width: 10%">
-                    Agent
-                    <p-columnFilter type="text" field="agents.matricule"></p-columnFilter>
+                    Agents
+                    <p-columnFilter type="text" field="agents.matricule" matchMode="contains"></p-columnFilter>
                 </th>
                 <th style="width: 10%">
                     Localité

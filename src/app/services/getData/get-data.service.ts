@@ -5,10 +5,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Habitation } from 'src/app/interfaces/Habitation.interface';
+import { Horaire } from 'src/app/interfaces/Horaire.interface';
 import { Infraction } from 'src/app/interfaces/Infraction.interface';
 import { Mission } from 'src/app/interfaces/Mission.interface';
 import { Quartier } from 'src/app/interfaces/Quartier.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
+import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -16,20 +18,24 @@ import { Rue } from 'src/app/interfaces/Rue.interface.';
 export class GetDataService {
     private myAgents = new BehaviorSubject<Agent[]>([]);
     private myHabitations = new BehaviorSubject<Habitation[]>([]);
+    private myHoraires = new BehaviorSubject<Horaire[]>([]);
     private myInfractions = new BehaviorSubject<Infraction[]>([]);
     private myMissions = new BehaviorSubject<Mission[]>([]);
     private myQuartiers = new BehaviorSubject<Quartier[]>([]);
     private myRues = new BehaviorSubject<Rue[]>([]);
+    private myVehicules = new BehaviorSubject<Vehicule[]>([]);
 
     readonly API_URL = `${environment.apiUrl}/dailies`;
 
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
         this.getHabitationsFromApi();
+        this.getHorairesFromApi();
         this.getInfractionsFromApi();
         this.getMissionsFromApi();
         this.getQuartierFromApi();
         this.getRueFromApi();
+        this.getVehiculeFromApi();
     }
 
     // Listing des agents
@@ -66,6 +72,23 @@ export class GetDataService {
                     console.error('Error fetching habitations: ', error);
                 },
             });
+    }
+    // Listing des horaires
+    horaires$: Observable<Horaire[]> = this.myHoraires
+        .asObservable()
+        .pipe(filter(horaires => horaires.length > 0));
+
+    private getHorairesFromApi() {
+        this.http.get<Horaire[]>(`${environment.apiUrl}/horaires`).subscribe({
+            next: data => {
+                this.myHoraires.next(
+                    data.filter(horaire => !horaire.deletedAt)
+                );
+            },
+            error: error => {
+                console.error('Error fetching horaires: ', error);
+            },
+        });
     }
     // Listing des infractions
     infractions$: Observable<Infraction[]> = this.myInfractions
@@ -135,6 +158,23 @@ export class GetDataService {
             },
             error: error => {
                 console.error('Error fetching rues: ', error);
+            },
+        });
+    }
+    // Listing des Vehicules
+    vehicules$: Observable<Vehicule[]> = this.myVehicules
+        .asObservable()
+        .pipe(filter(vehicules => vehicules.length > 0));
+
+    private getVehiculeFromApi() {
+        this.http.get<Vehicule[]>(`${environment.apiUrl}/vehicules`).subscribe({
+            next: data => {
+                this.myVehicules.next(
+                    data.filter(vehicule => !vehicule.deletedAt)
+                );
+            },
+            error: error => {
+                console.error('Error fetching vehicules: ', error);
             },
         });
     }

@@ -105,6 +105,7 @@ export class DailiesComponent implements OnInit {
             detail: error.message,
         });
     }
+
     findAgentById(agentId: number): Observable<string> {
         return this.agents$.pipe(
             map(agents => agents.find(a => a._id === agentId)),

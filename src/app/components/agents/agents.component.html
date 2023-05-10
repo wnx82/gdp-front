@@ -36,7 +36,7 @@
     <p-table #dataTableAgents [value]="agents" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
         [tableStyle]="{ 'min-width': '50rem' }"
         currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']">
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']" sortField="matricule">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
