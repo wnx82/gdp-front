@@ -65,9 +65,6 @@ p-fieldset {
     margin-right: 10px;
 }
 
-:host ::ng-deep .mt-16 {
-    margin-top: 16px;
-}
 @media (max-width: 768px) {
     .p-dialog {
         width: 90vw;

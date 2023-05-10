@@ -78,7 +78,7 @@ export class CreateConstatComponent implements OnInit {
     ) {
         this.selectedInfractions = []; // ou []
     }
-    storedValue: any;
+
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
     statuses: any[] = [];

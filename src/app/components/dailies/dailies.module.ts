@@ -5,9 +5,10 @@ import { DailiesRoutingModule } from './dailies-routing.module';
 import { DailiesComponent } from './dailies.component';
 
 import { SharedUiModule } from 'src/app/services/shared-ui/shared-ui.module';
+import { CreateDailiesComponent } from './create-dailies/create-dailies.component';
 
 @NgModule({
-    declarations: [DailiesComponent],
+    declarations: [DailiesComponent, CreateDailiesComponent],
     imports: [CommonModule, DailiesRoutingModule, SharedUiModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

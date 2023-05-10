@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Table, TableModule } from 'primeng/table';
 import { Infraction } from 'src/app/interfaces/Infraction.interface';
 @Component({
@@ -21,9 +21,12 @@ export class InfractionsComponent implements OnInit {
     dataForm = new FormGroup({
         category: new FormControl('', [Validators.required]),
         priority: new FormControl(''),
-        list: new FormControl(''),
+        list: new FormArray([]),
     });
-
+    newRowForm = new FormGroup({
+        article: new FormControl('', Validators.required),
+        description: new FormControl('', Validators.required),
+    });
     rowIndex: number | undefined;
     editingRow: boolean = false;
     newRow: boolean = false;
@@ -218,13 +221,16 @@ export class InfractionsComponent implements OnInit {
     }
 
     //add /remove rows
-    addRow() {
-        this.newRow = true;
-    }
 
     saveRow() {
         if (this.newRow) {
-            this.data.list.push([this.newArticle, this.newDescription]);
+            const list = this.dataForm.get('list') as FormArray;
+            list.push(
+                new FormGroup({
+                    article: new FormControl(this.newArticle),
+                    description: new FormControl(this.newDescription),
+                })
+            );
             this.newArticle = '';
             this.newDescription = '';
             this.newRow = false;
@@ -232,7 +238,20 @@ export class InfractionsComponent implements OnInit {
             this.editingRow = false;
         }
     }
-
+    saveNewRow() {
+        const newRow = this.newRowForm.value;
+        const list = this.dataForm.get('list') as FormArray;
+        console.log(list.getRawValue());
+        list.push(
+            new FormGroup({
+                article: new FormControl(newRow.article),
+                description: new FormControl(newRow.description),
+            })
+        );
+        console.log(list.getRawValue());
+        this.newRowForm.reset();
+        this.displayDialog = false;
+    }
     editRow(index: number) {
         this.rowIndex = index;
         this.editingRow = true;
@@ -242,7 +261,19 @@ export class InfractionsComponent implements OnInit {
         this.editingRow = false;
     }
 
-    deleteRow(index: number) {
-        this.data.list.splice(index, 1);
+    deleteRow(row: any) {
+        const list = this.dataForm.get('list') as FormArray;
+        const index = list.controls.indexOf(row);
+        list.removeAt(index);
+    }
+
+    displayDialog = false;
+
+    addRow() {
+        this.displayDialog = true;
+    }
+
+    hideDialog() {
+        this.displayDialog = false;
     }
 }

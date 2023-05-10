@@ -10,45 +10,11 @@
 <p-toast></p-toast>
 <div class="container">
     <h1>Liste des Dailies</h1>
-    <!-- <h1>Liste des agents</h1>
-    <div *ngIf="(agents$ | async) as agents">
-        <ul>
-            <li *ngFor="let agent of agents">
-                {{ agent._id }}
-                {{ agent.matricule }}
-                {{ agent.lastname }}
-                {{ agent.firstname }}
-
-        </ul>
-    </div>
-    <h1>Liste des missions</h1>
-    <div *ngIf="(missions$ | async) as missions">
-        <ul>
-            <li *ngFor="let mission of missions">
-                {{ mission._id }}
-                {{ mission.title }}
-                {{ mission.description }}
-                {{ mission.category }}
-                {{ mission.horaire }}
-                {{ mission.priority }}
-        </ul>
-    </div>
-    <h1>Liste des Quartiers</h1>
-    <div *ngIf="(quartiers$ | async) as quartiers">
-        <ul>
-            <li *ngFor="let quartier of quartiers">
-                {{ quartier.title }} :
-                <ul>
-                    <li *ngFor="let mission of quartier.missions">{{ mission }}</li>
-                </ul>
-            </li>
-        </ul>
-    </div> -->
 
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
-                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+                style="margin-top: 3px;" routerLink="create"></button>
             <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
                 icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
             <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
@@ -80,7 +46,11 @@
 
                         <p-tag>A{{findAgentById(agent) | async }}</p-tag>
                     </ng-container></td>
-                <td>{{ donnee.horaire }}</td>
+                <td>
+                    {{ donnee.horaire }}
+                    <div *ngIf="showHoraires">Heure de début : {{ extractHoraires(donnee.horaire).heure_debut }}</div>
+                    <div *ngIf="showHoraires">Heure de fin : {{ extractHoraires(donnee.horaire).heure_fin }}</div>
+                </td>
                 <td>{{ donnee.vehicule }}</td>
                 <td>
                     <table class="table table-bordered" *ngIf="donnee.quartiers && donnee.quartiers.length">
@@ -102,9 +72,11 @@
                     </div>
                 </td>
                 <td>{{ donnee.sent | date: 'yyyy-MM-dd HH:mm'}}</td>
-                <td><add-to-calendar-button name="name" description=" description" startDate="2023-09-14"
-                        startTime="10:15" endTime="17:45" timeZone="Europe/Brussels" location="World Wide Web"
-                        startDate="2022-02-21" options="['Outlook.com']" language="fr">
+                <td><add-to-calendar-button [attr.name]="donnee.date | date: 'yyyy-MM-dd'"
+                        [attr.description]="findQuartierById(donnee.quartiers)" [attr.startDate]="donnee.date"
+                        [attr.startTime]="extractHoraires(donnee.horaire).heure_debut"
+                        [attr.endTime]="extractHoraires(donnee.horaire).heure_fin" timeZone="Europe/Brussels"
+                        location="World Wide Web" options="['Outlook.com']" language="fr">
                     </add-to-calendar-button>
                 </td>
 

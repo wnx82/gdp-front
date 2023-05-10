@@ -304,4 +304,12 @@ export class DailiesComponent implements OnInit {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedData);
     }
+
+    extractHoraires(horaire: string) {
+        const [debut, fin] = horaire.split('-');
+        const heure_debut = debut.trim();
+        const heure_fin = fin.trim();
+        return { heure_debut, heure_fin };
+    }
+    showHoraires = false;
 }
