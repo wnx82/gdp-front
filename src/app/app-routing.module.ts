@@ -10,11 +10,25 @@ import { MessageServiceComponent } from './components/message-service/message-se
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
+    { path: 'media', component: UploadComponent },
+    { path: 'messages', component: MessageServiceComponent },
     {
-        path: 'agents',
+        path: 'agents' || 'users',
         loadChildren: () =>
             import('./components/agents/agents.module').then(
                 m => m.AgentsModule
+            ),
+    },
+    {
+        path: 'api',
+        loadChildren: () =>
+            import('./components/api/api.module').then(m => m.ApiModule),
+    },
+    {
+        path: 'rapports',
+        loadChildren: () =>
+            import('./components/rapports/rapports.module').then(
+                m => m.RapportsModule
             ),
     },
     {
@@ -24,32 +38,7 @@ const routes: Routes = [
                 m => m.AgentsModule
             ),
     },
-    {
-        path: 'rues',
-        loadChildren: () =>
-            import('./components/rues/rues.module').then(m => m.RuesModule),
-    },
-    {
-        path: 'missions',
-        loadChildren: () =>
-            import('./components/missions/missions.module').then(
-                m => m.MissionsModule
-            ),
-    },
-    {
-        path: 'statistics',
-        loadChildren: () =>
-            import('./components/statistics/statistics.module').then(
-                m => m.StatisticsModule
-            ),
-    },
-    { path: 'media', component: UploadComponent },
-    { path: 'messages', component: MessageServiceComponent },
-    // {
-    //     path: 'media',
-    //     loadChildren: () =>
-    //         import('./components/media/media.module').then(m => m.MediaModule),
-    // },
+
     {
         path: 'categories',
         loadChildren: () =>
@@ -93,6 +82,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'missions',
+        loadChildren: () =>
+            import('./components/missions/missions.module').then(
+                m => m.MissionsModule
+            ),
+    },
+    {
         path: 'quartiers',
         loadChildren: () =>
             import('./components/quartiers/quartiers.module').then(
@@ -100,18 +96,16 @@ const routes: Routes = [
             ),
     },
     {
-        path: 'vehicules',
+        path: 'statistics',
         loadChildren: () =>
-            import('./components/vehicules/vehicules.module').then(
-                m => m.VehiculesModule
+            import('./components/statistics/statistics.module').then(
+                m => m.StatisticsModule
             ),
     },
     {
-        path: 'habitations/details',
+        path: 'rues',
         loadChildren: () =>
-            import(
-                './components/habitations/details-habitation/details-habitation.module'
-            ).then(m => m.DetailsHabitationModule),
+            import('./components/rues/rues.module').then(m => m.RuesModule),
     },
     {
         path: 'validations',
@@ -121,11 +115,12 @@ const routes: Routes = [
             ),
     },
     {
-        path: 'api',
+        path: 'vehicules',
         loadChildren: () =>
-            import('./components/api/api.module').then(m => m.ApiModule),
+            import('./components/vehicules/vehicules.module').then(
+                m => m.VehiculesModule
+            ),
     },
-    { path: 'app', loadChildren: () => import('./components/rapports/rapports.module').then(m => m.RapportsModule) },
     {
         path: '**',
         loadChildren: () =>

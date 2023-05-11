@@ -16,6 +16,7 @@ export class StatisticsComponent {
     infractionsCount = 0; // Initialise la propriété infractionsCount à zéro
     missionsCount = 0; // Initialise la propriété missionsCount à zéro
     quartiersCount = 0; // Initialise la propriété quartiersCount à zéro
+    rapportsCount = 0; // Initialise la propriété rapportsCount à zéro
     ruesCount = 0; // Initialise la propriété ruesCount à zéro
     vehiculesCount = 0; // Initialise la propriété vehiculesCount à zéro
     lastUpdate: Date = new Date(); // Initialise la propriété lastUpdate avec la date et l'heure actuelles.
@@ -56,6 +57,9 @@ export class StatisticsComponent {
             .subscribe(quartiers => {
                 this.quartiersCount = quartiers.length;
             });
+        this.http.get<any[]>(`${this.API_URL}/rapports`).subscribe(rapports => {
+            this.rapportsCount = rapports.length;
+        });
         this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
             this.ruesCount = rues.length;
         });
