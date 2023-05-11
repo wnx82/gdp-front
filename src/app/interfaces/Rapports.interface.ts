@@ -1,4 +1,4 @@
-export interface Dailie {
+export interface Rapport {
     id?: number;
     date: Date | null;
     agents?: string | null[];

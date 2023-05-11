@@ -20,7 +20,7 @@ import { BehaviorSubject } from 'rxjs';
 import 'add-to-calendar-button';
 
 import { Agent } from 'src/app/interfaces/Agent.interface';
-import { Dailies } from 'src/app/interfaces/Dailies.interface';
+import { Dailie } from 'src/app/interfaces/Dailies.interface';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 @Component({
     selector: 'app-dailies',
@@ -31,7 +31,7 @@ import { GetDataService } from 'src/app/services/getData/get-data.service';
 export class DailiesComponent implements OnInit {
     @ViewChild('table') table: Table | undefined;
     private apiUrl: string | undefined;
-    donnees: Dailies[] = [];
+    donnees: Dailie[] = [];
     selectedData: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
@@ -45,12 +45,12 @@ export class DailiesComponent implements OnInit {
 
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
-        date: new FormControl('', [Validators.required]),
-        horaire: new FormControl('', [Validators.required]),
-        vehicule: new FormControl('', [Validators.required]),
-        quartiers: new FormControl('', [Validators.required]),
-        missions: new FormControl('', [Validators.required]),
-        notes: new FormControl('', [Validators.required]),
+        date: new FormControl(new Date(), [Validators.required]),
+        horaire: new FormControl(''),
+        vehicule: new FormControl(''),
+        quartiers: new FormControl(''),
+        missions: new FormControl(''),
+        notes: new FormControl(''),
     });
 
     myData: string | undefined;
@@ -140,7 +140,7 @@ export class DailiesComponent implements OnInit {
         }, 500);
     }
     get() {
-        this.http.get<Dailies[]>(this.API_URL).subscribe({
+        this.http.get<Dailie[]>(this.API_URL).subscribe({
             next: data => {
                 console.log(data);
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
@@ -150,9 +150,9 @@ export class DailiesComponent implements OnInit {
             },
         });
     }
-    add(donnee: Dailies) {
+    add(donnee: Dailie) {
         this.http
-            .post<Dailies>(`${this.API_URL}`, this.dataForm.value)
+            .post<Dailie>(`${this.API_URL}`, this.dataForm.value)
             .subscribe({
                 next: data => {
                     this.donnees.push(data);
@@ -176,14 +176,14 @@ export class DailiesComponent implements OnInit {
             });
     }
 
-    edit(id: number, donnee: Dailies) {
+    edit(id: number, donnee: Dailie) {
         if (!donnee) {
             console.error('Données invalides', donnee);
             return;
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<Dailies>(url, this.dataForm.value).subscribe({
+        this.http.patch<Dailie>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.donnees.findIndex(a => a.id === data.id);
                 this.donnees[index] = data;
@@ -215,7 +215,7 @@ export class DailiesComponent implements OnInit {
     }
 
     deleteDonnee(id: number) {
-        this.http.delete<Dailies>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Dailie>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.donnees = this.donnees.filter(a => a.id !== id);
                 this.messageService.add({

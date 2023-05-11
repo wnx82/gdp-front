@@ -10,7 +10,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 
 import { GetDataService } from 'src/app/services/getData/get-data.service';
-import { Dailies } from 'src/app/interfaces/Dailies.interface';
+import { Dailie } from 'src/app/interfaces/Dailies.interface';
 import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
 
 @Component({
@@ -21,7 +21,7 @@ import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
 })
 export class CreateDailiesComponent implements OnInit {
     private apiUrl: string | undefined;
-    dailies: Dailies[] = [];
+    dailies: Dailie[] = [];
 
     @ViewChild('table') table: Table | undefined;
 
