@@ -125,6 +125,7 @@ const routes: Routes = [
         loadChildren: () =>
             import('./components/api/api.module').then(m => m.ApiModule),
     },
+    { path: 'app', loadChildren: () => import('./components/rapports/rapports.module').then(m => m.RapportsModule) },
     {
         path: '**',
         loadChildren: () =>
