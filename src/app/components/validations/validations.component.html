@@ -148,8 +148,7 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                 <span class="p-float-label">
                                     <p-dropdown formControlName="habitation" [options]="habitations" optionLabel="label"
                                         [filter]="true" filterBy="label" [showClear]="true"
-                                        placeholder="Sélectionnez une habitation" formControlName="habitation"
-                                        optionValue="value">
+                                        placeholder="Sélectionnez une habitation" optionValue="value">
                                         <ng-template let-adresse pTemplate="item">
                                             <div class="let-adresse">
                                                 <div>
@@ -181,18 +180,13 @@ isAdding ? 'Ajouter une validation' : 'Modifier une validation'
                                 <button pButton pRipple type="button" label="Remplir avec la date actuelle"
                                     class="p-button-secondary p-button-outlined ml-4" icon="pi pi-calendar-plus"
                                     style="vertical-align: bottom;" (click)="fillWithCurrentDate()"></button>
-
-
                                 <label for="date">Date : </label>
-
-
                             </span>
-
                         </div>
 
                         <div class="p-col-12 p-md-6">
                             <label for="agents">Agents: </label>
-                            <p-multiSelect [options]="this.agents" formControlName="agents"
+                            <p-multiSelect [options]="agents" formControlName="agents"
                                 defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
                                 <ng-template let-agent pTemplate="agent">
                                     <div class="flex align-items-center">

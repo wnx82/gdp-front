@@ -302,6 +302,7 @@ export class AgentsComponent implements OnInit {
     selectAgent(agent: Agent) {
         this.selectedAgent = { ...agent };
         console.log("Sélection de l'agent", this.selectedAgent);
+        const birthday = agent?.birthday ? new Date(agent.birthday) : null; // Convertit la date en instance de date si elle existe
         this.dataForm.patchValue({
             email: agent?.email,
             password: agent?.password,
@@ -309,7 +310,7 @@ export class AgentsComponent implements OnInit {
             matricule: agent?.matricule,
             firstname: agent?.firstname,
             lastname: agent?.lastname,
-            birthday: agent?.birthday,
+            birthday: birthday,
             tel: agent?.tel,
             iceContact: agent?.iceContact,
             adresse: {

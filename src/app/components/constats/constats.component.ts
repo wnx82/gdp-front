@@ -38,7 +38,7 @@ export class ConstatsComponent implements OnInit {
     displayConfirmationDialog = false;
     dataForm = new FormGroup({
         agents: new FormControl('', [Validators.required]),
-        date: new FormControl('', [Validators.required]),
+        date: new FormControl(new Date(), [Validators.required]),
         pv: new FormControl('', [Validators.required]),
         vehicule: new FormGroup({
             marque: new FormControl(''),
@@ -50,7 +50,7 @@ export class ConstatsComponent implements OnInit {
         personne: new FormGroup({
             firstname: new FormControl(''),
             lastname: new FormControl(''),
-            birthday: new FormControl(''),
+            birthday: new FormControl(new Date()),
             nationalNumber: new FormControl(''),
             tel: new FormControl(''),
             adresse: new FormGroup({
@@ -309,6 +309,10 @@ export class ConstatsComponent implements OnInit {
 
     selectConstat(constat: any) {
         this.selectedConstat = { ...constat };
+        const date = constat?.date ? new Date(constat.date) : null; // Convertit la date en instance de date si elle existe
+        const birthday = constat?.personne?.birthday
+            ? new Date(constat?.personne?.birthday)
+            : null; // Convertit la date en instance de date si elle existe
         this.dataForm.patchValue({
             adresse: {
                 rue: constat?.adresse?.nomComplet,
@@ -325,7 +329,7 @@ export class ConstatsComponent implements OnInit {
             personne: {
                 firstname: constat?.personne?.firstname,
                 lastname: constat?.personne?.lastname,
-                birthday: constat?.personne?.birthday,
+                birthday: birthday,
                 nationalNumber: constat?.personne?.nationalNumber,
                 tel: constat?.personne?.tel,
                 adresse: {
@@ -336,7 +340,7 @@ export class ConstatsComponent implements OnInit {
             },
 
             agents: constat?.agents || [],
-            date: constat?.date,
+            date: date,
             infractions: constat?.infractions,
             notes: constat?.notes,
             annexes: constat?.annexes,

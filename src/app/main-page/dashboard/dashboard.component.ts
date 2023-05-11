@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
         setTimeout(() => {
             this._localStorageService.getAll();
             this.dataLoaded = true; //
-        }, 500);
+        }, 250);
     }
 
     clearAll() {

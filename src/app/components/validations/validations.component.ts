@@ -52,7 +52,7 @@ export class ValidationsComponent implements OnInit {
         agents: new FormControl(''),
         habitation: new FormControl('', [Validators.required]),
         note: new FormControl(''),
-        date: new FormControl(''),
+        date: new FormControl(new Date()),
     });
     agents: any[] = [];
     habitations: any[] = [];
@@ -299,11 +299,22 @@ export class ValidationsComponent implements OnInit {
     selectValidation(validation: any) {
         this.selectedValidation = { ...validation };
         console.log('sélection de la validation', this.selectedValidation);
+
+        const date = validation?.date ? new Date(validation.date) : null; // Convertit la date en instance de date si elle existe
+
+        const agentValues = validation?.agents?.matricule || [];
+        const agentSelections = agentValues.map((agentValue: number) => ({
+            label: agentValue.toString(),
+            value: agentValue,
+        }));
+
+        this.dataForm.get('agents')?.patchValue(agentSelections);
+
         this.dataForm.patchValue({
-            agents: validation?.agent,
-            habitation: validation?.habitation,
+            // agents: validation?.agents.matricule,
+            habitation: validation?.habitation.adresse.rue,
             note: validation?.note,
-            date: validation?.date,
+            date: date,
         });
         console.log('Data form value: ', this.dataForm.value);
     }

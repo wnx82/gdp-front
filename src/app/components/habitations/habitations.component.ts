@@ -319,6 +319,13 @@ export class HabitationsComponent implements OnInit {
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
         console.log('sélection de lhabitation', this.selectedHabitation);
+        const debut = habitation?.dates?.debut
+            ? new Date(habitation?.dates?.debut)
+            : null; // Convertit la date en instance de date si elle existe
+        const fin = habitation?.dates?.fin
+            ? new Date(habitation?.dates?.fin)
+            : null; // Convertit la date en instance de date si elle existe
+
         this.dataForm.patchValue({
             adresse: {
                 rue: habitation?.adresse?.nomComplet,
@@ -329,8 +336,8 @@ export class HabitationsComponent implements OnInit {
                 tel: habitation?.demandeur?.tel,
             },
             dates: {
-                debut: habitation?.dates?.debut,
-                fin: habitation?.dates?.fin,
+                debut: debut,
+                fin: fin,
             },
 
             mesures: habitation?.mesures || [],
