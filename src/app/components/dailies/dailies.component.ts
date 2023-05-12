@@ -22,6 +22,7 @@ import 'add-to-calendar-button';
 import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Dailie } from 'src/app/interfaces/Dailies.interface';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-dailies',
     templateUrl: './dailies.component.html',
@@ -54,13 +55,15 @@ export class DailiesComponent implements OnInit {
     });
 
     myData: string | undefined;
+
     // myQuartiers: any[] = [];
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private _localStorageService: LocalStorageService,
-        private getDataService: GetDataService
+        private getDataService: GetDataService,
+        private router: Router
     ) {}
     storedValue: any;
 
@@ -138,6 +141,9 @@ export class DailiesComponent implements OnInit {
             this.loading = false;
             this.get();
         }, 500);
+    }
+    ViewRapport(dailiesId: number) {
+        this.router.navigate(['rapports', dailiesId]);
     }
     get() {
         this.http.get<Dailie[]>(this.API_URL).subscribe({

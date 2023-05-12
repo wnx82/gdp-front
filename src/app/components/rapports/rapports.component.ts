@@ -45,13 +45,16 @@ export class RapportsComponent implements OnInit {
     agentsNeed: any[] = [];
 
     dataForm = new FormGroup({
+        daily: new FormControl('', [Validators.required]),
         agents: new FormControl('', [Validators.required]),
         date: new FormControl(new Date(), [Validators.required]),
         horaire: new FormControl(''),
         vehicule: new FormControl(''),
         quartiers: new FormControl(''),
+        quartierMissionsValidate: new FormControl(''),
         missions: new FormControl(''),
         notes: new FormControl(''),
+        annexes: new FormControl(''),
     });
 
     myData: string | undefined;
@@ -150,6 +153,7 @@ export class RapportsComponent implements OnInit {
             },
         });
     }
+
     add(donnee: Rapport) {
         this.http
             .post<Rapport>(`${this.API_URL}`, this.dataForm.value)

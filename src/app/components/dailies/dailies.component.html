@@ -76,6 +76,9 @@
                             (click)="deleteDonnee(donnee._id)"></p-button>
                         <p-button pRipple icon="pi pi-envelope" styleClass="p-button-rounded p-button-secondary"
                             (click)="sendMail(donnee._id)" [loading]="loading"></p-button>
+
+                        <p-button pRipple icon="pi pi-check-square" styleClass="p-button-rounded p-button-danger"
+                            (click)="ViewRapport(donnee._id)" [loading]="loading"></p-button>
                     </div>
                 </td>
                 <td>{{ donnee.sent | date: 'yyyy-MM-dd HH:mm'}}</td>

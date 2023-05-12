@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <div class="container">
-    <H1>Création d'une Dailie</H1>
+    <H1>Création d'un Rapport</H1>
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Retour" class="p-button-secondary p-button-outlined"
@@ -11,7 +11,7 @@
 
         </div>
     </div>
-    <form [formGroup]="dataForm" (ngSubmit)="addDailie(dataForm.value)">
+    <form [formGroup]="dataForm" (ngSubmit)="addRapport(dataForm.value)">
         <div class="p-grid">
 
             <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -31,7 +31,7 @@
                             <button pButton pRipple type="button" label="Remplir avec la date actuelle"
                                 class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus"
                                 style="margin-top: 3px;" (click)="fillWithCurrentDate()"></button>
-                            <label for="date">Date Dailie : </label>
+                            <label for="date">Date Rapport : </label>
                         </span>
                     </div>
 
@@ -67,6 +67,19 @@
                             <ng-template let-quartier pTemplate="quartier">
                                 <div class="flex align-items-center">
                                     <span>{{ quartier.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="quartiers">Missions spécifiques Quartier(s): </label>
+                        <p-multiSelect [options]="this.quartierMissionsValidate"
+                            formControlName="quartierMissionsValidate" defaultLabel="Sélectionnez les missions"
+                            scrollHeight="250px" display="chip">
+                            <ng-template let-mission pTemplate="mission">
+                                <div class="flex align-items-center">
+                                    <span>{{ mission.label }}</span>
                                 </div>
                             </ng-template>
                         </p-multiSelect>
