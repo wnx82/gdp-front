@@ -11,10 +11,10 @@ import { LocalStorageService } from '../../services/localstorage/local-storage.s
 export class DashboardComponent implements OnInit {
     dataLoaded = false; // flag to keep track of whether data is loaded or not
 
-    agentCount = 0; // Initialise la propriété agentCount à zéro
-    ruesCount = 0; // Initialise la propriété agentCount à zéro
-    missionsCount = 0; // Initialise la propriété agentCount à zéro
-    lastUpdate: Date = new Date(); // initialisation de la propriété
+    // agentCount = 0; // Initialise la propriété agentCount à zéro
+    // ruesCount = 0; // Initialise la propriété agentCount à zéro
+    // missionsCount = 0; // Initialise la propriété agentCount à zéro
+    // lastUpdate: Date = new Date(); // initialisation de la propriété
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
@@ -22,16 +22,16 @@ export class DashboardComponent implements OnInit {
     ) {}
     readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
-        this.lastUpdate = new Date();
-        this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
-            this.agentCount = agents.length;
-        });
-        this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
-            this.ruesCount = rues.length;
-        });
-        this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
-            this.missionsCount = missions.length;
-        });
+        // this.lastUpdate = new Date();
+        // this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
+        //     this.agentCount = agents.length;
+        // });
+        // this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
+        //     this.ruesCount = rues.length;
+        // });
+        // this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
+        //     this.missionsCount = missions.length;
+        // });
         setTimeout(() => {
             this._localStorageService.getAll();
             this.dataLoaded = true; //

@@ -35,9 +35,9 @@ export class LocalStorageService {
 
     getAll() {
         this.getRues();
-        this.getAgents();
-        this.getQuartiers();
-        this.getMissions();
+        // this.getAgents();
+        // this.getQuartiers();
+        // this.getMissions();
     }
     getRues(): any[] {
         const ruesLocalStorage = localStorage.getItem('rues');

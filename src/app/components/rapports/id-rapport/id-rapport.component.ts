@@ -9,6 +9,8 @@ import { Table } from 'primeng/table';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 import { Rapport } from 'src/app/interfaces/Rapports.interface';
 import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Dailie } from 'src/app/interfaces/Dailies.interface';
 
 @Component({
     selector: 'app-id-rapport',
@@ -42,7 +44,7 @@ export class IdRapportComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.dataForm = this.formBuilder.group({
-            daily: ['', Validators.required],
+            daily: [{ value: '', disabled: true }, Validators.required],
             agents: ['', Validators.required],
             date: [new Date(), Validators.required],
             horaire: [''],
@@ -50,7 +52,7 @@ export class IdRapportComponent implements OnInit {
             quartiers: [''],
             quartierMissionsValidate: [''],
             missions: [''],
-            notes: [''],
+            notes: [[]],
             annexes: [''],
         });
     }
@@ -77,7 +79,7 @@ export class IdRapportComponent implements OnInit {
         );
         this.getDataService.quartiers$.subscribe(quartiers => {
             this.quartiers = quartiers.map(quartier => {
-                console.log(quartier); // Affiche les valeurs de quartier dans la console
+                // console.log(quartier); // Affiche les valeurs de quartier dans la console
                 return {
                     value: quartier._id,
                     label: quartier.title,
@@ -85,14 +87,12 @@ export class IdRapportComponent implements OnInit {
                 };
             });
         });
-
         this.getDataService.missions$.subscribe(missions => {
             this.quartierMissionsValidate = missions.map(mission => ({
                 value: mission._id,
                 label: mission.title,
             }));
         });
-
         this.getDataService.missions$.subscribe(missions => {
             this.missions = missions.map(mission => ({
                 value: mission._id,
@@ -120,20 +120,52 @@ export class IdRapportComponent implements OnInit {
 
     getDailieById(id: string) {
         const url = `${this.API_URL_DAILIE}/${id}`;
-        this.http.get<Rapport>(url).subscribe({
-            next: rapport => {
-                const date = rapport?.date ? new Date(rapport.date) : null;
-                console.log('Daily récupéré :', rapport);
+        this.http.get<Dailie>(url).subscribe({
+            next: daily => {
+                // console.log(daily);
+                const date = daily?.date ? new Date(daily.date) : null;
+                console.log('Daily récupéré :', daily);
+                // console.log(daily.quartiers);
+                // if (Array.isArray(daily.quartiers)) {
+                //     const result = daily.quartiers.map(id => {
+                //         const mission = this.missions.find(
+                //             mission => mission._id === id
+                //         );
+                //         return {
+                //             value: mission?._id,
+                //             label: mission?.title,
+                //         };
+                //     });
+
+                //     // Utilisez le résultat de la transformation ici
+                //     console.log(result);
+                // } else {
+                //     // Gérez le cas où 'daily.quartiers' n'est pas un tableau
+                //     console.error("daily.quartiers n'est pas un tableau.");
+                // }
+
+                // const quartierMissionsValidate =
+                //     daily.quartiers.missions.map(quartierMissionId => {
+                //         const mission = missions.find(
+                //             mission =>
+                //                 parseInt(mission._id) ===
+                //                 quartierMissionId.toString()
+                //         );
+                //         return {
+                //             value: mission?._id,
+                //             label: mission?.title,
+                //         };
+                //     });
                 this.dataForm.patchValue({
-                    daily: rapport.daily,
-                    agents: rapport.agents, // Supposant qu'il n'y a qu'un seul agent dans le tableau agents
+                    daily: id,
+                    agents: daily.agents, // Supposant qu'il n'y a qu'un seul agent dans le tableau agents
                     date: date,
-                    horaire: rapport.horaire,
-                    vehicule: rapport.vehicule,
-                    quartiers: rapport.quartiers, // Supposant qu'il n'y a qu'un seul quartier dans le tableau quartiers
-                    quartierMissionsValidate: rapport.quartierMissionsValidate,
-                    missions: rapport.missions, // Supposant qu'il n'y a qu'une seule mission dans le tableau missions
-                    notes: rapport.notes,
+                    horaire: daily.horaire,
+                    vehicule: daily.vehicule,
+                    quartiers: daily.quartiers, // Supposant qu'il n'y a qu'un seul quartier dans le tableau quartiers
+                    // quartierMissionsValidate: daily.quartierMissionsValidate,
+                    missions: daily.missions, // Supposant qu'il n'y a qu'une seule mission dans le tableau missions
+                    notes: daily.notes,
                 });
             },
             error: error => {

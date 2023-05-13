@@ -16,6 +16,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from 'src/app/services/localstorage/local-storage.service';
 import { Agent } from 'src/app/interfaces/Agent.interface';
+import { GetDataService } from 'src/app/services/getData/get-data.service';
 @Component({
     selector: 'app-create-agent',
     templateUrl: './create-agent.component.html',
@@ -29,7 +30,8 @@ export class CreateAgentComponent {
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
         private _localStorageService: LocalStorageService,
-        private router: Router
+        private router: Router,
+        private getDataService: GetDataService
     ) {
         this.dataForm = this.fb.group({
             email: new FormControl('', [Validators.required, Validators.email]),
@@ -99,13 +101,22 @@ export class CreateAgentComponent {
     itemsPerPage: number = 10;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
-
+    rues$ = this.getDataService.rues$;
     storedValue: any;
     rues: any[] = [];
     readonly API_URL = `${environment.apiUrl}/agents`;
     date!: Date;
     ngOnInit() {
-        this.rues = this._localStorageService.getRues();
+        this.rues$.subscribe(
+            rues => {
+                this.rues = rues;
+                // console.log(this.rues);
+            },
+            error => {
+                console.error(error);
+            }
+        );
+        // this.rues = this._localStorageService.getRues();
     }
 
     private handleError(error: any): void {
