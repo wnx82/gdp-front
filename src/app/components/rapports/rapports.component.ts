@@ -50,9 +50,9 @@ export class RapportsComponent implements OnInit {
         date: new FormControl(new Date(), [Validators.required]),
         horaire: new FormControl(''),
         vehicule: new FormControl(''),
-        quartiers: new FormControl(''),
-        quartierMissionsValidate: new FormControl(''),
-        missions: new FormControl(''),
+        quartiers: new FormControl([]),
+        quartierMissionsValidate: new FormControl([]),
+        missions: new FormControl([]),
         notes: new FormControl(''),
         annexes: new FormControl(''),
     });
