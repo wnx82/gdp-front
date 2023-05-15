@@ -190,7 +190,7 @@ export class IdRapportComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Rapport ajouté',
                 });
-                this.dataForm.reset();
+                this.cancel();
             },
             error: error => {
                 this.messageService.add({
@@ -208,7 +208,7 @@ export class IdRapportComponent implements OnInit {
 
     cancel() {
         this.dataForm.reset();
-        this.router.navigate(['rapports']);
+        this.router.navigate(['dailies']);
     }
 
     clear(table: Table) {
