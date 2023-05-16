@@ -99,7 +99,7 @@
 
 
     <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
-        [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true"
+        [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="false"
         [style]="{width: '25vw'}" (onHide)="cancel()">
 
         <form [formGroup]="dataForm"

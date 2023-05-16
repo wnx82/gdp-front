@@ -138,7 +138,7 @@
     </p-table>
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="cancel()">
+        [modal]="true" [maximizable]="true" [closable]="false" (onHide)="cancel()">
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? addRue(dataForm.value) : editRue(selectedData._id, dataForm.value)">
             <div class="p-grid">

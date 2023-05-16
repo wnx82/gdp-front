@@ -123,7 +123,7 @@
 
     <p-dialog header="{{
 isAdding ? 'Ajouter une validation' : 'Modifier une validation'
-}}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="true" [dismissableMask]="true"
+}}" [(visible)]="isAdding || isEditing" [modal]="true" [maximizable]="true" [closable]="false" [dismissableMask]="true"
         (onHide)="cancel()">
         <!-- <form [formGroup]="dataForm"> -->
         <form [formGroup]="dataForm"

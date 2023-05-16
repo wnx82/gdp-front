@@ -52,7 +52,8 @@
     </p-table>
 
     <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [(visible)]="isAdding || isEditing"
-        [modal]="true" [maximizable]="true" [closable]="true" (onHide)="selectedData={}">
+        [modal]="true" [maximizable]="true" [closable]="false" (onHide)="onHide()">
+
 
         <form [formGroup]="dataForm"
             (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">

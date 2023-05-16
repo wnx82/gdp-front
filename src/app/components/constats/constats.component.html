@@ -116,7 +116,7 @@
 
 
 <p-dialog header="{{ isAdding ? 'Ajouter un constat' : 'Modifier un constat' }}" [(visible)]="isAdding || isEditing"
-    [modal]="true" [maximizable]="true" [closable]="true" [style]="{width: '50vw'}" [dismissableMask]="true"
+    [modal]="true" [maximizable]="true" [closable]="false" [style]="{width: '50vw'}" [dismissableMask]="true"
     (onHide)="cancel()">
 
     <form [formGroup]="dataForm"

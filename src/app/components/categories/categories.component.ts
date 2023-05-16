@@ -201,4 +201,10 @@ export class CategoriesComponent implements OnInit {
         this.isEditing = !this.isEditing;
         // console.log(this.selectedData);
     }
+
+    onHide() {
+        this.selectedData = {};
+        this.isAdding = false;
+        this.isEditing = false;
+    }
 }

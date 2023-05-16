@@ -23,6 +23,7 @@ import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Dailie } from 'src/app/interfaces/Dailies.interface';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 import { Router } from '@angular/router';
+
 @Component({
     selector: 'app-dailies',
     templateUrl: './dailies.component.html',
@@ -141,6 +142,9 @@ export class DailiesComponent implements OnInit {
             this.loading = false;
             this.get();
         }, 500);
+    }
+    editDailie(dailiesId: number) {
+        this.router.navigate(['dailies', dailiesId]);
     }
     ViewRapport(dailiesId: number) {
         this.router.navigate(['rapports', dailiesId]);
