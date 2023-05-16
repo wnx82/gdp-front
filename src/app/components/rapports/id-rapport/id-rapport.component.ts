@@ -53,7 +53,7 @@ export class IdRapportComponent implements OnInit {
             quartierMissionsValidate: [''],
             missions: [''],
             notes: [[]],
-            annexes: [''],
+            annexes: [[]],
         });
     }
 

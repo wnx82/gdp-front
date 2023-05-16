@@ -49,7 +49,7 @@ export class IdDailieComponent implements OnInit {
             quartiers: [''],
             missions: [''],
             notes: [[]],
-            annexes: [''],
+            annexes: [[]],
         });
     }
 
