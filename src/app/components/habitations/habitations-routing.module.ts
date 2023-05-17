@@ -5,6 +5,7 @@ import { DetailsHabitationComponent } from './details-habitation/details-habitat
 
 const routes: Routes = [
     { path: '', component: HabitationsComponent },
+    { path: ':active', component: HabitationsComponent },
     { path: ':id', component: DetailsHabitationComponent },
 ];
 

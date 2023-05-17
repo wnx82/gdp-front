@@ -17,6 +17,7 @@ import { Habitation } from 'src/app/interfaces/Habitation.interface';
 import { Rue } from 'src/app/interfaces/Rue.interface.';
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-habitations',
     templateUrl: './habitations.component.html',
@@ -30,7 +31,8 @@ export class HabitationsComponent implements OnInit {
         private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
-        private getDataService: GetDataService
+        private getDataService: GetDataService,
+        private route: ActivatedRoute
     ) {}
     private apiUrl: string | undefined;
     readonly API_URL = `${environment.apiUrl}/habitations`;
@@ -87,6 +89,13 @@ export class HabitationsComponent implements OnInit {
 
     getHabitations() {
         let url = `${this.API_URL}`;
+        const active = this.route.snapshot.params['active'];
+        console.log('active:', active);
+
+        if (active === 'active') {
+            url += '/active';
+        }
+
         this.http.get<Habitation[]>(url).subscribe({
             next: data => {
                 this.habitations = data.filter(
