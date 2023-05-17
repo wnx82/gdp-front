@@ -18,6 +18,7 @@ import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
 export class GetDataService {
     private myAgents = new BehaviorSubject<Agent[]>([]);
     private myHabitations = new BehaviorSubject<Habitation[]>([]);
+    private myHabitationsActive = new BehaviorSubject<Habitation[]>([]);
     private myHoraires = new BehaviorSubject<Horaire[]>([]);
     private myInfractions = new BehaviorSubject<Infraction[]>([]);
     private myMissions = new BehaviorSubject<Mission[]>([]);
@@ -25,11 +26,12 @@ export class GetDataService {
     private myRues = new BehaviorSubject<Rue[]>([]);
     private myVehicules = new BehaviorSubject<Vehicule[]>([]);
 
-    readonly API_URL = `${environment.apiUrl}/dailies`;
+    // readonly API_URL = `${environment.apiUrl}/dailies`;
 
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
         this.getHabitationsFromApi();
+        this.getHabitationsActiveFromApi();
         this.getHorairesFromApi();
         this.getInfractionsFromApi();
         this.getMissionsFromApi();
@@ -65,6 +67,25 @@ export class GetDataService {
             .subscribe({
                 next: data => {
                     this.myHabitations.next(
+                        data.filter(habitation => !habitation.deletedAt)
+                    );
+                },
+                error: error => {
+                    console.error('Error fetching habitations: ', error);
+                },
+            });
+    }
+    // Listing des habitations actives
+    habitationsActive$: Observable<Habitation[]> = this.myHabitationsActive
+        .asObservable()
+        .pipe(filter(habitations => habitations.length > 0));
+
+    private getHabitationsActiveFromApi() {
+        this.http
+            .get<Habitation[]>(`${environment.apiUrl}/habitations/active`)
+            .subscribe({
+                next: data => {
+                    this.myHabitationsActive.next(
                         data.filter(habitation => !habitation.deletedAt)
                     );
                 },

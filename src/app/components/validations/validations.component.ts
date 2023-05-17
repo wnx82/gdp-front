@@ -59,12 +59,12 @@ export class ValidationsComponent implements OnInit {
     rues: Rue[] = [];
     currentDate: any = Date;
     agents$ = this.getDataService.agents$;
-    habitations$ = this.getDataService.habitations$;
+    habitationsActive$ = this.getDataService.habitationsActive$;
     rues$ = this.getDataService.rues$;
 
     ngOnInit() {
         this.getValidations();
-        this.habitations$.subscribe(
+        this.habitationsActive$.subscribe(
             habitations => {
                 this.habitations = habitations.map(habitation => ({
                     value: habitation._id,
