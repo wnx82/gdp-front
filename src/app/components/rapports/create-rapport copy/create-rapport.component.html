@@ -22,10 +22,6 @@
                             <span class="font-bold text-lg">Informations fiche journalière</span>
                         </div>
                     </ng-template>
-                    <span class="p-float-label">
-                        <input type="text" formControlName="daily" required pInputText>
-                        <label for="daily">daily</label>
-                    </span>
 
                     <div class="p-field">
                         <span class="p-float-label">
@@ -77,19 +73,6 @@
                     </div>
 
                     <div class="p-col-12 p-md-6">
-                        <label for="quartiers">Missions spécifiques Quartier(s): </label>
-                        <p-multiSelect [options]="this.quartierMissionsValidate"
-                            formControlName="quartierMissionsValidate" defaultLabel="Sélectionnez les missions"
-                            scrollHeight="250px" display="chip">
-                            <ng-template let-mission pTemplate="mission">
-                                <div class="flex align-items-center">
-                                    <span>{{ mission.label }}</span>
-                                </div>
-                            </ng-template>
-                        </p-multiSelect>
-                    </div>
-
-                    <div class="p-col-12 p-md-6">
                         <label for="missions">Mission(s) supplémentaire(s): </label>
                         <p-multiSelect [options]="this.missions" formControlName="missions"
                             defaultLabel="Sélectionnez une mission" scrollHeight="250px" display="chip">
@@ -103,10 +86,6 @@
                     <span class="p-float-label mt-3">
                         <textarea id="notes" formControlName="notes" rows="5" cols="30" pInputTextarea></textarea>
                         <label for="notes">Notes</label>
-                    </span>
-                    <span class="p-float-label mt-3">
-                        <textarea id="annexes" formControlName="annexes" rows="5" cols="30" pInputTextarea></textarea>
-                        <label for="annexes">Annexes</label>
                     </span>
                 </p-fieldset>
 

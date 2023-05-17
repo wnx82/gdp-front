@@ -132,7 +132,7 @@ export class AgentsComponent implements OnInit {
         this.http.get<Agent[]>(url).subscribe({
             next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
-                console.log(this.agents);
+                // console.log(this.agents);
             },
             error: error => {
                 this.messageService.add({

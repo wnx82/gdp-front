@@ -145,26 +145,29 @@
                 <div class="p-col-6">
                     <div class="p-field ">
                         <span class="p-float-label">
-                            <input type="text" id="nom" name="nom" formControlName="nom" required pInputText
-                                [(ngModel)]="nom">
+                            <input type="text" id="nom" formControlName="nom" required pInputText>
                             <label for="nom">Nom de la rue</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="denomination" name="denomination" formControlName="denomination"
-                                pInputText [(ngModel)]="denomination">
+                            <input type="text" id="denomination" formControlName="denomination" pInputText>
                             <label for="denomination">Denomination</label>
                         </span>
                     </div>
                     <div class="p-field">
                         <span class="p-float-label">
-                            <input type="text" id="nomComplet" name="nomComplet" formControlName="nomComplet"
-                                pInputText>
+                            <input type="text" id="nomComplet" formControlName="nomComplet" pInputText>
                             <label for="nomComplet">Nom Complet</label>
                         </span>
                     </div>
-
+                    <div class="p-field ">
+                        <span class="p-float-label">
+                            <p-dropdown formControlName="cp" [options]="cpList" optionValue="value"
+                                placeholder="Sélectionner un code postal"></p-dropdown>
+                            <label for="cp">Code Postal</label>
+                        </span>
+                    </div>
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-dropdown formControlName="localite" [options]="localiteList" optionValue="value"
@@ -173,22 +176,10 @@
                             <label for="localite">Localité</label>
                         </span>
                     </div>
-
-
-                    <div class="p-field ">
-                        <span class="p-float-label">
-                            <p-dropdown formControlName="cp" [options]="cpList" optionValue="value"
-                                placeholder="Sélectionner un code postal"></p-dropdown>
-                            <label for="cp">Code Postal</label>
-                        </span>
-                    </div>
-
-
-
                     <div class="p-field">
                         <span class="p-float-label">
                             <p-dropdown formControlName="quartier" [options]="quartiers" optionLabel="title"
-                                optionValue="title" display="chip" [(ngModel)]="selectedData.quartier"></p-dropdown>
+                                optionValue="title" display="chip"></p-dropdown>
                             <label for="quartier">Quartier</label>
                         </span>
                     </div>

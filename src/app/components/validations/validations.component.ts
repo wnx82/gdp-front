@@ -74,7 +74,6 @@ export class ValidationsComponent implements OnInit {
                         habitation.adresse?.numero,
                     // numero: habitation.adresse?.numero,
                 }));
-                console.log(this.habitations);
             },
             error => {
                 console.error(error);

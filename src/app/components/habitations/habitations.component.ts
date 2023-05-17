@@ -90,7 +90,6 @@ export class HabitationsComponent implements OnInit {
     getHabitations() {
         let url = `${this.API_URL}`;
         const active = this.route.snapshot.params['active'];
-        console.log('active:', active);
 
         if (active === 'active') {
             url += '/active';

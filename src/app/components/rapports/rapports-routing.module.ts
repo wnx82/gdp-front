@@ -7,7 +7,8 @@ import { IdRapportComponent } from './id-rapport/id-rapport.component';
 const routes: Routes = [
     { path: '', component: RapportsComponent },
     { path: 'create', component: CreateRapportComponent },
-    { path: ':id', component: IdRapportComponent },
+    { path: ':id', component: CreateRapportComponent },
+    { path: ':id/edit', component: IdRapportComponent },
 ];
 
 @NgModule({

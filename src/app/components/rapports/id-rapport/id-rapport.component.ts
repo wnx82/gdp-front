@@ -32,7 +32,7 @@ export class IdRapportComponent implements OnInit {
     currentDate: any = Date;
 
     readonly API_URL = `${environment.apiUrl}/rapports`;
-    readonly API_URL_DAILIE = `${environment.apiUrl}/dailies`;
+    // readonly API_URL_DAILIE = `${environment.apiUrl}/dailies`;
 
     constructor(
         private http: HttpClient,
@@ -60,7 +60,7 @@ export class IdRapportComponent implements OnInit {
     ngOnInit() {
         const id = this.route.snapshot.params['id'];
         console.log('ID de la route :', id);
-        this.getDailieById(id);
+        this.getRapportById(id);
 
         this.getDataService.agents$.subscribe(agents => {
             this.agents = agents.map(agent => ({
@@ -118,54 +118,25 @@ export class IdRapportComponent implements OnInit {
         });
     }
 
-    getDailieById(id: string) {
-        const url = `${this.API_URL_DAILIE}/${id}`;
-        this.http.get<Dailie>(url).subscribe({
-            next: daily => {
-                // console.log(daily);
-                const date = daily?.date ? new Date(daily.date) : null;
-                console.log('Daily récupéré :', daily);
-                // console.log(daily.quartiers);
-                // if (Array.isArray(daily.quartiers)) {
-                //     const result = daily.quartiers.map(id => {
-                //         const mission = this.missions.find(
-                //             mission => mission._id === id
-                //         );
-                //         return {
-                //             value: mission?._id,
-                //             label: mission?.title,
-                //         };
-                //     });
+    getRapportById(id: string) {
+        const url = `${this.API_URL}/${id}`;
+        this.http.get<Rapport>(url).subscribe({
+            next: rapport => {
+                // console.log(rapport);
+                const date = rapport?.date ? new Date(rapport.date) : null;
+                console.log('Rapport récupéré :', rapport);
 
-                //     // Utilisez le résultat de la transformation ici
-                //     console.log(result);
-                // } else {
-                //     // Gérez le cas où 'daily.quartiers' n'est pas un tableau
-                //     console.error("daily.quartiers n'est pas un tableau.");
-                // }
-
-                // const quartierMissionsValidate =
-                //     daily.quartiers.missions.map(quartierMissionId => {
-                //         const mission = missions.find(
-                //             mission =>
-                //                 parseInt(mission._id) ===
-                //                 quartierMissionId.toString()
-                //         );
-                //         return {
-                //             value: mission?._id,
-                //             label: mission?.title,
-                //         };
-                //     });
                 this.dataForm.patchValue({
                     daily: id,
-                    agents: daily.agents, // Supposant qu'il n'y a qu'un seul agent dans le tableau agents
+                    agents: rapport.agents, // Supposant qu'il n'y a qu'un seul agent dans le tableau agents
                     date: date,
-                    horaire: daily.horaire,
-                    vehicule: daily.vehicule,
-                    quartiers: daily.quartiers, // Supposant qu'il n'y a qu'un seul quartier dans le tableau quartiers
-                    // quartierMissionsValidate: daily.quartierMissionsValidate,
-                    missions: daily.missions, // Supposant qu'il n'y a qu'une seule mission dans le tableau missions
-                    notes: daily.notes,
+                    horaire: rapport.horaire,
+                    vehicule: rapport.vehicule,
+                    quartiers: rapport.quartiers, // Supposant qu'il n'y a qu'un seul quartier dans le tableau quartiers
+                    quartierMissionsValidate: rapport.quartierMissionsValidate,
+                    missions: rapport.missions, // Supposant qu'il n'y a qu'une seule mission dans le tableau missions
+                    notes: rapport.notes,
+                    annexes: rapport.annexes,
                 });
             },
             error: error => {
@@ -178,7 +149,7 @@ export class IdRapportComponent implements OnInit {
     }
 
     addRapport(rapports: any) {
-        console.log(this.dataForm.value);
+        // console.log(this.dataForm.value);
         this.dataForm.controls['vehicule'].getRawValue()?.toString();
         this.dataForm.controls['horaire'].getRawValue()?.toString();
 
@@ -201,7 +172,41 @@ export class IdRapportComponent implements OnInit {
             },
         });
     }
+    editRapport(donnee: Rapport) {
+        const id = this.route.snapshot.params['id'];
+        if (!donnee) {
+            console.error('Données invalides', donnee);
+            return;
+        }
+        const url = `${this.API_URL}/${id}`;
+        // console.log(this.dataForm.value);
 
+        this.http.patch<Rapport>(url, this.dataForm.value).subscribe({
+            next: data => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Modification effectuée',
+                });
+                this.dataForm.reset();
+                this.cancel();
+            },
+            error: error => {
+                console.error('Erreur de requête PATCH', error);
+                if (error.error && error.error.message) {
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
+                }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'La modification a échouée',
+                });
+            },
+        });
+    }
     getCurrentDate(): Date {
         return new Date();
     }

@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { SelectItemGroup } from 'primeng/api';
-import { Agent } from 'src/app/interfaces/Agent.interface';
-
 import { GetDataService } from 'src/app/services/getData/get-data.service';
 import { Rapport } from 'src/app/interfaces/Rapports.interface';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Dailie } from 'src/app/interfaces/Dailies.interface';
 
 @Component({
     selector: 'app-create-rapport',
@@ -18,69 +18,58 @@ import { Rapport } from 'src/app/interfaces/Rapports.interface';
     styleUrls: ['./create-rapport.component.css'],
     providers: [MessageService, ConfirmationService],
 })
-export class CreateRapportComponent {
+export class CreateRapportComponent implements OnInit {
     private apiUrl: string | undefined;
     rapports: Rapport[] = [];
-
     @ViewChild('table') table: Table | undefined;
-
-    dataForm = new FormGroup({
-        daily: new FormControl('', [Validators.required]),
-        agents: new FormControl('', [Validators.required]),
-        date: new FormControl(new Date(), [Validators.required]),
-        horaire: new FormControl(''),
-        vehicule: new FormControl(''),
-        quartiers: new FormControl(''),
-        quartierMissionsValidate: new FormControl(''),
-        missions: new FormControl(''),
-        notes: new FormControl(''),
-        annexes: new FormControl(''),
-    });
-
-    checked: boolean = false;
-    groupedAgents: SelectItemGroup[] = [];
-    selectedAgents: Agent[] = [];
-    agentsBrut: any[] = [];
+    dataForm: FormGroup;
     agents: any[] = [];
     horaires: any[] = [];
     quartiers: any[] = [];
+    quartierMissionsValidate: any[] = [];
     missions: any[] = [];
     vehicules: any[] = [];
-
-    agentsNeed: any[] = [];
     currentDate: any = Date;
-    categories: any[] = [];
-    selectedCategory: any;
-    selectedInfractions: any[] = [];
+
+    readonly API_URL = `${environment.apiUrl}/rapports`;
+    readonly API_URL_DAILIE = `${environment.apiUrl}/dailies`;
 
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private getDataService: GetDataService,
-        private router: Router
+        private formBuilder: FormBuilder,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
-        this.selectedInfractions = []; // ou []
+        this.dataForm = this.formBuilder.group({
+            daily: [{ value: '', disabled: true }, Validators.required],
+            agents: ['', Validators.required],
+            date: [new Date(), Validators.required],
+            horaire: [''],
+            vehicule: [''],
+            quartiers: [''],
+            quartierMissionsValidate: [''],
+            missions: [''],
+            notes: [[]],
+            annexes: [[]],
+        });
     }
 
-    readonly API_URL = `${environment.apiUrl}/rapports`;
-    statuses: any[] = [];
-    agents$ = this.getDataService.agents$;
-    horaires$ = this.getDataService.horaires$;
-    quartiers$ = this.getDataService.quartiers$;
-    missions$ = this.getDataService.missions$;
-    vehicules$ = this.getDataService.vehicules$;
-
     ngOnInit() {
-        //Récupérations des agents
-        this.agents$.subscribe(agents => {
+        const id = this.route.snapshot.params['id'];
+        console.log('ID de la route :', id);
+        this.getDailieById(id);
+
+        this.getDataService.agents$.subscribe(agents => {
             this.agents = agents.map(agent => ({
                 value: agent._id,
                 label: agent.matricule,
             }));
-            // console.log(this.agents);
         });
-        this.horaires$.subscribe(
+
+        this.getDataService.horaires$.subscribe(
             horaires => {
                 this.horaires = horaires.map(horaire => horaire.horaire);
             },
@@ -88,22 +77,30 @@ export class CreateRapportComponent {
                 console.error(error);
             }
         );
-
-        this.quartiers$.subscribe(quartiers => {
-            this.quartiers = quartiers.map(quartier => ({
-                value: quartier._id,
-                label: quartier.title,
-            }));
-            // console.log(this.agents);
+        this.getDataService.quartiers$.subscribe(quartiers => {
+            this.quartiers = quartiers.map(quartier => {
+                // console.log(quartier); // Affiche les valeurs de quartier dans la console
+                return {
+                    value: quartier._id,
+                    label: quartier.title,
+                    missions: quartier.missions,
+                };
+            });
         });
-        this.missions$.subscribe(missions => {
+        this.getDataService.missions$.subscribe(missions => {
+            this.quartierMissionsValidate = missions.map(mission => ({
+                value: mission._id,
+                label: mission.title,
+            }));
+        });
+        this.getDataService.missions$.subscribe(missions => {
             this.missions = missions.map(mission => ({
                 value: mission._id,
                 label: mission.title,
             }));
-            // console.log(this.agents);
         });
-        this.vehicules$.subscribe(
+
+        this.getDataService.vehicules$.subscribe(
             vehicules => {
                 this.vehicules = vehicules.map(vehicule => vehicule.marque);
             },
@@ -111,11 +108,6 @@ export class CreateRapportComponent {
                 console.error(error);
             }
         );
-
-        this.statuses = [
-            { label: 'Avertissement', value: false },
-            { label: 'PV', value: true },
-        ];
     }
 
     private handleError(error: any): void {
@@ -125,12 +117,68 @@ export class CreateRapportComponent {
             detail: error.message,
         });
     }
-    // onCategoryChange() {
-    //     this.selectedInfractions = [];
-    // }
+
+    getDailieById(id: string) {
+        const url = `${this.API_URL_DAILIE}/${id}`;
+        this.http.get<Dailie>(url).subscribe({
+            next: daily => {
+                // console.log(daily);
+                const date = daily?.date ? new Date(daily.date) : null;
+                console.log('Daily récupéré :', daily);
+                // console.log(daily.quartiers);
+                // if (Array.isArray(daily.quartiers)) {
+                //     const result = daily.quartiers.map(id => {
+                //         const mission = this.missions.find(
+                //             mission => mission._id === id
+                //         );
+                //         return {
+                //             value: mission?._id,
+                //             label: mission?.title,
+                //         };
+                //     });
+
+                //     // Utilisez le résultat de la transformation ici
+                //     console.log(result);
+                // } else {
+                //     // Gérez le cas où 'daily.quartiers' n'est pas un tableau
+                //     console.error("daily.quartiers n'est pas un tableau.");
+                // }
+
+                // const quartierMissionsValidate =
+                //     daily.quartiers.missions.map(quartierMissionId => {
+                //         const mission = missions.find(
+                //             mission =>
+                //                 parseInt(mission._id) ===
+                //                 quartierMissionId.toString()
+                //         );
+                //         return {
+                //             value: mission?._id,
+                //             label: mission?.title,
+                //         };
+                //     });
+                this.dataForm.patchValue({
+                    daily: id,
+                    agents: daily.agents, // Supposant qu'il n'y a qu'un seul agent dans le tableau agents
+                    date: date,
+                    horaire: daily.horaire,
+                    vehicule: daily.vehicule,
+                    quartiers: daily.quartiers, // Supposant qu'il n'y a qu'un seul quartier dans le tableau quartiers
+                    // quartierMissionsValidate: daily.quartierMissionsValidate,
+                    missions: daily.missions, // Supposant qu'il n'y a qu'une seule mission dans le tableau missions
+                    notes: daily.notes,
+                });
+            },
+            error: error => {
+                console.log(
+                    'Erreur lors de la récupération du rapport :',
+                    error
+                );
+            },
+        });
+    }
 
     addRapport(rapports: any) {
-        console.log(this.dataForm.value);
+        // console.log(this.dataForm.value);
         this.dataForm.controls['vehicule'].getRawValue()?.toString();
         this.dataForm.controls['horaire'].getRawValue()?.toString();
 
@@ -142,10 +190,7 @@ export class CreateRapportComponent {
                     summary: 'Succès',
                     detail: 'Rapport ajouté',
                 });
-                // this.dataForm.controls['date'].reset();
-                this.dataForm.reset();
-
-                // this.dataForm.reset();
+                this.cancel();
             },
             error: error => {
                 this.messageService.add({
@@ -156,34 +201,26 @@ export class CreateRapportComponent {
             },
         });
     }
+
     getCurrentDate(): Date {
         return new Date();
     }
 
     cancel() {
-        // this.selectedRapport = {};
-        // this.isAdding = false;
-        // this.isEditing = false;
         this.dataForm.reset();
-        this.router.navigate(['rapports']);
+        this.router.navigate(['dailies']);
     }
 
     clear(table: Table) {
         table.clear();
     }
+
     resetForm() {
-        // Récupère la référence du formulaire
-        const form = this.dataForm;
-
-        // Réinitialise les valeurs du formulaire à leur valeur par défaut
-        form.reset();
-
-        // Marque tous les contrôles du formulaire comme "non modifiés"
-        form.markAsPristine();
-
-        // Marque tous les contrôles du formulaire comme "non touchés"
-        form.markAsUntouched();
+        this.dataForm.reset();
+        this.dataForm.markAsPristine();
+        this.dataForm.markAsUntouched();
     }
+
     fillWithCurrentDate() {
         this.currentDate = new Date();
         this.dataForm.patchValue({

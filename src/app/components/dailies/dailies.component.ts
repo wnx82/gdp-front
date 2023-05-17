@@ -146,13 +146,13 @@ export class DailiesComponent implements OnInit {
     editDailie(dailiesId: number) {
         this.router.navigate(['dailies', dailiesId]);
     }
-    ViewRapport(dailiesId: number) {
-        this.router.navigate(['rapports', dailiesId]);
+    ViewRapport(rapportId: number) {
+        this.router.navigate(['rapports', rapportId]);
     }
     get() {
         this.http.get<Dailie[]>(this.API_URL).subscribe({
             next: data => {
-                console.log(data);
+                // console.log(data);
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
             },
             error: error => {

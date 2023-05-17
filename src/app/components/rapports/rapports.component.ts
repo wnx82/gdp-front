@@ -23,6 +23,7 @@ import { Agent } from 'src/app/interfaces/Agent.interface';
 import { Rapport } from 'src/app/interfaces/Rapports.interface';
 
 import { GetDataService } from 'src/app/services/getData/get-data.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-rapports',
     templateUrl: './rapports.component.html',
@@ -54,7 +55,7 @@ export class RapportsComponent implements OnInit {
         quartierMissionsValidate: new FormControl([]),
         missions: new FormControl([]),
         notes: new FormControl(''),
-        annexes: new FormControl(''),
+        annexes: new FormControl([]),
     });
 
     myData: string | undefined;
@@ -64,7 +65,8 @@ export class RapportsComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
         private _localStorageService: LocalStorageService,
-        private getDataService: GetDataService
+        private getDataService: GetDataService,
+        private router: Router
     ) {}
     storedValue: any;
 
@@ -142,10 +144,12 @@ export class RapportsComponent implements OnInit {
             this.get();
         }, 500);
     }
+    editRapport(RapportId: number) {
+        this.router.navigate(['rapports', RapportId, 'edit']);
+    }
     get() {
         this.http.get<Rapport[]>(this.API_URL).subscribe({
             next: data => {
-                console.log(data);
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
             },
             error: error => {

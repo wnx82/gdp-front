@@ -96,18 +96,11 @@ export class RuesComponent implements OnInit {
         this.quartiers$.subscribe(
             quartiers => {
                 this.quartiers = quartiers;
-                console.log(this.quartiers);
             },
             error => {
                 console.error(error);
             }
         );
-        this.dataForm.get('localite')?.valueChanges.subscribe(value => {
-            const codePostal = this.localiteList.find(
-                option => option.value === value
-            )?.cp;
-            this.dataForm.get('cp')?.setValue(codePostal ?? null);
-        });
 
         this.dataForm.get('cp')?.valueChanges.subscribe(value => {
             const localite = this.cpList.find(
@@ -115,6 +108,12 @@ export class RuesComponent implements OnInit {
             )?.name;
             this.dataForm.get('localite')?.setValue(localite ?? null);
         });
+        // this.dataForm.get('localite')?.valueChanges.subscribe(value => {
+        //     const codePostal = this.localiteList.find(
+        //         option => option.value === value
+        //     )?.cp;
+        //     this.dataForm.get('cp')?.setValue(codePostal ?? null);
+        // });
     }
 
     get() {

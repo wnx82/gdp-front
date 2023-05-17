@@ -34,7 +34,7 @@ export class LocalStorageService {
     }
 
     getAll() {
-        this.getRues();
+        // this.getRues();
         // this.getAgents();
         // this.getQuartiers();
         // this.getMissions();
