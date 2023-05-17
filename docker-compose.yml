@@ -1,11 +1,15 @@
-version: "3.9"
-
+version: '3.9'
 services:
-  api:
-    container_name: gdp-front
-    build:
-      dockerfile: Dockerfile
-    volumes:
-      - ./:/app
-    ports:
-      - 4200:4200
+    angular-app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '4200:4200'
+        volumes:
+            - ./src:/app/src
+        depends_on:
+            - api
+
+    api:
+        image: gdp-back-api
