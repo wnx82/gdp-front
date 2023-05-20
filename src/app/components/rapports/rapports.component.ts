@@ -151,6 +151,7 @@ export class RapportsComponent implements OnInit {
         this.http.get<Rapport[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
+                console.log(this.donnees);
             },
             error: error => {
                 console.log(error);

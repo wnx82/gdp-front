@@ -11,6 +11,7 @@ export interface Agent {
     iceContact?: string | null;
     adresse?: {
         rue?: string | null;
+        nomComplet?: string | null;
         numero?: string | null;
     };
     picture?: string | null;

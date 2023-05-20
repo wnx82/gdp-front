@@ -296,35 +296,40 @@
                                         <span class="font-bold text-lg">Adresse</span>
                                     </div>
                                 </ng-template>
-
-                                <span class="p-float-label">
-                                    <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
-                                                    [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
-                                                    (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
-                                                    [ngModelOptions]="{standalone: true}">
-                                                    <ng-template let-item pTemplate="item">
-                                                        {{ item }}
-                                                    </ng-template>
-                                                </p-autoComplete> -->
-                                    <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
-                                        filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
-                                        formControlName="rue" optionValue="_id">
-                                        <ng-template let-nom pTemplate="item">
-                                            <div class="let-nom">
-                                                <div>{{nom.nomComplet}}</div>
+                                <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
+                                                                                        [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
+                                                                                        (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
+                                                                                        [ngModelOptions]="{standalone: true}">
+                                                                                        <ng-template let-item pTemplate="item">
+                                                                                            {{ item }}
+                                                                                        </ng-template>
+                                                                                    </p-autoComplete> -->
+                                <!-- <span class="p-float-label">
+                                    <p-dropdown [options]="this.rues" [filter]="true" filterBy="nomComplet"
+                                        [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue">
+                                        <ng-template let-rue pTemplate="rue">
+                                            <div class="let-rue">
+                                                <div>{{rue.label}}</div>
                                             </div>
                                         </ng-template>
                                     </p-dropdown>
+                                </span> -->
 
-
+                                <span class="p-float-label">
+                                    <p-dropdown [options]="rues" [filter]="true" filterBy="label" [showClear]="true"
+                                        placeholder="Sélectionnez une rue" formControlName="rue">
+                                        <ng-template let-rue pTemplate="rue">
+                                            <div class="let-rue">
+                                                <div>{{rue.label}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
                                 </span>
 
 
                                 <span class="p-float-label">
                                     <input type="text" formControlName="numero" pInputText>
-                                    <!-- <input type="text" id="numero" name="numero"
-                                                    [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
-                                                    pInputText> -->
+
                                     <label for="numero">Numéro</label>
                                 </span>
 

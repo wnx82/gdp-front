@@ -60,32 +60,7 @@ export class AgentsComponent implements OnInit {
         });
     }
     private apiUrl: string | undefined;
-    // dataForm = new FormGroup({
-    //     email: new FormControl('', [Validators.required, Validators.email]),
-    //     password: new FormControl('', [
-    //         Validators.required,
-    //         Validators.minLength(8),
-    //     ]),
-    //     userAccess: new FormControl(1, [
-    //         Validators.required,
-    //         Validators.pattern(/^\d+$/),
-    //     ]),
-    //     matricule: new FormControl('', [
-    //         Validators.required,
-    //         Validators.pattern(/^\d+$/),
-    //     ]),
-    //     firstname: new FormControl(''),
-    //     lastname: new FormControl(''),
-    //     birthday: new FormControl(''),
-    //     tel: new FormControl(''),
-    //     iceContact: new FormControl(''),
-    //     adresse: new FormGroup({
-    //         rue: new FormControl(''),
-    //         numero: new FormControl(''),
-    //     }),
-    //     picture: new FormControl(''),
-    //     formations: new FormArray([]),
-    // });
+
     dataForm: FormGroup<any>;
     agents: Agent[] = [];
     filteredRues: any[] = [];
@@ -106,17 +81,23 @@ export class AgentsComponent implements OnInit {
         apiUrl: 'http://localhost:3003', // Définissez l'URL de votre backend ici
     };
     date!: Date;
-    rues$ = this.getDataService.rues$;
+    // rues$ = this.getDataService.rues$;
     ngOnInit() {
         this.getAgents();
-        this.rues$.subscribe(
-            rues => {
-                this.rues = rues;
-            },
-            error => {
-                console.error(error);
-            }
-        );
+        // this.rues$.subscribe(
+        //     rues => {
+        //         this.rues = rues;
+        //     },
+        //     error => {
+        //         console.error(error);
+        //     }
+        // );
+        this.getDataService.rues$.subscribe(rues => {
+            this.rues = rues.map(rue => ({
+                value: rue._id,
+                label: rue.nomComplet,
+            }));
+        });
     }
 
     private handleError(error: any): void {
@@ -314,7 +295,7 @@ export class AgentsComponent implements OnInit {
             tel: agent?.tel,
             iceContact: agent?.iceContact,
             adresse: {
-                rue: agent?.adresse?.rue,
+                rue: agent?.adresse?.nomComplet,
                 numero: agent?.adresse?.numero,
             },
             picture: agent?.picture,

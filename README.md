@@ -101,14 +101,25 @@ Une date de présentation de l’application reste à définir et comptera pour 
     </code>
 
 -   protéger tous les dossiers autres que users grace à JWT une fois la phase déploiement lancée
--   bug dans les recherches
--   
+-
+
+## ✍️ TO DO LIST
+
+-   Annexes fichiers
+-   Bug Annexe create & update
+-   Missions Quartier
+
+## ✍️ TO DO LIST LATER
+
+-   Statistiques
+-   Login & pass
+-
 
 ## 🐛 Bugs!
 
 -   ConfirmationService ne fonctionne pas
--   visibility true or false
--   Missions & rues bugs
+-   closable
+-   bug dans les recherches
 -
 
 ## 🎨 Front-End Tutorial
