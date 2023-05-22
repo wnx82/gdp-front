@@ -186,43 +186,46 @@ export class ConstatsComponent implements OnInit {
         });
     }
 
-    editConstat(id: number, constat: any) {
-        if (!constat) {
-            console.error('Données invalides', constat);
-            return;
-        }
+    // editConstat(id: number, constat: any) {
+    //     if (!constat) {
+    //         console.error('Données invalides', constat);
+    //         return;
+    //     }
 
-        const url = `${this.API_URL}/${this.selectedConstat._id}`;
+    //     const url = `${this.API_URL}/${this.selectedConstat._id}`;
 
-        this.http.patch<Constat>(url, this.dataForm.value).subscribe({
-            next: data => {
-                const index = this.constats.findIndex(a => a._id === data._id);
-                this.constats[index] = data;
-                this.selectedConstat = {};
-                this.isEditing = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Modification effectuée',
-                });
-                this.dataForm.reset();
-                this.getConstats();
-            },
-            error: error => {
-                console.error('Erreur de requête PATCH', error);
-                if (error.error && error.error.message) {
-                    console.error(
-                        "Message d'erreur du serveur :",
-                        error.error.message
-                    );
-                }
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
+    //     this.http.patch<Constat>(url, this.dataForm.value).subscribe({
+    //         next: data => {
+    //             const index = this.constats.findIndex(a => a._id === data._id);
+    //             this.constats[index] = data;
+    //             this.selectedConstat = {};
+    //             this.isEditing = false;
+    //             this.messageService.add({
+    //                 severity: 'success',
+    //                 summary: 'Succès',
+    //                 detail: 'Modification effectuée',
+    //             });
+    //             this.dataForm.reset();
+    //             this.getConstats();
+    //         },
+    //         error: error => {
+    //             console.error('Erreur de requête PATCH', error);
+    //             if (error.error && error.error.message) {
+    //                 console.error(
+    //                     "Message d'erreur du serveur :",
+    //                     error.error.message
+    //                 );
+    //             }
+    //             this.messageService.add({
+    //                 severity: 'error',
+    //                 summary: 'Erreur',
+    //                 detail: error.error.message,
+    //             });
+    //         },
+    //     });
+    // }
+    editConstat(constatId: number) {
+        this.router.navigate(['constats', constatId]);
     }
 
     onConfirmDelete(constat: any) {

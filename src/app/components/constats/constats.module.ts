@@ -6,9 +6,14 @@ import { ConstatsComponent } from './constats.component';
 
 import { SharedUiModule } from 'src/app/services/shared-ui/shared-ui.module';
 import { CreateConstatComponent } from './create-constat/create-constat.component';
+import { EditConstatComponent } from './edit-constat/edit-constat.component';
 
 @NgModule({
-    declarations: [ConstatsComponent, CreateConstatComponent],
+    declarations: [
+        ConstatsComponent,
+        CreateConstatComponent,
+        EditConstatComponent,
+    ],
     imports: [CommonModule, ConstatsRoutingModule, SharedUiModule],
 })
 export class ConstatsModule {}
