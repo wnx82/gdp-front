@@ -63,11 +63,6 @@ export class ConstatsComponent implements OnInit {
             rue: new FormControl('', [Validators.required]),
             numero: new FormControl(''),
         }),
-        // geolocation: new FormGroup({
-        //     latitude: new FormControl(''),
-        //     longitude: new FormControl(''),
-        //     horodatage: new FormControl(''),
-        // }),
 
         infractions: new FormArray([]),
         notes: new FormControl(''),
@@ -127,24 +122,6 @@ export class ConstatsComponent implements OnInit {
             detail: error.message,
         });
     }
-    //   getSeverity(status) {
-    //     switch (status) {
-    //         case 'unqualified':
-    //             return 'danger';
-
-    //         case 'qualified':
-    //             return 'success';
-
-    //         case 'new':
-    //             return 'info';
-
-    //         case 'negotiation':
-    //             return 'warning';
-
-    //         case 'renewal':
-    //             return null;
-    //     }
-    // }
     getConstats() {
         let url = `${this.API_URL}`;
         this.http.get<any[]>(url).subscribe({
@@ -162,68 +139,6 @@ export class ConstatsComponent implements OnInit {
         });
     }
 
-    addConstat(constat: any) {
-        // console.log(this.dataForm.value);
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
-            next: data => {
-                this.constats.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Constat ajouté',
-                });
-                this.dataForm.reset();
-                this.getConstats();
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
-    }
-
-    // editConstat(id: number, constat: any) {
-    //     if (!constat) {
-    //         console.error('Données invalides', constat);
-    //         return;
-    //     }
-
-    //     const url = `${this.API_URL}/${this.selectedConstat._id}`;
-
-    //     this.http.patch<Constat>(url, this.dataForm.value).subscribe({
-    //         next: data => {
-    //             const index = this.constats.findIndex(a => a._id === data._id);
-    //             this.constats[index] = data;
-    //             this.selectedConstat = {};
-    //             this.isEditing = false;
-    //             this.messageService.add({
-    //                 severity: 'success',
-    //                 summary: 'Succès',
-    //                 detail: 'Modification effectuée',
-    //             });
-    //             this.dataForm.reset();
-    //             this.getConstats();
-    //         },
-    //         error: error => {
-    //             console.error('Erreur de requête PATCH', error);
-    //             if (error.error && error.error.message) {
-    //                 console.error(
-    //                     "Message d'erreur du serveur :",
-    //                     error.error.message
-    //                 );
-    //             }
-    //             this.messageService.add({
-    //                 severity: 'error',
-    //                 summary: 'Erreur',
-    //                 detail: error.error.message,
-    //             });
-    //         },
-    //     });
-    // }
     editConstat(constatId: number) {
         this.router.navigate(['constats', constatId]);
     }
@@ -347,11 +262,6 @@ export class ConstatsComponent implements OnInit {
             infractions: constat?.infractions,
             notes: constat?.notes,
             annexes: constat?.annexes,
-            // geolocation: {
-            //     latitude: constat?.geolocation?.latitude,
-            //     longitude: constat?.geolocation?.longitude,
-            //     horodatage: constat?.geolocation?.couleur,
-            // },
         });
     }
 

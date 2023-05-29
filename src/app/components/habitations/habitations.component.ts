@@ -30,10 +30,28 @@ export class HabitationsComponent implements OnInit {
         private messageService: MessageService,
         private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
-        private fb: FormBuilder,
+        private formBuilder: FormBuilder,
         private getDataService: GetDataService,
         private route: ActivatedRoute
-    ) {}
+    ) {
+        this.dataForm = this.formBuilder.group({
+            adresse: this.formBuilder.group({
+                rue: [''],
+                numero: [''],
+            }),
+            demandeur: this.formBuilder.group({
+                nom: [''],
+                tel: [''],
+            }),
+            dates: this.formBuilder.group({
+                debut: [new Date()],
+                fin: [new Date()],
+            }),
+            mesures: this.formBuilder.array([]),
+            vehicule: [''],
+            googlemap: [''],
+        });
+    }
     private apiUrl: string | undefined;
     readonly API_URL = `${environment.apiUrl}/habitations`;
     // habitations: Habitation[] = [];
@@ -43,33 +61,11 @@ export class HabitationsComponent implements OnInit {
     selectedHabitation: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
-
+    dataForm: FormGroup;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
-    dataForm = new FormGroup({
-        adresse: new FormGroup({
-            rue: new FormControl(''),
-            numero: new FormControl(''),
-        }),
-        demandeur: new FormGroup({
-            nom: new FormControl(''),
-            tel: new FormControl(''),
-        }),
-        dates: new FormGroup({
-            debut: new FormControl(new Date()),
-            fin: new FormControl(new Date()),
-        }),
-        mesures: new FormArray([]),
-        // mesures: new FormArray([]),
-        vehicule: new FormControl(''),
-        googlemap: new FormControl(''),
-    });
 
-    // storedValue: any;
-    // date!: Date;
-    // dates!: Date;
-    // selectedQuartier: any;
-    // selectedLocalite: any;
+    mesures: string[] = [];
 
     rues$ = this.getDataService.rues$;
     habitations$ = this.getDataService.habitations$;
@@ -333,7 +329,7 @@ export class HabitationsComponent implements OnInit {
         const fin = habitation?.dates?.fin
             ? new Date(habitation?.dates?.fin)
             : null; // Convertit la date en instance de date si elle existe
-
+        this.mesures = habitation?.mesures || [];
         this.dataForm.patchValue({
             adresse: {
                 rue: habitation?.adresse?.nomComplet,

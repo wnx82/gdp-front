@@ -120,15 +120,7 @@
                                         </div>
                                     </ng-template>
                                     <span class="p-float-label">
-                                        <!-- <p-autoComplete [(ngModel)]="selectedHabitation.adresse" [dropdown]="true"
-                                [suggestions]="filteredRues" (completeMethod)="filterRues($event)"
-                                (onSelect)="selectedHabitation.rue = $event" placeholder="Rue"
-                                [ngModelOptions]="{standalone: true}">
-                                <ng-template let-item pTemplate="item">
-                                    {{ item }}
-                                </ng-template>
-                            </p-autoComplete> -->
-                                        <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true"
+                                        <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
                                             filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
                                             formControlName="rue" optionValue="_id">
                                             <ng-template let-nom pTemplate="item">
@@ -137,8 +129,6 @@
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-
-
                                     </span>
 
 
@@ -226,17 +216,14 @@
                             <input type="text" formControlName="mesures" pInputText>
                             <label for="mesures">mesures</label>
                         </span>
-
-                    </p-fieldset>
-                    <!-- <div class="p-field">
-                        <span class="p-float-label">
+                        <div>
+                            <h3>Mesures</h3>
                             <ul>
-                                <li *ngFor="let mesure of mesures">{{mesure}}</li>
+                                <li *ngFor="let mesure of mesures">{{ mesure }}</li>
                             </ul>
+                        </div>
+                    </p-fieldset>
 
-                            <label for="mesures">Mesures de sécurité</label>
-                        </span>
-                    </div> -->
 
 
 
