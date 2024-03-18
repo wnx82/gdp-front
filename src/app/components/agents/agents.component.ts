@@ -59,8 +59,8 @@ export class AgentsComponent implements OnInit {
             formations: new FormArray([]),
         });
     }
-    private apiUrl: string | undefined;
-
+    environment = environment;
+    readonly API_URL = `${environment.apiUrl}/agents`;
     dataForm: FormGroup<any>;
     agents: Agent[] = [];
     filteredRues: any[] = [];
@@ -75,23 +75,11 @@ export class AgentsComponent implements OnInit {
 
     storedValue: any;
     rues: any[] = [];
-    readonly API_URL = `${environment.apiUrl}/agents`;
-    environment = {
-        production: false,
-        apiUrl: 'http://localhost:3003', // Définissez l'URL de votre backend ici
-    };
+
     date!: Date;
-    // rues$ = this.getDataService.rues$;
+
     ngOnInit() {
         this.getAgents();
-        // this.rues$.subscribe(
-        //     rues => {
-        //         this.rues = rues;
-        //     },
-        //     error => {
-        //         console.error(error);
-        //     }
-        // );
         this.getDataService.rues$.subscribe(rues => {
             this.rues = rues.map(rue => ({
                 value: rue._id,

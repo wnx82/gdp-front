@@ -213,7 +213,7 @@ export class EditConstatComponent implements OnInit {
             },
             error: error => {
                 console.log(
-                    'Erreur lors de la récupération du dailie :',
+                    'Erreur lors de la récupération du constat :',
                     error
                 );
             },
