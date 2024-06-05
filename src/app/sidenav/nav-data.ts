@@ -124,6 +124,10 @@ export const navbarData: INavbarData[] = [
                 routeLink: 'vehicules',
                 label: 'Liste des vehicules',
             },
+            {
+                routeLink: '',
+                label: '',
+            },
         ],
     },
 ];

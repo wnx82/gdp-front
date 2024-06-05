@@ -5,6 +5,7 @@
 @import 'primeflex/primeflex.css';
 @import 'primeng/resources/primeng.min.css';
 @import 'primeng/resources/themes/lara-light-blue/theme.css';
+
 // !@import '@angular/material/theming';
 
 // @import 'node_modules/primeng/resources/themes/nova/theme.css';
@@ -19,7 +20,7 @@
 
 * {
     margin: 0;
-    padding: 0;
+    // padding: 0;
     box-sizing: border-box;
 }
 
@@ -65,13 +66,15 @@ p-fieldset {
     margin-right: 10px;
 }
 
+
+.col-md-12 button {
+    margin-right: 10px;
+}
+
+
 @media (max-width: 768px) {
     .p-dialog {
         width: 90vw;
         height: 90vh;
     }
-}
-
-.col-md-12 button {
-    margin-right: 10px;
 }
