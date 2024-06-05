@@ -19,9 +19,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 * {
-    margin: 0;
+    // margin: 0;
     // padding: 0;
     box-sizing: border-box;
+}
+.sidenav-container * {
+    margin: 0;
 }
 
 body {
@@ -53,23 +56,30 @@ span.p-float-label {
     margin-bottom: 20px;
 }
 
-p-fieldset {
-    margin: 20px;
-}
 
 .button-container {
     display: flex;
     justify-content: space-between;
 }
 
-.button-container button:first-child {
-    margin-right: 10px;
+/* Pour espacer les messages globalement */
+.ui-messages {
+    margin-bottom: 20px; /* Ajustez la valeur selon vos besoins */
 }
 
 
-.col-md-12 button {
-    margin-right: 10px;
-}
+// p-fieldset {
+//     margin: 20px;
+// }
+
+// .col-md-12 button {
+//     margin-right: 10px;
+// }
+
+// .button-container button:first-child {
+//     margin-right: 10px;
+// }
+
 
 
 @media (max-width: 768px) {
