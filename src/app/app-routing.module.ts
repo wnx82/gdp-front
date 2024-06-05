@@ -12,13 +12,13 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'media', component: UploadComponent },
 
-    // {
-    //     path: 'agents' || 'users',
-    //     loadChildren: () =>
-    //         import('./components/agents/agents.module').then(
-    //             m => m.AgentsModule
-    //         ),
-    // },
+    {
+        path: 'agents' || 'users',
+        loadChildren: () =>
+            import('./components/agents/agents.module').then(
+                m => m.AgentsModule
+            ),
+    },
     {
         path: 'api',
         loadChildren: () =>
@@ -46,13 +46,13 @@ const routes: Routes = [
                 m => m.CategoriesModule
             ),
     },
-    // {
-    //     path: 'constats',
-    //     loadChildren: () =>
-    //         import('./components/constats/constats.module').then(
-    //             m => m.ConstatsModule
-    //         ),
-    // },
+    {
+        path: 'constats',
+        loadChildren: () =>
+            import('./components/constats/constats.module').then(
+                m => m.ConstatsModule
+            ),
+    },
     // {
     //     path: 'dailies',
     //     loadChildren: () =>
@@ -67,20 +67,20 @@ const routes: Routes = [
     //             m => m.HabitationsModule
     //         ),
     // },
-    // {
-    //     path: 'horaires',
-    //     loadChildren: () =>
-    //         import('./components/horaires/horaires.module').then(
-    //             m => m.HorairesModule
-    //         ),
-    // },
-    // {
-    //     path: 'infractions',
-    //     loadChildren: () =>
-    //         import('./components/infractions/infractions.module').then(
-    //             m => m.InfractionsModule
-    //         ),
-    // },
+    {
+        path: 'horaires',
+        loadChildren: () =>
+            import('./components/horaires/horaires.module').then(
+                m => m.HorairesModule
+            ),
+    },
+    {
+        path: 'infractions',
+        loadChildren: () =>
+            import('./components/infractions/infractions.module').then(
+                m => m.InfractionsModule
+            ),
+    },
     // {
     //     path: 'missions',
     //     loadChildren: () =>

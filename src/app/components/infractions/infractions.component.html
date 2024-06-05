@@ -1,0 +1,210 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>
+            Êtes-vous sûr de vouloir supprimer définitivement les données
+            supprimées?
+        </p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des infractions</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter une donnée" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <p-table #dataTableInfractions [value]="donnees" [paginator]="true" [rows]="10"
+                    [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+                    [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['category', 'Liste']">
+                    <ng-template pTemplate="caption">
+                        <div class="flex">
+                            <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
+                                (click)="clear(dataTableInfractions)"></button>
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input #searchInput pInputText type="text" (input)="
+                                        dataTableInfractions.filterGlobal(
+                                            searchInput.value,
+                                            'contains'
+                                        )
+                                    " placeholder="Rechercher mot-clé" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="category" style="width: 20%">
+                                Categorie<p-sortIcon field="category"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="priority" style="width: 20%">
+                                Priorité<p-sortIcon field="priority"></p-sortIcon>
+                            </th>
+                            <th>Liste</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-donnee>
+                        <tr>
+                            <td>{{ donnee.category }}</td>
+                            <td>{{ donnee.priority }}</td>
+                            <td>
+                                <table class="table table-bordered">
+                                    <tr *ngFor="let item of donnee.list">
+                                        <td>{{ item[0] }}</td>
+                                        <td>{{ item[1] }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mx-2"
+                                    (click)="selectData(donnee); toggleEdit()"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteDonnee(donnee._id)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="paginatorleft">
+                        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                            (click)="toggleAdd()"></p-button>
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                        <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+                    </ng-template>
+                    <ng-template pTemplate="paginatorleft">
+                        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                            (click)="toggleAdd()"></p-button>
+                    </ng-template>
+                    <ng-template pTemplate="paginatorright">
+                        <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <p-dialog header="{{ isAdding ? 'Ajouter une donnée' : 'Modifier une donnée' }}" [visible]="isDialogVisible"
+        [modal]="true" [maximizable]="true" [closable]="false" (onHide)="selectedData = {}">
+        <form [formGroup]="dataForm" (ngSubmit)="
+                isAdding
+                    ? add(dataForm.value)
+                    : edit(selectedData._id, dataForm.value)
+            ">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <span class="p-float-label">
+                        <input type="text" id="category" name="category" formControlName="category" required pInputText
+                            [value]="selectedData.category" />
+                        <label for="category">category</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input type="text" id="priority" name="priority" formControlName="priority" pInputText
+                            [value]="selectedData.priority" />
+                        <label for="priority">Priorité</label>
+                    </span>
+
+                    <!-- <span class="p-float-label">
+                        <input type="text" id="list" name="list" formControlName="list" pInputText
+                            [value]="selectedData.list">
+                        <label for="list">Liste</label>
+                    </span> -->
+                    <p-table [value]="selectedData.list">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Article</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                            <tr>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" [(ngModel)]="row[0]" />
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ row[0] }}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" [(ngModel)]="row[1]" />
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ row[1] }}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <button pButton type="button" icon="pi pi-pencil" (click)="editRow(row)"></button>
+                                    <button pButton type="button" icon="pi pi-trash" (click)="deleteRow(row)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <button pButton type="button" label="Ajouter" (click)="addRow()"></button>
+                </div>
+
+                <div class="button-container">
+                    <div class="p-d-flex p-jc-between">
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                        <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                            class="p-button-sm p-button-success" icon="{{
+                                isAdding ? 'pi pi-plus' : 'pi pi-pencil'
+                            }}" [disabled]="!dataForm.valid"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+</div>
+<p-dialog header="Ajouter une nouvelle ligne" [(visible)]="displayDialog" [modal]="true">
+    <form [formGroup]="newRowForm" (ngSubmit)="saveNewRow()">
+        <div class="form-group">
+            <label>Article</label>
+            <input type="text" formControlName="article" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <input type="text" formControlName="description" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <button type="button" class="btn btn-secondary" (click)="hideDialog()">
+            Annuler
+        </button>
+    </form>
+</p-dialog>
+
+<div *ngIf="newRow">
+    <form>
+        <div>
+            <label for="newArticle">Article</label>
+            <input id="newArticle" type="text" [(ngModel)]="newArticle" />
+        </div>
+        <div>
+            <label for="newDescription">Description</label>
+            <input id="newDescription" type="text" [(ngModel)]="newDescription" />
+        </div>
+        <button type="button" (click)="saveRow()">Enregistrer</button>
+        <button type="button" (click)="newRow = false">Annuler</button>
+    </form>
+</div>

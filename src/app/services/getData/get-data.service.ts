@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Agent } from 'src/app/interfaces/Agent.interface';
-import { Habitation } from 'src/app/interfaces/Habitation.interface';
-import { Horaire } from 'src/app/interfaces/Horaire.interface';
-import { Infraction } from 'src/app/interfaces/Infraction.interface';
-import { Mission } from 'src/app/interfaces/Mission.interface';
-import { Quartier } from 'src/app/interfaces/Quartier.interface';
-import { Rue } from 'src/app/interfaces/Rue.interface.';
-import { Vehicule } from 'src/app/interfaces/Vehicule.interface';
+import { Agent } from '../../interfaces/Agent.interface';
+import { Habitation } from '../../interfaces/Habitation.interface';
+import { Horaire } from '../../interfaces/Horaire.interface';
+import { Infraction } from '../../interfaces/Infraction.interface';
+import { Mission } from '../../interfaces/Mission.interface';
+import { Quartier } from '../../interfaces/Quartier.interface';
+import { Rue } from '../../interfaces/Rue.interface.';
+import { Vehicule } from '../../interfaces/Vehicule.interface';
 
 @Injectable({
     providedIn: 'root',

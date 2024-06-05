@@ -1,0 +1,245 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cet agent ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteAgent(selectedAgent._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+
+<div class="container">
+    <h1>Liste des agents</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les agents supprimés"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <p-table #dataTableAgents [value]="agents" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['lastname', 'firstname']" sortField="matricule">
+
+        <!-- Header Template -->
+        <ng-template pTemplate="caption">
+            <!-- Filter Input -->
+            <div class="flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableAgents)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableAgents.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <!-- Table Header -->
+            <tr>
+                <th style="width:5%"></th>
+                <th pSortableColumn="matricule" style="width:10%">Matricule<p-sortIcon field="matricule"></p-sortIcon>
+                </th>
+                <th pSortableColumn="lastname" style="width:10%">Nom<p-sortIcon field="lastname"></p-sortIcon></th>
+                <th pSortableColumn="firstname" style="width:10%">Prénom<p-sortIcon field="firstname"></p-sortIcon></th>
+                <th pSortableColumn="userAccess" style="width:10%">Niveau<p-sortIcon field="userAccess"></p-sortIcon>
+                </th>
+                <th style="width:10%"></th>
+            </tr>
+        </ng-template>
+
+        <!-- Body Template -->
+        <ng-template pTemplate="body" let-agent>
+            <tr>
+                <td>
+                    <img [src]="agent.picture ? agent.picture : (agent.userAccess < 1 ? environment.apiUrl + '/images/admin.png' : environment.apiUrl + '/images/user.png')"
+                        [alt]="agent.matricule" width="25" />
+                </td>
+                <td><p-tag>A{{ agent.matricule }}</p-tag></td>
+                <td>{{ agent.lastname | uppercase }}</td>
+                <td>{{ agent.firstname }}</td>
+                <td>{{ agent.userAccess }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectAgent(agent); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteAgent(agent._id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- Paginator Template -->
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-table>
+
+    <!-- Add/Edit Dialog -->
+    <button pButton pRipple type="button" label="Ajouter un agent" class="p-button-secondary" icon="pi pi-user-plus"
+        style="margin-top: 3px;" (click)="toggleAdd()"></button>
+    <p-dialog header="{{isAdding ? 'Ajouter un agent' : 'Modifier un agent'}}" [visible]="isDialogVisible"
+        [modal]="true" [maximizable]="true" [closable]="false" [dismissableMask]="true" (onHide)="cancel()"
+        [style]="{width: '600px'}">
+        <!-- Form Content -->
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addAgent(dataForm.value) : editAgent(selectedAgent._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="field p-fluid mt-4">
+                    <!-- Form Fields -->
+                    <div class="p-col-6">
+                        <p-fieldset>
+                            <!-- User Details -->
+                            <ng-template pTemplate="header">
+                                <div class="flex align-items-center text-primary">
+                                    <span class="pi pi-user mr-2"></span>
+                                    <span class="font-bold text-lg">User Details</span>
+                                </div>
+                            </ng-template>
+                            <!-- Input Fields -->
+                            <span class="p-float-label">
+                                <div class="p-inputgroup">
+                                    <span class="p-inputgroup-addon">A</span>
+                                    <input type="number" id="matricule" pInputText pKeyFilter="int"
+                                        placeholder="Matricule" formControlName="matricule"
+                                        required="Veuillez saisir le matricule" />
+                                    <label for="matricule">Matricule</label>
+                                </div>
+                                <small
+                                    *ngIf="dataForm.get('matricule')?.invalid && (dataForm.get('matricule')?.dirty || dataForm.get('matricule')?.touched)">Le
+                                    matricule doit être un nombre entier positif.</small>
+                            </span>
+                            <span class="p-float-label">
+                                <input type="text" formControlName="lastname" [value]="selectedAgent.lastname"
+                                    pInputText>
+                                <label for="lastname">Nom</label>
+                                <small
+                                    *ngIf="dataForm.get('lastname')?.invalid && (dataForm.get('lastname')?.dirty || dataForm.get('lastname')?.touched)">
+                                    Le nom est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" pInputText formControlName="firstname" />
+                                <label for="firstname">Prénom</label>
+                                <small
+                                    *ngIf="dataForm.get('firstname')?.invalid && (dataForm.get('firstname')?.dirty || dataForm.get('firstname')?.touched)">
+                                    Le prénom est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="text" id="tel" name="tel" formControlName="tel" [value]="selectedAgent.tel"
+                                    pInputText>
+                                <label for="tel">Téléphone</label>
+                                <small
+                                    *ngIf="dataForm.get('tel')?.invalid && (dataForm.get('tel')?.dirty || dataForm.get('tel')?.touched)">
+                                    Le téléphone est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <p-calendar id="birthday" name="birthday" formControlName="birthday" [showIcon]="true"
+                                    dateFormat="dd/mm/yy"></p-calendar>
+                                <label for="birthday">Date de naissance</label>
+                                <small
+                                    *ngIf="dataForm.get('birthday')?.invalid && (dataForm.get('birthday')?.dirty || dataForm.get('birthday')?.touched)">
+                                    La date de naissance est obligatoire.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <input type="email" id="email" name="email" formControlName="email" required
+                                    [value]="selectedAgent.email" pInputText>
+                                <label for="email">Email</label>
+                                <small
+                                    *ngIf="dataForm.get('email')?.invalid && (dataForm.get('email')?.dirty || dataForm.get('email')?.touched)">
+                                    L'email est obligatoire et doit être une adresse email valide.
+                                </small>
+                            </span>
+
+
+                            <span class="p-float-label">
+                                <p-password formControlName="password" required [toggleMask]="true"></p-password>
+                                <label for="password">Mot de passe</label>
+                                <small
+                                    *ngIf="dataForm.get('password')?.invalid && (dataForm.get('password')?.dirty || dataForm.get('password')?.touched)">
+                                    Le mot de passe est obligatoire et doit contenir au moins 8 caractères dont une
+                                    majuscule, une minuscule et un
+                                    chiffre.
+                                </small>
+                            </span>
+
+
+
+                            <span class="p-float-label">
+                                <input type="number" id="userAccess" name="userAccess" formControlName="userAccess"
+                                    required [value]="selectedAgent.userAccess" pInputText min="0" max="10"
+                                    title="Veuillez saisir un nombre entre 0 et 10">
+                                <label for="userAccess">Niveau d'accès utilisateur</label>
+                                <small
+                                    *ngIf="dataForm.get('userAccess')?.invalid && (dataForm.get('userAccess')?.dirty || dataForm.get('userAccess')?.touched)">
+                                    Le niveau d'accès doit être un nombre entier entre 0 et 10.
+                                </small>
+                            </span>
+
+
+
+                            <span class="p-float-label">
+                                <div class="p-inputgroup">
+                                    <span class="p-inputgroup-addon">
+                                        <i class="pi pi-user"></i>
+                                    </span>
+                                    <input type="text" id="iceContact" name="iceContact" formControlName="iceContact"
+                                        required [value]="selectedAgent.iceContact" pInputText>
+                                    <label for="iceContact">Contact en cas d'urgence</label>
+                                </div>
+                                <small
+                                    *ngIf="dataForm.get('iceContact')?.invalid && (dataForm.get('iceContact')?.dirty || dataForm.get('iceContact')?.touched)">
+                                    Le contact en cas d'urgence est obligatoire.
+                                </small>
+                            </span>
+                            <!-- Other input fields go here -->
+                            <!-- Buttons -->
+                            <div class="button-container">
+                                <button pButton pRipple type="button" label="Annuler"
+                                    class="p-button-sm p-button-secondary" icon="pi pi-times"
+                                    (click)="cancel()"></button>
+                                <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                                    class="p-button-sm p-button-success"
+                                    icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
+                                    [disabled]="!dataForm.valid"></button>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+</div>

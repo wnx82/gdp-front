@@ -1,0 +1,115 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer ce constat ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteConstat(selectedConstat._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des constats</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un constat" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" routerLink="create"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <p-table #dataTableConstats [value]="constats" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['agents', 'adresse.nomComplet' ]" sortField="date"
+        [sortOrder]="-1">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableConstats)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableConstats.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Rechercher mot-clé" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date" style="width:20%">Date<p-sortIcon field="date"></p-sortIcon></th>
+                <th style="width:20%">Agents<p-columnFilter type="text" field="agents"
+                        matchMode="contains"></p-columnFilter></th>
+                <th>
+                    PV<p-columnFilter type="boolean" field="pv"></p-columnFilter>
+                </th>
+
+                <!-- <th style="width:20%">Pv</th> -->
+
+
+
+                <th style="width:30%">Lieu<p-columnFilter type="text" field="adresse.nomComplet"
+                        matchMode="contains"></p-columnFilter>
+                </th>
+                <th style="width:30%">Action</th>
+
+            </tr>
+        </ng-template>
+
+
+        <ng-template pTemplate="body" let-constat>
+            <tr>
+                <td>{{ constat.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+                <!-- <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)"></p-tag> -->
+                <td>
+                    <ng-container *ngFor="let agent of constat.agents">
+                        <p-tag>A{{ agent }}</p-tag>
+                    </ng-container>
+                </td>
+                <td>
+                    <i class="pi"
+                        [ngClass]="{ 'text-green-500 pi-check-circle': constat.pv, 'text-red-500 pi-times-circle': !constat.pv }"></i>
+                </td>
+
+                <!-- <td>{{ constat.agents }}</td> -->
+                <!-- <td>
+
+                    <p-tag [value]="constat.pv ? 'Oui' : 'Non'" [severity]="constat.pv ? 'success' : 'danger'"></p-tag>
+                </td> -->
+
+                <td>{{ constat.adresse.nomComplet }}</td>
+                <td>
+
+
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="editConstat(constat._id); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectConstat(constat); deleteConstat(constat._id)"></button>
+                    <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectConstat(constat); onConfirmDelete(constat)"></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
+    </p-table>
+</div>
