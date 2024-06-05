@@ -1,0 +1,20 @@
+<div class="card">
+
+    <div class="card-head">📊 Statistiques</div>
+    <div class="card-body">
+        <a no-open href="http://google.com/">Google!</a>
+        <div class="chart">
+            Nombres d'agents : {{ agentCount }}<br>
+            Nombres de catégories : {{ categoriesCount }}<br>
+            Nombres de constats : {{ constatsCount }}<br>
+            Nombres de dailies : {{ dailiesCount }}<br>
+            Nombres d'horaires : {{ horairesCount }}<br>
+            Nombres d'infractions : {{ infractionsCount }}<br>
+            Nombres de missions : {{ missionsCount }}<br>
+            Nombres de quartiers : {{ quartiersCount }}<br>
+            Nombres de rapports : {{ rapportsCount }}<br>
+            Nombres de rues : {{ ruesCount }}<br>
+            Nombres de vehicules : {{ vehiculesCount }}<br>
+        </div>
+        <p>Dernière mise à jour : {{ lastUpdate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+    </div>
