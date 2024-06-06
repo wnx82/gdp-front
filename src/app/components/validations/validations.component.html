@@ -1,0 +1,215 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>
+            Êtes-vous sûr de vouloir supprimer définitivement les données
+            supprimées?
+        </p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette validation ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="
+                deleteValidation(selectedValidation._id);
+                displayConfirmationDelete = false
+            "></button>
+    </p-footer>
+</p-dialog>
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des validations</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter une validation" class="p-button-primary"
+                icon="pi pi-plus" style="margin-top: 3px" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les validations supprimés"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <p-table #dataTableValidations [value]="validations" [paginator]="true" [rows]="itemsPerPage"
+        [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['habitation.adresse.rue', 'habitation.adresse.localite', 'date','agents.matricule']"
+        sortField="date" [sortOrder]="-1">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Vider" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableValidations)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text" (input)="
+                        dataTableValidations.filterGlobal(
+                            searchInput.value,
+                            'contains'
+                        )
+                    " placeholder="Rechercher mot-clé" />
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th style="width: 10%">Habitation<p-columnFilter type="text" field="habitation.adresse.rue"
+                        matchMode="contains"></p-columnFilter></th>
+                <th style="width: 10%">
+                    Agents
+                    <p-columnFilter type="text" field="agents.matricule" matchMode="contains"></p-columnFilter>
+                </th>
+                <th style="width: 10%">
+                    Localité
+                    <p-columnFilter type="text" field="habitation.adresse.localite"
+                        matchMode="contains"></p-columnFilter>
+                </th>
+                <th style="width: 10%">
+                    Note
+                    <p-columnFilter type="text" field="note" filterMatchMode="contains"
+                        filterDateFormat="yyyy-MM-dd"></p-columnFilter>
+                </th>
+                <th style="width: 10%">
+                    Date vérification
+                    <p-columnFilter type="date" field="date" filterMatchMode="equals"
+                        filterDateFormat="yyyy-MM-dd"></p-columnFilter>
+                </th>
+
+                <th style="width: 10%">Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-validation>
+            <tr>
+
+                <td>
+                    {{ validation.habitation.adresse.rue }},
+                    {{ validation.habitation.adresse.numero }}
+                </td>
+                <td>
+                    <ng-container *ngFor="let matricule of validation.agents.matricule">
+                        <p-tag>A{{matricule }}</p-tag>
+                    </ng-container>
+                </td>
+                <td>
+                    <p-tag [value]="validation.habitation.adresse.localite"
+                        [severity]="getSeverity(validation.habitation.adresse.localite)"></p-tag>
+                </td>
+                <td>{{ validation.note }}</td>
+                <td>{{ validation.date | date:'yyyy-MM-dd HH:mm' }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectValidation(validation); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteValidation(validation._id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template></p-table>
+
+    <p-dialog header="{{isAdding ? 'Ajouter une validation' : 'Modifier une validation'}}" [visible]="isDialogVisible" [modal]="true" [maximizable]="true" [closable]="false" [dismissableMask]="true"
+        (onHide)="cancel()">
+        <!-- <form [formGroup]="dataForm"> -->
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? addValidation(dataForm.value) : editValidation(selectedValidation._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <div style="
+                display: flex;
+                flex-wrap: wrap;
+                align-items: stretch;
+                justify-content: center;
+            ">
+                        <div style="flex: 1; margin-right: 10px">
+
+                            <p-fieldset>
+                                <ng-template pTemplate="header">
+                                    <div class="flex align-items-center text-primary">
+                                        <span class="pi pi-home mr-2"></span>
+                                        <span class="font-bold text-lg">Habitation</span>
+                                    </div>
+                                </ng-template>
+                                <span class="p-float-label">
+                                    <p-dropdown formControlName="habitation" [options]="habitations" optionLabel="label"
+                                        [filter]="true" filterBy="label" [showClear]="true"
+                                        placeholder="Sélectionnez une habitation" optionValue="value">
+                                        <ng-template let-adresse pTemplate="item">
+                                            <div class="let-adresse">
+                                                <div>
+                                                    {{ adresse.label }}
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </span>
+
+                            </p-fieldset>
+
+                        </div>
+                    </div>
+                    <p-fieldset>
+                        <ng-template pTemplate="header">
+                            <div class="flex align-items-center text-primary">
+                                <span class="pi pi-info-circle mr-2"></span>
+                                <span class="font-bold text-lg">Informations</span>
+                            </div>
+
+                        </ng-template>
+                        <div class="p-field">
+                            <span class="p-float-label">
+                                <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                    [showTime]="true" [hourFormat]="'24:00'" class="p-datepicker-today"
+                                    [showButtonBar]="true">
+                                </p-calendar>
+                                <button pButton pRipple type="button" label="Remplir avec la date actuelle"
+                                    class="p-button-secondary p-button-outlined ml-4" icon="pi pi-calendar-plus"
+                                    style="vertical-align: bottom;" (click)="fillWithCurrentDate()"></button>
+                                <label for="date">Date : </label>
+                            </span>
+                        </div>
+
+                        <div class="p-col-12 p-md-6">
+                            <label for="agents">Agents: </label>
+                            <p-multiSelect [options]="agents" formControlName="agents"
+                                defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
+                                <ng-template let-agent pTemplate="agent">
+                                    <div class="flex align-items-center">
+                                        <span>{{ agent.label }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </div>
+
+                        <span class="p-float-label mt-3">
+                            <textarea id="note" formControlName="note" rows="5" cols="30" pInputTextarea></textarea>
+                            <label for="note">Note</label>
+                        </span>
+
+
+                    </p-fieldset>
+                </div>
+            </div>
+
+            <div class="button-container">
+
+                <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                    icon="pi pi-times" (click)="cancel()"></button>
+                <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                    class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"></button>
+            </div>
+        </form>
+    </p-dialog>

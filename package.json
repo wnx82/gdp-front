@@ -21,6 +21,7 @@
     "@angular/router": "^18.0.0",
     "@ngx-formly/bootstrap": "^6.3.3",
     "@ngx-formly/core": "^6.3.3",
+    "add-to-calendar-button": "^2.6.16",
     "bootstrap": "^5.3.3",
     "bson": "^6.7.0",
     "class-transformer": "^0.5.1",

@@ -1,0 +1,185 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteData(selectedData._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des missions</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter une mission" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les données supprimées" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les données supprimées"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <p-table #dataTableMissions [value]="missions" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['title', 'description']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dataTableMissions)"></button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input #searchInput pInputText type="text"
+                        (input)="dataTableMissions.filterGlobal(searchInput.value, 'contains')"
+                        placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="title" style="width:10%">Titre<p-sortIcon field="title"></p-sortIcon></th>
+                <th style="width:10%">Description</th>
+                <th pSortableColumn="category" style="width:10%">Catégorie<p-sortIcon field="category"></p-sortIcon>
+                </th>
+                <th style="width:10%">Horaire</th>
+                <th pSortableColumn="priority" style="width:10%">Priorité<p-sortIcon field="priority"></p-sortIcon></th>
+                <th style="width:10%">Contact</th>
+                <th style="width:10%">
+                    Visible<p-columnFilter type="boolean" field="visibility"></p-columnFilter>
+                </th>
+                <th style="width:10%">Action</th>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-mission>
+            <tr>
+                <td>{{ mission.title }}</td>
+                <td>{{ mission.description }}</td>
+                <td>{{ mission.category }}</td>
+                <td>{{ mission.horaire }}</td>
+                <td>{{ mission.priority }}</td>
+                <td>{{ mission.contact }}</td>
+                <td>
+                    <i class="pi"
+                        [ngClass]="{ 'text-green-500 pi-check-circle': mission.visibility, 'text-red-500 pi-times-circle': !mission.visibility }"></i>
+                </td>
+
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectData(mission); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="selectData(mission); onConfirmDelete(mission)"></button>
+
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <!-- <p-button type="button" icon="pi pi-home" styleClass="p-button-text"></p-button> -->
+        </ng-template>
+    </p-table>
+
+
+    <p-dialog header="{{ isAdding ? 'Ajouter une mission' : 'Modifier une mission' }}"
+    [visible]="isDialogVisible" [modal]="true" [maximizable]="true" [closable]="false"
+        [style]="{width: '25vw'}" (onHide)="cancel()">
+
+        <form [formGroup]="dataForm"
+            (ngSubmit)="isAdding ? add(dataForm.value) : edit(selectedData._id, dataForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="title" name="title" formControlName="title" pInputText
+                            [value]="selectedData.title">
+                        <label for="title">Titre</label>
+                    </span>
+                    <small
+                        *ngIf="dataForm.controls['title'].invalid && (dataForm.controls['title'].dirty || dataForm.controls['title'].touched)"
+                        class="p-error">Le champ "Titre" est obligatoire.</small>
+
+
+                    <span class="p-float-label">
+                        <textarea rows="5" cols="30" pInputTextarea id="description" name="description"
+                            formControlName="description" [value]="selectedData.description"></textarea>
+                        <label for="description">Description</label>
+                    </span>
+
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="category" name="category" formControlName="category"
+                            [value]="selectedData.category" pInputText>
+                        <label for="category">Catégorie</label>
+                    </span>
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="horaire" name="horaire" formControlName="horaire"
+                            [value]="selectedData.horaire" pInputText>
+                        <label for="horaire">Horaire</label>
+                    </span>
+
+
+
+                    <span class="p-float-label">
+                        <input type="number" id="priority" name="priority" formControlName="priority"
+                            [value]="selectedData.priority" pInputText>
+                        <label for="priority">Priorité</label>
+                    </span>
+
+
+                    <span class="p-float-label">
+                        <input type="text" id="contact" name="contact" formControlName="contact"
+                            [value]="selectedData.contact" pInputText>
+                        <label for="contact">Contact</label>
+                    </span>
+                    <!-- <div class="p-field">
+                                        <span class="p-float-label">
+                                            <input type="text" id="annexes" name="annexes" formControlName="annexes"
+                                                [value]="selectedData.annexes" pInputText>
+                                            <label for="annexes">Annexes</label>
+                                        </span>
+                                    </div> -->
+                    <div class="mb-2">
+                        <p-checkbox formControlName="visibility" [binary]="true" inputId="binary"></p-checkbox>
+                        <label for="visibility" class="ml-2">Visible</label>
+                    </div>
+
+
+
+
+                    <div class="button-container">
+                        <div class="p-d-flex p-jc-between">
+                            <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                                icon="pi pi-times" (click)="cancel()"></button>
+                            <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                                class="p-button-sm p-button-success"
+                                icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
+                                [disabled]="!dataForm.valid"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </p-dialog>

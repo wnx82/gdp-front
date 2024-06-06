@@ -1,0 +1,104 @@
+<p-toast></p-toast>
+<div class="container">
+    <H1>Modification d'une Dailie</H1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Retour" class="p-button-secondary p-button-outlined"
+                icon="pi pi-arrow-left" style="margin-top: 3px;" (click)="cancel()"></button>
+            <button pButton pRipple type="button" label="Reset" class="p-button-secondary p-button-outlined"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="resetForm()"></button>
+
+
+        </div>
+    </div>
+    <form [formGroup]="dataForm" (ngSubmit)="edit(dataForm.value)">
+        <div class="p-grid">
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <p-fieldset>
+                    <ng-template pTemplate="header">
+                        <div class="flex align-items-center text-primary">
+                            <span class="pi pi-info-circle mr-2"></span>
+                            <span class="font-bold text-lg">Informations fiche journalière</span>
+                        </div>
+                    </ng-template>
+
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <p-calendar formControlName="date" [showIcon]="true" [dateFormat]="'dd/mm/yy'"
+                                class="p-datepicker-today" [showButtonBar]="true">
+                            </p-calendar>
+                            <button pButton pRipple type="button" label="Remplir avec la date actuelle"
+                                class="p-button-secondary p-button-outlined" icon="pi pi-calendar-plus"
+                                style="margin-top: 3px;" (click)="fillWithCurrentDate()"></button>
+                            <label for="date">Date Rapport : </label>
+                        </span>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="agents">Agents: </label>
+                        <p-multiSelect [options]="this.agents" formControlName="agents"
+                            defaultLabel="Sélectionnez un agent" scrollHeight="250px" display="chip">
+                            <ng-template let-agent pTemplate="agent">
+                                <div class="flex align-items-center">
+                                    <span>{{ agent.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="horaires">Horaire: </label>
+                        <p-dropdown [options]="horaires" placeholder="Sélectionnez un horaire" [editable]="true"
+                            formControlName="horaire" selectedItemValue="horaire"></p-dropdown>
+                    </div>
+
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="vehicules">Véhicule: </label>
+                        <p-dropdown [options]="vehicules" placeholder="Sélectionnez un véhicule" [editable]="true"
+                            formControlName="vehicule" selectedItemValue="vehicule"></p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="quartiers">Quartier(s): </label>
+                        <p-multiSelect [options]="this.quartiers" formControlName="quartiers"
+                            defaultLabel="Sélectionnez un quartier" scrollHeight="250px" display="chip">
+                            <ng-template let-quartier pTemplate="quartier">
+                                <div class="flex align-items-center">
+                                    <span>{{ quartier.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+
+
+                    <div class="p-col-12 p-md-6">
+                        <label for="missions">Mission(s) supplémentaire(s): </label>
+                        <p-multiSelect [options]="this.missions" formControlName="missions"
+                            defaultLabel="Sélectionnez une mission" scrollHeight="250px" display="chip">
+                            <ng-template let-mission pTemplate="mission">
+                                <div class="flex align-items-center">
+                                    <span>{{ mission.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
+                    <span class="p-float-label mt-3">
+                        <textarea id="notes" formControlName="notes" rows="5" cols="30" pInputTextarea></textarea>
+                        <label for="notes">Notes</label>
+                    </span>
+                </p-fieldset>
+
+                <div class="button-container">
+                    <div class="p-d-flex p-jc-between">
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                        <button pButton pRipple type="submit" label="Modifier" class="p-button-sm p-button-success"
+                            icon="pi pi-plus" [disabled]="!dataForm.valid"></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

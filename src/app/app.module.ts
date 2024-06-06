@@ -27,6 +27,8 @@ import { MessagesModule } from 'primeng/messages';
 // import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 
+
+
 // import { ButtonModule } from 'primeng/button';
 // import { PaginatorModule } from 'primeng/paginator';
 // import { InputTextModule } from 'primeng/inputtext'; // Importez le module InputTextModule depuis primeng

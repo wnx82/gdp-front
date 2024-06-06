@@ -24,20 +24,14 @@ const routes: Routes = [
         loadChildren: () =>
             import('./components/api/api.module').then(m => m.ApiModule),
     },
-    // {
-    //     path: 'rapports',
-    //     loadChildren: () =>
-    //         import('./components/rapports/rapports.module').then(
-    //             m => m.RapportsModule
-    //         ),
-    // },
-    // {
-    //     path: 'users',
-    //     loadChildren: () =>
-    //         import('./components/users/agents.module').then(
-    //             m => m.AgentsModule
-    //         ),
-    // },
+
+    {
+        path: 'users',
+        loadChildren: () =>
+            import('./components/agents/agents.module').then(
+                m => m.AgentsModule
+            ),
+    },
 
     {
         path: 'categories',
@@ -53,20 +47,20 @@ const routes: Routes = [
                 m => m.ConstatsModule
             ),
     },
-    // {
-    //     path: 'dailies',
-    //     loadChildren: () =>
-    //         import('./components/dailies/dailies.module').then(
-    //             m => m.DailiesModule
-    //         ),
-    // },
-    // {
-    //     path: 'habitations',
-    //     loadChildren: () =>
-    //         import('./components/habitations/habitations.module').then(
-    //             m => m.HabitationsModule
-    //         ),
-    // },
+    {
+        path: 'dailies',
+        loadChildren: () =>
+            import('./components/dailies/dailies.module').then(
+                m => m.DailiesModule
+            ),
+    },
+    {
+        path: 'habitations',
+        loadChildren: () =>
+            import('./components/habitations/habitations.module').then(
+                m => m.HabitationsModule
+            ),
+    },
     {
         path: 'horaires',
         loadChildren: () =>
@@ -81,20 +75,27 @@ const routes: Routes = [
                 m => m.InfractionsModule
             ),
     },
-    // {
-    //     path: 'missions',
-    //     loadChildren: () =>
-    //         import('./components/missions/missions.module').then(
-    //             m => m.MissionsModule
-    //         ),
-    // },
-    // {
-    //     path: 'quartiers',
-    //     loadChildren: () =>
-    //         import('./components/quartiers/quartiers.module').then(
-    //             m => m.QuartiersModule
-    //         ),
-    // },
+    {
+        path: 'missions',
+        loadChildren: () =>
+            import('./components/missions/missions.module').then(
+                m => m.MissionsModule
+            ),
+    },
+    {
+        path: 'quartiers',
+        loadChildren: () =>
+            import('./components/quartiers/quartiers.module').then(
+                m => m.QuartiersModule
+            ),
+    },
+    {
+        path: 'rapports',
+        loadChildren: () =>
+            import('./components/rapports/rapports.module').then(
+                m => m.RapportsModule
+            ),
+    },
     {
         path: 'statistics',
         loadChildren: () =>
@@ -102,18 +103,18 @@ const routes: Routes = [
                 m => m.StatisticsModule
             ),
     },
-    // {
-    //     path: 'rues',
-    //     loadChildren: () =>
-    //         import('./components/rues/rues.module').then(m => m.RuesModule),
-    // },
-    // {
-    //     path: 'validations',
-    //     loadChildren: () =>
-    //         import('./components/validations/validations.module').then(
-    //             m => m.ValidationsModule
-    //         ),
-    // },
+    {
+        path: 'rues',
+        loadChildren: () =>
+            import('./components/rues/rues.module').then(m => m.RuesModule),
+    },
+    {
+        path: 'validations',
+        loadChildren: () =>
+            import('./components/validations/validations.module').then(
+                m => m.ValidationsModule
+            ),
+    },
     {
         path: 'vehicules',
         loadChildren: () =>

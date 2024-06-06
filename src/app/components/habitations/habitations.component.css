@@ -1,0 +1,43 @@
+.p-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.p-field input {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    height: 2rem;
+    /* hauteur réduite */
+}
+
+.p-field label {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.p-field input:focus {
+    outline: none;
+    border-color: #007ad9;
+    box-shadow: 0 0 5px #007ad9;
+}
+
+.card-deck {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.card-deck:last-child {
+    margin-right: 0;
+}
+
+.card-content {
+    text-align: center !important;
+}
+
