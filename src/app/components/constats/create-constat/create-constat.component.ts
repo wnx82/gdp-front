@@ -7,7 +7,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { SelectItemGroup } from 'primeng/api';
-import { Agent } from '../../../interfaces/Agent.interface';
+import { Agent } from '../../../interfaces/User.interface';
 import { Constat } from '../../../interfaces/Constat.interface';
 import { Rue } from '../../../interfaces/Rue.interface.';
 import { ConstatsComponent } from '../constats.component';

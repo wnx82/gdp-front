@@ -14,7 +14,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
-import { Agent } from '../../interfaces/Agent.interface';
+import { Agent } from '../../interfaces/User.interface';
 import { GetDataService } from '../../services/getData/get-data.service';
 
 @Component({

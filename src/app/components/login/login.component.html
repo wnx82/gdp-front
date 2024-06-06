@@ -1,0 +1,58 @@
+<p-toast></p-toast>
+<div *ngIf="showLoader" class="loader-container">
+    <div class="loader"></div>
+</div>
+<div *ngIf="!showLoader">
+    <div class="parent">
+        <div class="container" [ngClass]="isSignDivVisible ? 'active' : ''" id="container">
+
+            <div class="form-container sign-in">
+                <form class="signin-form" [formGroup]="loginForm">
+                    <img src="assets/images/logo.png" alt="Logo GDP" class="logo" style="width: 100px; height: auto; display: block; margin: 0 auto;" />
+
+
+
+    
+
+                    <h1>Se connecter</h1>
+
+                    <input pInputText id="email" name="email" formControlName="email" type="text" placeholder="Email"
+                        autocomplete="current-email" />
+                    <small class="error-message"
+                        *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)">
+                        {{ loginForm.get('email')?.hasError('required') ? 'L\'e-mail est requis' : '' }}
+                        {{ loginForm.get('email')?.hasError('email') ? 'Veuillez entrer une adresse e-mail valide' : ''
+                        }}
+                    </small>
+                    <p-password formControlName="password" name="password" [toggleMask]="true" [feedback]="false"
+                        [placeholder]="'Mot de passe'" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }"
+                        autocomplete="current-password"></p-password>
+
+                    <small class="error-message"
+                        *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
+                        {{ loginForm.get('password')?.hasError('minlength') ? 'Doit contenir au moins 3 caractères' : ''
+                        }}
+                    </small>
+
+                    <button (click)="onLogin()" [class.disabled-button]="!isLoginButtonEnabled()">Se connecter</button>
+                </form>
+            </div>
+
+
+
+            <div class="toggle-container">
+                <div class="toggle">
+                    <div class="toggle-panel toggle-left">
+                        <h1>De retour!</h1>
+                        <p>Entrez vos coordonnées personnelles pour utiliser toutes les fonctionnalités du site</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- By VANDERMEULEN Christophe -->

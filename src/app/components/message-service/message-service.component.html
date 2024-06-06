@@ -1,0 +1,30 @@
+<!-- <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages> -->
+
+<h5>Message Service</h5>
+<form [formGroup]="dataForm">
+    <div>
+        <label for="severityInput">Severity:</label>
+        <select id="severityInput" formControlName="severity">
+            <option value="success">Success</option>
+            <option value="error">Error</option>
+            <option value="info">Info</option>
+            <option value="warn">Warning</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="summaryInput">Summary:</label>
+        <input type="text" id="summaryInput" formControlName="summary" />
+    </div>
+
+    <div>
+        <label for="detailInput">Detail:</label>
+        <input type="text" id="detailInput" formControlName="detail" />
+    </div>
+</form>
+<button type="button" pButton (click)="showViaService()" label="Via Service" [disabled]="!dataForm.valid"></button>
+
+<button type="button" pButton pRipple (click)="clearMessage()" icon="pi pi-times" label="Clear"
+    class="p-button-secondary"></button>
+
+

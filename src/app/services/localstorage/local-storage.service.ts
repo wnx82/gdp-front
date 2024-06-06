@@ -18,6 +18,8 @@ export class LocalStorageService {
     getItem(key: string): any {
         const value = localStorage.getItem(key);
         if (value) {
+            console.log('accessToken:', value);
+            
             return JSON.parse(value);
         }
         return null;

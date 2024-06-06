@@ -24,7 +24,7 @@ import { UploadComponent } from './services/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
-// import { MessageServiceComponent } from './components/message-service/message-service.component';
+import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 
 
@@ -48,7 +48,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
         RegistrationComponent,
         ToUpperCasePipe,
         UploadComponent,
-        // MessageServiceComponent,
+        MessageServiceComponent,
         StatisticsComponent,
     ],
     imports: [

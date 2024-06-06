@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Agent } from '../../interfaces/Agent.interface';
+import { Agent } from '../../interfaces/User.interface';
 import { Habitation } from '../../interfaces/Habitation.interface';
 import { Horaire } from '../../interfaces/Horaire.interface';
 import { Infraction } from '../../interfaces/Infraction.interface';

@@ -19,7 +19,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { GetDataService } from '../../services/getData/get-data.service';
 import { Rue } from '../../interfaces/Rue.interface.';
-import { Agent } from '../../interfaces/Agent.interface';
+import { Agent } from '../../interfaces/User.interface';
 
 @Component({
     selector: 'app-validations',

@@ -18,7 +18,7 @@ import { SelectItemGroup } from 'primeng/api';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Agent } from '../../interfaces/Agent.interface';
+import { Agent } from '../../interfaces/User.interface';
 import { Dailie } from '../../interfaces/Dailies.interface';
 import { GetDataService } from '../../services/getData/get-data.service';
 import { Router } from '@angular/router';

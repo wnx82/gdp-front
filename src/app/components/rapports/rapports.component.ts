@@ -19,7 +19,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
 import 'add-to-calendar-button';
 
-import { Agent } from '../../interfaces/Agent.interface';
+import { Agent } from '../../interfaces/User.interface';
 import { Rapport } from '../../interfaces/Rapports.interface';
 
 import { GetDataService } from '../../services/getData/get-data.service';
