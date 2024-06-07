@@ -1,17 +1,20 @@
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { UploadComponent } from './services/upload/upload.component';
 import { LoginComponent } from './components/login/login.component';
-import { PasswordComponent } from './components/password/password.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'password', component: PasswordComponent },
+    { path: 'reset-password/:token', component: ResetPasswordComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+
 
     {
         path: '',
