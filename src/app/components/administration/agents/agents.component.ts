@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import {
     FormArray,
     FormBuilder,
@@ -9,7 +9,7 @@ import {
     FormGroup,
     Validators,
 } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
+
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
 import { Agent } from '../../../interfaces/User.interface';
@@ -53,6 +53,7 @@ export class AgentsComponent implements OnInit {
             formations: new FormArray([]),
         });
     }
+
     environment = environment;
     readonly API_URL = `${environment.apiUrl}/agents`;
     readonly API_URL_PWD = `${environment.apiUrl}`;
@@ -172,15 +173,8 @@ export class AgentsComponent implements OnInit {
     }
 
     onConfirmDelete(agent: Agent) {
+        this.selectedAgent = agent; // Met à jour l'agent sélectionné
         this.displayConfirmationDelete = true;
-        this.confirmationService.confirm({
-            message: 'Voulez-vous vraiment supprimer cet agent ?',
-            header: 'Confirmation de suppression',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.deleteAgent(agent._id);
-            },
-        });
     }
 
     deleteAgent(id: number) {
@@ -206,8 +200,8 @@ export class AgentsComponent implements OnInit {
 
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
-        //
     }
+
     confirmDeleteDeleted(): void {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
@@ -230,6 +224,7 @@ export class AgentsComponent implements OnInit {
 
         this.displayConfirmationDialog = false;
     }
+
     confirmRestoreDeleted(): void {
         const url = `${this.API_URL}/restore`;
         this.http.post(url, {}).subscribe({
@@ -250,6 +245,7 @@ export class AgentsComponent implements OnInit {
             },
         });
     }
+
     selectAgent(agent: Agent) {
         this.selectedAgent = { ...agent };
         console.log("Sélection de l'agent", this.selectedAgent);
@@ -289,7 +285,7 @@ export class AgentsComponent implements OnInit {
         this.dataForm.get('password')?.clearValidators();
         this.dataForm.get('password')?.updateValueAndValidity();
     }
-    
+
     clear(table: Table) {
         table.clear();
     }
@@ -320,7 +316,6 @@ export class AgentsComponent implements OnInit {
             console.log('No email provided');
         }
     }
-    
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;

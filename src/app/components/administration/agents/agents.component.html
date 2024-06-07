@@ -82,12 +82,12 @@
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectAgent(agent); toggleEdit()" pTooltip="Editer cet agent"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        (click)="deleteAgent(agent._id)" pTooltip="Supprimer cet agent"></button>
                     <button pButton pRipple icon="pi pi-envelope" class="p-button-rounded p-button-info mx-2"
                         (click)="sendResetPasswordEmail(agent.email)" pTooltip="Envoyer un email de réinitialisation du mot de passe"></button>
-                </td>
                 
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="onConfirmDelete(agent)" pTooltip="Supprimer cet agent"></button>
+                    </td>
                 
             </tr>
         </ng-template>
