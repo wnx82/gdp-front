@@ -1,8 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { UploadComponent } from './services/upload/upload.component';
@@ -155,9 +153,5 @@ const routes: Routes = [
         SharedUiModule,
     ],
     exports: [RouterModule],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        // autres fournisseurs
-      ],
 })
 export class AppRoutingModule {}
