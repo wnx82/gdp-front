@@ -5,11 +5,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { UploadComponent } from './services/upload/upload.component';
 import { LoginComponent } from './components/login/login.component';
+import { PasswordComponent } from './components/password/password.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
+    { path: 'password', component: PasswordComponent },
+
     {
         path: '',
         canActivate: [AuthGuard],
@@ -29,77 +32,77 @@ const routes: Routes = [
             {
                 path: 'agents',
                 loadChildren: () =>
-                    import('./components/agents/agents.module').then(
+                    import('./components/admin/agents/agents.module').then(
                         m => m.AgentsModule
                     ),
             },
             {
                 path: 'users',
                 loadChildren: () =>
-                    import('./components/agents/agents.module').then(
+                    import('./components/admin/agents/agents.module').then(
                         m => m.AgentsModule
                     ),
             },
             {
                 path: 'categories',
                 loadChildren: () =>
-                    import('./components/categories/categories.module').then(
+                    import('./components/admin/categories/categories.module').then(
                         m => m.CategoriesModule
                     ),
             },
             {
                 path: 'constats',
                 loadChildren: () =>
-                    import('./components/constats/constats.module').then(
+                    import('./components/admin/constats/constats.module').then(
                         m => m.ConstatsModule
                     ),
             },
             {
                 path: 'dailies',
                 loadChildren: () =>
-                    import('./components/dailies/dailies.module').then(
+                    import('./components/admin/dailies/dailies.module').then(
                         m => m.DailiesModule
                     ),
             },
             {
                 path: 'habitations',
                 loadChildren: () =>
-                    import('./components/habitations/habitations.module').then(
+                    import('./components/admin/habitations/habitations.module').then(
                         m => m.HabitationsModule
                     ),
             },
             {
                 path: 'horaires',
                 loadChildren: () =>
-                    import('./components/horaires/horaires.module').then(
+                    import('./components/admin/horaires/horaires.module').then(
                         m => m.HorairesModule
                     ),
             },
             {
                 path: 'infractions',
                 loadChildren: () =>
-                    import('./components/infractions/infractions.module').then(
+                    import('./components/admin/infractions/infractions.module').then(
                         m => m.InfractionsModule
                     ),
             },
             {
                 path: 'missions',
                 loadChildren: () =>
-                    import('./components/missions/missions.module').then(
+                    import('./components/admin/missions/missions.module').then(
                         m => m.MissionsModule
                     ),
             },
             {
                 path: 'quartiers',
                 loadChildren: () =>
-                    import('./components/quartiers/quartiers.module').then(
+                    import('./components/admin/quartiers/quartiers.module').then(
                         m => m.QuartiersModule
                     ),
             },
             {
                 path: 'rapports',
                 loadChildren: () =>
-                    import('./components/rapports/rapports.module').then(
+                    import('./components/admin/rapports/rapports.module').then(
                         m => m.RapportsModule
                     ),
             },
@@ -113,19 +116,19 @@ const routes: Routes = [
             {
                 path: 'rues',
                 loadChildren: () =>
-                    import('./components/rues/rues.module').then(m => m.RuesModule),
+                    import('./components/admin/rues/rues.module').then(m => m.RuesModule),
             },
             {
                 path: 'validations',
                 loadChildren: () =>
-                    import('./components/validations/validations.module').then(
+                    import('./components/admin/validations/validations.module').then(
                         m => m.ValidationsModule
                     ),
             },
             {
                 path: 'vehicules',
                 loadChildren: () =>
-                    import('./components/vehicules/vehicules.module').then(
+                    import('./components/admin/vehicules/vehicules.module').then(
                         m => m.VehiculesModule
                     ),
             },

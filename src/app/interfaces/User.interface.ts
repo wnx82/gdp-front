@@ -9,11 +9,6 @@ export interface Agent {
     birthday?: Date | null;
     tel?: string | null;
     iceContact?: string | null;
-    adresse?: {
-        rue?: string | null;
-        nomComplet?: string | null;
-        numero?: string | null;
-    };
     picture?: string | null;
     formations?: string[];
     createdAt?: string | null;
@@ -32,11 +27,6 @@ export interface User {
     birthday?: Date | null;
     tel?: string | null;
     iceContact?: string | null;
-    adresse?: {
-        rue?: string | null;
-        nomComplet?: string | null;
-        numero?: string | null;
-    };
     picture?: string | null;
     formations?: string[];
     createdAt?: string | null;

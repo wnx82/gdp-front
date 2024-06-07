@@ -26,6 +26,7 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
+import { PasswordComponent } from './components/password/password.component';
 
 
 
@@ -50,6 +51,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
         UploadComponent,
         MessageServiceComponent,
         StatisticsComponent,
+        PasswordComponent,
     ],
     imports: [
         BrowserModule,
