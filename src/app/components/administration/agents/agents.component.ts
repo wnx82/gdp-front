@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import {
     FormArray,
@@ -57,6 +55,7 @@ export class AgentsComponent implements OnInit {
     }
     environment = environment;
     readonly API_URL = `${environment.apiUrl}/agents`;
+    readonly API_URL_PWD = `${environment.apiUrl}`;
     dataForm: FormGroup<any>;
     agents: Agent[] = [];
     filteredRues: any[] = [];
@@ -97,7 +96,6 @@ export class AgentsComponent implements OnInit {
         this.http.get<Agent[]>(url).subscribe({
             next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
-                // console.log(this.agents);
             },
             error: error => {
                 this.messageService.add({
@@ -110,8 +108,10 @@ export class AgentsComponent implements OnInit {
     }
 
     addAgent(agent: any) {
+        if (this.dataForm.invalid) {
+            return;
+        }
         let url = `${this.API_URL}`;
-        console.log(this.dataForm.value);
         this.http.post<Agent>(url, this.dataForm.value).subscribe({
             next: data => {
                 this.agents.push(data);
@@ -135,30 +135,19 @@ export class AgentsComponent implements OnInit {
     }
 
     editAgent(id: number, agent: any) {
-        if (!agent) {
-            console.error('Données invalides', agent);
+        if (this.dataForm.invalid) {
             return;
         }
-        console.log('agent update', agent);
-        const updatedAgent = {
-            ...agent,
-            matricule: { ...agent.matricule },
-            email: { ...agent.email },
-            password: { ...agent.password },
-            userAccess: { ...agent.userAccess },
-            firstname: { ...agent.firstname },
-            lastname: { ...agent.lastname },
-            birthday: { ...agent.birthday },
-            tel: { ...agent.tel },
-            iceContact: { ...agent.iceContact },
-            picture: { ...agent.picture },
-            formations: { ...agent.formations },
-        };
 
-        const url = `${this.API_URL}/${this.selectedAgent._id}`;
+        const updatedAgent = { ...agent };
 
-        this.http.patch<Agent>(url, this.dataForm.value).subscribe({
-            // this.http.patch<any>(url, updatedAgent).subscribe({
+        if (!agent.password) {
+            delete updatedAgent.password;
+        }
+
+        const url = `${this.API_URL}/${id}`;
+
+        this.http.patch<Agent>(url, updatedAgent).subscribe({
             next: data => {
                 const index = this.agents.findIndex(a => a._id === data._id);
                 this.agents[index] = data;
@@ -220,7 +209,6 @@ export class AgentsComponent implements OnInit {
         //
     }
     confirmDeleteDeleted(): void {
-        // Mettez ici le code pour supprimer définitivement les données supprimées
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
             next: () => {
@@ -229,7 +217,7 @@ export class AgentsComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Toutes les données ont été complètement effacées',
                 });
-                this.getAgents(); // Met à jour la liste
+                this.getAgents();
             },
             error: error => {
                 this.messageService.add({
@@ -243,7 +231,6 @@ export class AgentsComponent implements OnInit {
         this.displayConfirmationDialog = false;
     }
     confirmRestoreDeleted(): void {
-        // Mettez ici le code pour restaurer les données supprimées
         const url = `${this.API_URL}/restore`;
         this.http.post(url, {}).subscribe({
             next: () => {
@@ -252,7 +239,7 @@ export class AgentsComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Toutes les données ont été restaurées avec succès',
                 });
-                this.getAgents(); // Met à jour la liste
+                this.getAgents();
             },
             error: error => {
                 this.messageService.add({
@@ -266,10 +253,10 @@ export class AgentsComponent implements OnInit {
     selectAgent(agent: Agent) {
         this.selectedAgent = { ...agent };
         console.log("Sélection de l'agent", this.selectedAgent);
-        const birthday = agent?.birthday ? new Date(agent.birthday) : null; // Convertit la date en instance de date si elle existe
+        const birthday = agent?.birthday ? new Date(agent.birthday) : null;
         this.dataForm.patchValue({
             email: agent?.email,
-            password: agent?.password,
+            password: '',
             userAccess: agent?.userAccess,
             matricule: agent?.matricule,
             firstname: agent?.firstname,
@@ -290,29 +277,52 @@ export class AgentsComponent implements OnInit {
     }
 
     toggleAdd() {
-        this.isAdding = !this.isAdding;
+        this.isAdding = true;
         this.selectedAgent = {};
         this.dataForm.reset();
+        this.dataForm.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
+        this.dataForm.get('password')?.updateValueAndValidity();
     }
 
     toggleEdit() {
-        this.isEditing = !this.isEditing;
-        console.log(this.selectedAgent);
+        this.isEditing = true;
+        this.dataForm.get('password')?.clearValidators();
+        this.dataForm.get('password')?.updateValueAndValidity();
     }
+    
     clear(table: Table) {
         table.clear();
     }
 
-    addFormation(): void {
-        // this.dataForm.formations.push(this.dataForm.control(''));
-    }
+    addFormation(): void {}
 
-    removeFormation(index: number): void {
-        // this.formations.removeAt(index);
+    removeFormation(index: number): void {}
+
+    sendResetPasswordEmail(email: string) {
+        if (email) {
+            console.log('Attempting to send reset password email to:', email);
+            this.http.post(`${this.API_URL_PWD}/forgot-password`, { email }).subscribe(
+                () => {
+                    console.log('Reset link sent successfully to:', email);
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reset link sent to the agent\'s email.' });
+                },
+                error => {
+                    console.error('Error occurred while sending reset link:', error);
+                    if (error.status === 404) {
+                        console.error('404 Not Found - Email not found in the database');
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email not found.' });
+                    } else {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to send reset link.' });
+                    }
+                }
+            );
+        } else {
+            console.log('No email provided');
+        }
     }
+    
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-    
+    }
 }
