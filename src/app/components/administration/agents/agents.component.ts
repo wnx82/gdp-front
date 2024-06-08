@@ -51,7 +51,8 @@ export class AgentsComponent implements OnInit {
             iceContact: new FormControl(''),
             picture: new FormControl(''),
             formations: new FormArray([]),
-            enable: new FormControl(true)
+            enable: new FormControl(true),
+            // lastConnection: new FormControl(''),
         });
     }
 
@@ -243,10 +244,20 @@ export class AgentsComponent implements OnInit {
         });
     }
 
-    selectAgent(agent: Agent) {
+    selectAgent(agent: any) {
         this.selectedAgent = { ...agent };
         console.log("Sélection de l'agent", this.selectedAgent);
+    
         const birthday = agent?.birthday ? new Date(agent.birthday) : null;
+    
+        this.formations.clear();
+    
+        if (agent.formations && agent.formations.length > 0) {
+            agent.formations.forEach((formation: any) => {
+                this.formations.push(this.fb.control(formation));
+            });
+        }
+    
         this.dataForm.patchValue({
             email: agent?.email,
             password: '',
@@ -258,11 +269,12 @@ export class AgentsComponent implements OnInit {
             tel: agent?.tel,
             iceContact: agent?.iceContact,
             picture: agent?.picture,
-            formations: agent?.formations || [],
             enable: agent?.enable,
         });
+    
         console.log('Data form value: ', this.dataForm.value);
     }
+    
 
     cancel() {
         this.selectedAgent = {};
@@ -274,6 +286,7 @@ export class AgentsComponent implements OnInit {
         this.isAdding = true;
         this.selectedAgent = {};
         this.dataForm.reset();
+        this.formations.clear();
         this.dataForm.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
         this.dataForm.get('password')?.updateValueAndValidity();
     }
@@ -287,11 +300,16 @@ export class AgentsComponent implements OnInit {
     clear(table: Table) {
         table.clear();
     }
-
-    addFormation(): void {}
-
-    removeFormation(index: number): void {}
-
+    get formations(): FormArray {
+        return this.dataForm.get('formations') as FormArray;
+    }
+    addFormation() {
+        this.formations.push(new FormControl(''));
+      }
+    
+    removeFormation(index: number) {
+    this.formations.removeAt(index);
+    }
     sendResetPasswordEmail(email: string) {
         if (email) {
             console.log('Tentative d\'envoi de l\'email de réinitialisation du mot de passe à :', email);

@@ -205,12 +205,29 @@
                           </small>
                       </span>
 
+                      <div formArrayName="formations">
+                        <div *ngFor="let formation of formations.controls; let i = index">
+                            <span class="p-float-label">
+                                <input type="text" [formControlName]="i" pInputText />
+                                <label>Formation {{ i + 1 }}</label>
+                            </span>
+                            <button pButton type="button" icon="pi pi-minus" class="p-button-danger p-button-sm" (click)="removeFormation(i)"></button>
+                        </div>
+                        <button pButton type="button" icon="pi pi-plus" class="p-button-success p-button-sm mt-2" (click)="addFormation()"></button>
+                    </div>
+
                       <span class="p-float-label">
                         <p-toggleButton formControlName="enable" onLabel="Activé" offLabel="Désactivé"></p-toggleButton>
                         <label for="enable">Statut</label>
                     </span>
-                
-
+                    <div *ngIf="selectedAgent">
+                        <span class="p-float-label">
+                            Dernière connexion : {{ selectedAgent.lastConnection | date:'fullDate' }}
+                        </span>
+                    </div>
+                    
+                    
+                    
                       <div class="button-container">
                           <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary" icon="pi pi-times" (click)="cancel()"></button>
                           <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}" class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}" [disabled]="!dataForm.valid"></button>

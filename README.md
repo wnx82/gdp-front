@@ -4,6 +4,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 
 
+npm run build-css
+npm run minify-css
+
+npm run build --prod
+
+
+
 <p align="center"><img src="https://github.com/winnux82/gdp-back/blob/main/public/images/gdplogo.png" alt="GDP Logo"></p>
 
 <h1 align="center">GDP Portail</h1>

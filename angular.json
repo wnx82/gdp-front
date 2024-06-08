@@ -46,7 +46,7 @@
             ],
             "styles": [
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.scss"
+              "src/styles.min.css"
             ],
             "scripts": []
           },
@@ -58,16 +58,27 @@
                     "with": "/src/app/environments/environment.prod.ts"
                 }
               ],
+              "optimization": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "20kb",
+                  "maximumError": "25kb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "css",
+                  "maximumWarning": "20kb",
+                  "maximumError": "25kb"
                 }
               ],
               "outputHashing": "all"

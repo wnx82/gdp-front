@@ -1,5 +1,5 @@
 //app.module.ts
-import { NgModule } from '@angular/core';
+import { NgModule,LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,7 +26,8 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
-
+import { PrimeNGConfig } from 'primeng/api';
+import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
 
 
 // import { ButtonModule } from 'primeng/button';
@@ -67,6 +68,13 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
         SharedUiModule,
     ],
     // providers: [MessageService],
+    providers: [
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
+      ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+    constructor(private primengConfig: PrimeNGConfig) {
+        this.primengConfig.setTranslation(PRIMENG_LOCALE_FR);
+      }
+}

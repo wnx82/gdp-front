@@ -14,8 +14,8 @@ export interface Agent {
     createdAt?: string | null;
     updatedAt?: string | null;
     deletedAt?: string | null;
-    lastConnection?: string | null; // Ajoutée
-    enable?: boolean | null; // Ajoutée
+    lastConnection?: string | null; 
+    enable?: boolean | null; 
 }
 
 export interface User {
@@ -34,8 +34,8 @@ export interface User {
     createdAt?: string | null;
     updatedAt?: string | null;
     deletedAt?: string | null;
-    lastConnection?: string | null; // Ajoutée
-    enable?: boolean | null; // Ajoutée
+    lastConnection?: string | null; 
+    enable?: boolean | null; 
 }
 
 

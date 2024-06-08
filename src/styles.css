@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+/* Import Primeng styles */
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+@import 'primeng/resources/primeng.min.css';
+@import 'primeng/resources/themes/lara-light-blue/theme.css';
+* {
+  box-sizing: border-box;
+  padding-top: 0%;
+}
+
+body {
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  margin: 1.25rem 0 1.25rem 0;
+  box-shadow: 0 0.25rem 0.5rem #e6edef;
+}
+.card .card-head {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #edf1f7;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.card .card-body {
+  padding: 1rem 1.5rem;
+}
+
+span.p-float-label {
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Pour espacer les messages globalement */
+.ui-messages {
+  margin-bottom: 20px; /* Ajustez la valeur selon vos besoins */
+}
+
+@media (max-width: 768px) {
+  .p-dialog {
+    width: 90vw;
+    height: 90vh;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

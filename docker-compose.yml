@@ -1,15 +1,16 @@
 version: '3.9'
-services:
-    angular-app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        ports:
-            - '4200:4200'
-        volumes:
-            - ./src:/app/src
-        depends_on:
-            - api
 
-    api:
-        image: gdp-back-api
+services:
+  front:
+    container_name: gdp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - networkgdp
+
+networks:
+  networkgdp:
+    driver: bridge
