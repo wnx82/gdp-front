@@ -26,8 +26,6 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 

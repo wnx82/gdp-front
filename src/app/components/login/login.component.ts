@@ -13,6 +13,8 @@ import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
 import { AuthService } from '../../services/auth/auth.service';
 import { environment } from '../../environments/environment';
 import { RegisterService } from '../../services/register/register.service';
+import { StatusService } from '../../services/status/status-service.service'
+
 @Component({
     selector: 'app-login',
     standalone: true,
@@ -35,6 +37,7 @@ export class LoginComponent implements OnInit {
         private authService: AuthService,
         private messageService: MessageService,
         private router: Router,
+        private statusService: StatusService,
         // private registerService: RegisterService
     ) {
         //Partie login
@@ -61,9 +64,30 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         //
+        this.checkDatabaseStatus();
         setTimeout(() => {
             this.showLoader = false;
         }, 100);
+    }
+    checkDatabaseStatus() {
+        this.statusService.checkDatabaseStatus().subscribe(
+            response => {
+                // Base de données connectée, affichez un message de succès ou faites toute autre action nécessaire
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'La base de données est connectée.',
+                });
+            },
+            error => {
+                // Erreur lors de la vérification du statut de la base de données, affichez un message d'erreur ou prenez toute autre action nécessaire
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'Erreur lors de la vérification du statut de la base de données : ' + error,
+                });
+            }
+        );
     }
 
     onLogin() {
