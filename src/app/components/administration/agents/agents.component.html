@@ -58,12 +58,10 @@
             <!-- Table Header -->
             <tr>
                 <th style="width:5%"></th>
-                <th pSortableColumn="matricule" style="width:10%">Matricule<p-sortIcon field="matricule"></p-sortIcon>
-                </th>
+                <th pSortableColumn="matricule" style="width:10%">Matricule<p-sortIcon field="matricule"></p-sortIcon></th>
                 <th pSortableColumn="lastname" style="width:10%">Nom<p-sortIcon field="lastname"></p-sortIcon></th>
                 <th pSortableColumn="firstname" style="width:10%">Prénom<p-sortIcon field="firstname"></p-sortIcon></th>
-                <th pSortableColumn="userAccess" style="width:10%">Niveau<p-sortIcon field="userAccess"></p-sortIcon>
-                </th>
+                <th pSortableColumn="userAccess" style="width:10%">Niveau<p-sortIcon field="userAccess"></p-sortIcon></th>
                 <th style="width:10%"></th>
             </tr>
         </ng-template>
@@ -72,9 +70,12 @@
         <ng-template pTemplate="body" let-agent>
             <tr>
                 <td>
-                    <img [src]="agent.picture ? agent.picture : (agent.userAccess < 1 ? environment.apiUrl + '/images/admin.png' : environment.apiUrl + '/images/user.png')"
-                        [alt]="agent.matricule" width="25" />
+                    <i [class]="agent.userAccess < 1 ? 'pi pi-user-plus' : 'pi pi-user'" pBadge class="p-badge-lg mr-2 p-text-secondary" [severity]="agent.enable ? 'success' : 'danger'" style="font-size: 2rem;"></i>
                 </td>
+                
+                
+                
+                
                 <td><p-tag>A{{ agent.matricule }}</p-tag></td>
                 <td>{{ agent.lastname | uppercase }}</td>
                 <td>{{ agent.firstname }}</td>
@@ -84,8 +85,7 @@
                         (click)="selectAgent(agent); toggleEdit()" pTooltip="Editer cet agent"></button>
                     <button pButton pRipple icon="pi pi-envelope" class="p-button-rounded p-button-info mx-2"
                         (click)="sendResetPasswordEmail(agent.email)" pTooltip="Envoyer un email de réinitialisation du mot de passe"></button>
-                
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mx-2"
                         (click)="onConfirmDelete(agent)" pTooltip="Supprimer cet agent"></button>
                     </td>
                 
@@ -197,13 +197,19 @@
                               <span class="p-inputgroup-addon">
                                   <i class="pi pi-user"></i>
                               </span>
-                              <input type="text" id="iceContact" formControlName="iceContact" required pInputText>
+                              <input type="text" id="iceContact" formControlName="iceContact" pInputText>
                               <label for="iceContact">Contact en cas d'urgence</label>
                           </div>
                           <small *ngIf="dataForm.get('iceContact')?.invalid && (dataForm.get('iceContact')?.dirty || dataForm.get('iceContact')?.touched)">
                               Le contact en cas d'urgence est obligatoire.
                           </small>
                       </span>
+
+                      <span class="p-float-label">
+                        <p-toggleButton formControlName="enable" onLabel="Activé" offLabel="Désactivé"></p-toggleButton>
+                        <label for="enable">Statut</label>
+                    </span>
+                
 
                       <div class="button-container">
                           <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary" icon="pi pi-times" (click)="cancel()"></button>

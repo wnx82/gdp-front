@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-
-
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
 
 body{
     background-color: #c9d6ff;
@@ -12,19 +16,6 @@ body{
     flex-direction: column;
     height: 100vh;
 }
-
-/* Conteneur parent */
-.parent {
-    background-color: #c9d6ff;
-    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-
 
 .container{
     background-color: #fff;
@@ -69,23 +60,9 @@ body{
     cursor: pointer;
 }
 
-.disabled-button {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* Style pour les boutons de la classe toggleButton */
-.toggle-container .toggleButton {
+.container button.hidden{
     background-color: transparent;
-    border: 2px solid #fff;
-    color: #fff;
-
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.toggle-container .toggleButton:hover {
-    background-color: #fff;
-    color: #512da8;
+    border-color: #fff;
 }
 
 .container form{
@@ -98,15 +75,15 @@ body{
     height: 100%;
 }
 
-/* Champ de saisie */
-.container input {
+.container input{
+    background-color: #eee;
+    border: none;
     margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
     width: 100%;
-}
-
-
-.container p-password {
-    width: 100%;
+    outline: none;
 }
 
 .form-container{
@@ -219,10 +196,4 @@ body{
 
 .container.active .toggle-right{
     transform: translateX(200%);
-}
-
-/* Logo */
-.logo {
-    width: 100px;
-    height: auto;
 }

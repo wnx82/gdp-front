@@ -5,6 +5,8 @@ import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router'; 
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-password',
@@ -18,25 +20,39 @@ export class ForgotPasswordComponent {
   forgetPasswordForm: FormGroup;
   private apiUrl: string = environment.apiUrl;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private messageService: MessageService) {
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient, 
+    private messageService: MessageService,
+    private router: Router  
+  ) {
     this.forgetPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.forgetPasswordForm.valid) {
       const email = this.forgetPasswordForm.get('email')?.value;
 
-      this.http.post(`${this.apiUrl}/forgot-password`, { email }).subscribe(
-        () => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reset link sent to your email.' });
-        },
-        error => {
-          console.error('Error:', error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to send reset link.' });
-        }
-      );
+      try {
+        await firstValueFrom(this.http.post(`${this.apiUrl}/forgot-password`, { email }));
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Succès', 
+          detail: 'Lien de réinitialisation envoyé à votre email.' 
+        });
+        setTimeout(() => {
+          this.router.navigate(['/login']); 
+        }, 3000); // Délai de 3 secondes
+      } catch (error) {
+        console.error('Erreur :', error);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Erreur', 
+          detail: "Échec de l'envoi du lien de réinitialisation." 
+        });
+      }
     }
   }
 

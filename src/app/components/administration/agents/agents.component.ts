@@ -51,6 +51,7 @@ export class AgentsComponent implements OnInit {
             iceContact: new FormControl(''),
             picture: new FormControl(''),
             formations: new FormArray([]),
+            enable: new FormControl(true)
         });
     }
 
@@ -76,12 +77,7 @@ export class AgentsComponent implements OnInit {
 
     ngOnInit() {
         this.getAgents();
-        this.getDataService.rues$.subscribe(rues => {
-            this.rues = rues.map(rue => ({
-                value: rue._id,
-                label: rue.nomComplet,
-            }));
-        });
+
     }
 
     private handleError(error: any): void {
@@ -97,6 +93,7 @@ export class AgentsComponent implements OnInit {
         this.http.get<Agent[]>(url).subscribe({
             next: data => {
                 this.agents = data.filter(agent => !agent.deletedAt);
+                console.log(this.agents)
             },
             error: error => {
                 this.messageService.add({
@@ -262,6 +259,7 @@ export class AgentsComponent implements OnInit {
             iceContact: agent?.iceContact,
             picture: agent?.picture,
             formations: agent?.formations || [],
+            enable: agent?.enable,
         });
         console.log('Data form value: ', this.dataForm.value);
     }
@@ -296,26 +294,27 @@ export class AgentsComponent implements OnInit {
 
     sendResetPasswordEmail(email: string) {
         if (email) {
-            console.log('Attempting to send reset password email to:', email);
+            console.log('Tentative d\'envoi de l\'email de réinitialisation du mot de passe à :', email);
             this.http.post(`${this.API_URL_PWD}/forgot-password`, { email }).subscribe(
                 () => {
-                    console.log('Reset link sent successfully to:', email);
-                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reset link sent to the agent\'s email.' });
+                    console.log('Lien de réinitialisation envoyé avec succès à :', email);
+                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Lien de réinitialisation envoyé à l\'email de l\'agent.' });
                 },
                 error => {
-                    console.error('Error occurred while sending reset link:', error);
+                    console.error('Erreur lors de l\'envoi du lien de réinitialisation :', error);
                     if (error.status === 404) {
-                        console.error('404 Not Found - Email not found in the database');
-                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email not found.' });
+                        console.error('404 Non trouvé - Email non trouvé dans la base de données');
+                        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Email non trouvé.' });
                     } else {
-                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to send reset link.' });
+                        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Échec de l\'envoi du lien de réinitialisation.' });
                     }
                 }
             );
         } else {
-            console.log('No email provided');
+            console.log('Aucun email fourni');
         }
     }
+    
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;

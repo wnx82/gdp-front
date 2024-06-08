@@ -10,10 +10,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     providers: [ConfirmationService],
 })
 export class ApiComponent implements OnInit {
-    readonly API_URL = `${environment.apiUrl}/logs`;
+    readonly API_URL_ACCESS = `${environment.apiUrl}/logs/access`;
+    readonly API_URL_CONSOLE = `${environment.apiUrl}/logs/console`;
 
     logs: string[] = [];
     displayConfirmationDelete = false;
+    currentLogUrl: string = this.API_URL_ACCESS; // Default to access logs
 
     displayedLogs: string[] = []; // Logs à afficher pour la page actuelle
     itemsPerPage: number = 50; // Nombre de logs par page
@@ -26,17 +28,20 @@ export class ApiComponent implements OnInit {
             event.first + event.rows
         );
     }
+
     constructor(
         private http: HttpClient,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
+
     ngOnInit() {
-        this.getLogs();
+        this.getLogs(this.currentLogUrl);
     }
 
-    getLogs() {
-        this.http.get<string[]>(this.API_URL).subscribe(
+    getLogs(url: string) {
+        this.currentLogUrl = url;
+        this.http.get<string[]>(url).subscribe(
             data => {
                 this.logs = data;
                 this.getDisplayedLogs(); // Met à jour les logs paginés après la récupération
@@ -55,26 +60,21 @@ export class ApiComponent implements OnInit {
             this.firstItemIndex,
             lastItemIndex > totalLogs ? totalLogs : lastItemIndex
         );
-
-        if (totalLogs >= 20 * this.itemsPerPage) {
-            //A 20 pages de logs, lancer delete
-            this.confirmDeleteLogs();
-        }
     }
 
     onConfirm() {
         this.displayConfirmationDelete = false;
-        this.http.delete<string[]>(this.API_URL).subscribe(
+        this.http.delete<string[]>(this.currentLogUrl).subscribe(
             () => {
                 console.log(
-                    'Le contenu du fichier access.log a été effacé avec succès.'
+                    'Le contenu du fichier a été effacé avec succès.'
                 );
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
-                    detail: 'Fichier access.log effacé',
+                    detail: 'Fichier effacé',
                 });
-                this.getLogs(); // Recharge la liste des logs après la suppression
+                this.getLogs(this.currentLogUrl); // Recharge la liste des logs après la suppression
             },
             (error: HttpErrorResponse) => {
                 console.error(
@@ -91,24 +91,14 @@ export class ApiComponent implements OnInit {
 
     confirmDeleteLogs() {
         this.displayConfirmationDelete = true;
-        this.confirmationService.confirm({
-            message:
-                'Êtes-vous sûr de vouloir supprimer le contenu du fichier access.log ?',
-            header: 'Confirmation de suppression',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.onConfirm();
-            },
-            reject: () => {
-                this.onReject();
-            },
-        });
     }
 
     getDisplayRange(): string {
         const lastItemIndex = this.firstItemIndex + this.displayedLogs.length;
-        return `Affichage de ${
-            this.firstItemIndex + 1
-        } à ${lastItemIndex} sur ${this.logs.length} entrées`;
+        return `Affichage de ${this.firstItemIndex + 1} à ${lastItemIndex} sur ${this.logs.length} entrées`;
+    }
+
+    switchLogType(url: string) {
+        this.getLogs(url);
     }
 }

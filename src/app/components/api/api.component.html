@@ -7,21 +7,27 @@
         <button pButton label="Supprimer" class="p-button-danger" (click)="onConfirm()"></button>
     </p-footer>
 </p-dialog>
+
 <p-toast></p-toast>
 
 <div class="p-d-flex p-jc-between p-ai-center">
     <form>
         <button pButton label="Supprimer" class="p-button-danger mb-4" (click)="confirmDeleteLogs()"></button>
-        <!-- <p-confirmDialog #confirmDelete></p-confirmDialog> -->
     </form>
+</div>
 
-    <div *ngIf="logs !== null">
-        <p>{{ getDisplayRange() }}</p>
+<div class="p-d-flex p-jc-between p-ai-center">
+    <button pButton label="Afficher les logs d'accès" class="p-button-info mb-4" (click)="switchLogType(API_URL_ACCESS)"></button>
+    <button pButton label="Afficher les logs de console" class="p-button-info mb-4" (click)="switchLogType(API_URL_CONSOLE)"></button>
+</div>
 
-        <ul>
-            <li *ngFor="let log of displayedLogs">{{ log }}</li>
-        </ul>
+<div *ngIf="logs !== null">
+    <p>{{ getDisplayRange() }}</p>
 
-        <p-paginator [rows]="itemsPerPage" [totalRecords]="logs.length" [first]="firstItemIndex"
-            (onPageChange)="onPageChange($event)"></p-paginator>
-    </div>
+    <ul>
+        <li *ngFor="let log of displayedLogs">{{ log }}</li>
+    </ul>
+
+    <p-paginator [rows]="itemsPerPage" [totalRecords]="logs.length" [first]="firstItemIndex"
+        (onPageChange)="onPageChange($event)"></p-paginator>
+</div>
