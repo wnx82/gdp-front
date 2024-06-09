@@ -6,7 +6,7 @@ export interface Validation {
     note?: string | null;
     date?: string | null;
     googlemap?: string | null;
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    deletedAt?: string | null;
 }

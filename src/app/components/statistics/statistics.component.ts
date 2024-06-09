@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class StatisticsComponent {
     agentCount = 0; // Initialise la propriété agentCount à zéro
+    articlesCount = 0; // Initialise la propriété articlesCount à zéro
     categoriesCount = 0; // Initialise la propriété categoriesCount à zéro
     constatsCount = 0; // Initialise la propriété constatsCount à zéro
     dailiesCount = 0; // Initialise la propriété dailiesCount à zéro
@@ -29,9 +30,10 @@ export class StatisticsComponent {
         this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
             this.agentCount = agents.length;
         });
-        this.http
-            .get<any[]>(`${this.API_URL}/categories`)
-            .subscribe(categories => {
+        this.http.get<any[]>(`${this.API_URL}/articles`).subscribe(articles => {
+                this.articlesCount = articles.length;
+            });
+        this.http.get<any[]>(`${this.API_URL}/categories`).subscribe(categories => {
                 this.categoriesCount = categories.length;
             });
         this.http.get<any[]>(`${this.API_URL}/constats`).subscribe(constats => {

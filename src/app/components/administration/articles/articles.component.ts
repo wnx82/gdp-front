@@ -1,35 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Categorie } from '../../../interfaces/Categorie.interface';
+import { Article, Attachment } from '../../../interfaces/Article.interface'; 
 
 @Component({
-    selector: 'app-categories',
-    templateUrl: './categories.component.html',
-    styleUrls: ['./categories.component.scss'],
+    selector: 'app-articles',
+    templateUrl: './articles.component.html',
+    styleUrls: ['./articles.component.scss'],
     providers: [MessageService],
 })
-export class CategoriesComponent implements OnInit {
+export class ArticlesComponent implements OnInit {
     private apiUrl: string | undefined;
-    donnees: Categorie[] = [];
-    selectedData: any = {};
+    articles: Article[] = [];
+    selectedArticle: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
     displayConfirmationDialog = false;
     displayConfirmationDelete = false;
-    dataForm = new FormGroup({
+    articleForm = new FormGroup({
         title: new FormControl('', [Validators.required]),
+        category: new FormControl('', [Validators.required]),
+        date: new FormControl('', [Validators.required]),
+        content: new FormControl('', [Validators.required]),
+        attachments: new FormControl<Attachment[] | null>([]),
+        author: new FormControl(''),
     });
+
     constructor(
         private http: HttpClient,
         private messageService: MessageService
     ) {}
-    readonly API_URL = `${environment.apiUrl}/categories`;
+
+    readonly API_URL = `${environment.apiUrl}/articles`;
+
     ngOnInit(): void {
         this.get();
     }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -39,10 +48,10 @@ export class CategoriesComponent implements OnInit {
     }
 
     get() {
-        this.http.get<Categorie[]>(this.API_URL).subscribe({
+        this.http.get<Article[]>(this.API_URL).subscribe({
             next: data => {
-                this.donnees = data.filter(donnee => !donnee.deletedAt);
-                console.log(this.donnees)
+                this.articles = data;
+                console.log(this.articles)
             },
             error: error => {
                 console.log(error);
@@ -50,17 +59,17 @@ export class CategoriesComponent implements OnInit {
         });
     }
 
-    add(donnee: any) {
-        this.http.post<any>(`${this.API_URL}`, this.dataForm.value).subscribe({
+    add(article: any) {
+        this.http.post<any>(`${this.API_URL}`, this.articleForm.value).subscribe({
             next: data => {
-                this.donnees.push(data);
+                this.articles.push(data);
                 this.isAdding = false;
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
-                    detail: 'Donnée ajoutée',
+                    detail: 'Article ajouté',
                 });
-                this.dataForm.reset();
+                this.articleForm.reset();
                 this.get();
             },
             error: error => {
@@ -74,34 +83,31 @@ export class CategoriesComponent implements OnInit {
         });
     }
 
-    edit(id: number, donnee: any) {
-        if (!donnee) {
-            console.error('Données invalides', donnee);
+    edit(id: number, article: any) {
+        if (!article) {
+            console.error('Données invalides', article);
             return;
         }
         const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<Categorie>(url, this.dataForm.value).subscribe({
+        this.http.patch<Article>(url, this.articleForm.value).subscribe({
             next: data => {
-                const index = this.donnees.findIndex(a => a._id === data._id);
-                this.donnees[index] = data;
-                this.selectedData = {};
+                const index = this.articles.findIndex(a => a._id === data._id);
+                this.articles[index] = data;
+                this.selectedArticle = {};
                 this.isEditing = false;
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
                     detail: 'Modification effectuée',
                 });
-                this.dataForm.reset();
+                this.articleForm.reset();
                 this.get();
             },
             error: error => {
                 console.error('Erreur de requête PATCH', error);
                 if (error.error && error.error.message) {
-                    console.error(
-                        "Message d'erreur du serveur :",
-                        error.error.message
-                    );
+                    console.error("Message d'erreur du serveur :", error.error.message);
                 }
                 this.messageService.add({
                     severity: 'error',
@@ -112,14 +118,14 @@ export class CategoriesComponent implements OnInit {
         });
     }
 
-    deleteDonnee(id: number) {
-        this.http.delete<Categorie>(`${this.API_URL}/${id}`).subscribe({
+    deleteArticle(id: number) {
+        this.http.delete<Article>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.donnees = this.donnees.filter(a => a._id !== id);
+                this.articles = this.articles.filter(a => a._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
-                    detail: 'Donnée effacée',
+                    detail: 'Article effacé',
                 });
                 this.get();
             },
@@ -136,8 +142,8 @@ export class CategoriesComponent implements OnInit {
 
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
-        //
     }
+
     confirmDeleteDeleted(): void {
         const url = `${this.API_URL}/purge`;
         this.http.post(url, {}).subscribe({
@@ -161,8 +167,8 @@ export class CategoriesComponent implements OnInit {
             },
         });
     }
+
     confirmRestoreDeleted(): void {
-        // Mettez ici le code pour restaurer les données supprimées
         const url = `${this.API_URL}/restore`;
         this.http.post(url, {}).subscribe({
             next: () => {
@@ -183,19 +189,19 @@ export class CategoriesComponent implements OnInit {
         });
     }
 
-    onConfirmDelete(categorie: Categorie) {
-        this.selectedData = categorie; 
+    onConfirmDelete(article: Article) {
+        this.selectedArticle = article; 
         this.displayConfirmationDelete = true;
     }
 
     deleteData(id: number) {
-        this.http.delete<Categorie>(`${this.API_URL}/${id}`).subscribe({
+        this.http.delete<Article>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
-                this.donnees = this.donnees.filter(a => a._id !== id);
+                this.articles = this.articles.filter(a => a._id !== id);
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
-                    detail: 'Catégorie effacée',
+                    detail: 'Article effacé',
                 });
                 this.get();
             },
@@ -208,36 +214,42 @@ export class CategoriesComponent implements OnInit {
             },
         });
     }
-    selectData(donnee: Categorie) {
-        this.selectedData = { ...donnee };
-        this.dataForm.patchValue({
-            title: donnee?.title,
+
+    selectData(article: Article) {
+        this.selectedArticle = { ...article };
+        this.articleForm.patchValue({
+            title: article?.title,
+            category: article?.category,
+            date: article?.date,
+            content: article?.content,
+            attachments: article?.attachments,
+            author: article?.author,
         });
     }
+
     cancel() {
-        this.selectedData = {};
+        this.selectedArticle = {};
         this.isAdding = false;
         this.isEditing = false;
     }
+
     toggleAdd() {
         this.isAdding = !this.isAdding;
-        this.selectedData = {};
-        this.dataForm.reset();
+        this.selectedArticle = {};
+        this.articleForm.reset();
     }
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        // console.log(this.selectedData);
     }
 
     onHide() {
-        this.selectedData = {};
+        this.selectedArticle = {};
         this.isAdding = false;
         this.isEditing = false;
     }
     
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-    
+    }
 }

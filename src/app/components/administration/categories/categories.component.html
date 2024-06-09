@@ -7,6 +7,20 @@
         <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
     </p-footer>
 </p-dialog>
+
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cette catégorie ?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteData(selectedData._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+
 <p-toast></p-toast>
 <div class="container">
     <h1>Liste des catégories</h1>
@@ -38,9 +52,12 @@
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(donnee); toggleEdit()"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        (click)="deleteDonnee(donnee._id)"></button>
-                </td>
+                    <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteDonnee(donnee._id)"></button> -->
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mx-2"
+                        (click)="onConfirmDelete(donnee)" pTooltip="Supprimer cette donnée"></button>
+                    </td>    
+                
             </tr>
         </ng-template>
         <ng-template pTemplate="paginatorleft">
@@ -51,7 +68,7 @@
         </ng-template>
     </p-table>
 
-    <p-dialog header="{{isAdding ? 'Ajouter une donnée' : 'Modifier une donnée'}}" [visible]="isDialogVisible"
+    <p-dialog header="{{isAdding ? 'Ajouter une catégorie' : 'Modifier une catégorie'}}" [visible]="isDialogVisible"
         [modal]="true" [maximizable]="true" [closable]="false" (onHide)="onHide()">
 
 

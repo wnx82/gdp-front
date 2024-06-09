@@ -62,6 +62,7 @@
                 <th pSortableColumn="lastname" style="width:10%">Nom<p-sortIcon field="lastname"></p-sortIcon></th>
                 <th pSortableColumn="firstname" style="width:10%">Prénom<p-sortIcon field="firstname"></p-sortIcon></th>
                 <th pSortableColumn="userAccess" style="width:10%">Niveau<p-sortIcon field="userAccess"></p-sortIcon></th>
+                <th pSortableColumn="lastConnection" style="width:10%">Dernière connexion<p-sortIcon field="userAccess"></p-sortIcon></th>
                 <th style="width:10%"></th>
             </tr>
         </ng-template>
@@ -80,6 +81,7 @@
                 <td>{{ agent.lastname | uppercase }}</td>
                 <td>{{ agent.firstname }}</td>
                 <td>{{ agent.userAccess }}</td>
+                <td>{{ agent.lastConnection | date:'shortDate' }} {{ agent.lastConnection | date:'HH:mm:ss' }}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectAgent(agent); toggleEdit()" pTooltip="Editer cet agent"></button>
@@ -206,15 +208,18 @@
                       </span>
 
                       <div formArrayName="formations">
-                        <div *ngFor="let formation of formations.controls; let i = index">
-                            <span class="p-float-label">
-                                <input type="text" [formControlName]="i" pInputText />
-                                <label>Formation {{ i + 1 }}</label>
-                            </span>
+                        <div *ngFor="let formation of formations.controls; let i = index" class="formation-item">
+                            <div class="input-container">
+                                <span class="p-float-label">
+                                    <input type="text" [formControlName]="i" pInputText />
+                                    <label>Formation {{ i + 1 }}</label>
+                                </span>
+                            </div>
                             <button pButton type="button" icon="pi pi-minus" class="p-button-danger p-button-sm" (click)="removeFormation(i)"></button>
                         </div>
                         <button pButton type="button" icon="pi pi-plus" class="p-button-success p-button-sm mt-2" (click)="addFormation()"></button>
                     </div>
+                    
 
                       <span class="p-float-label">
                         <p-toggleButton formControlName="enable" onLabel="Activé" offLabel="Désactivé"></p-toggleButton>
@@ -222,9 +227,10 @@
                     </span>
                     <div *ngIf="selectedAgent">
                         <span class="p-float-label">
-                            Dernière connexion : {{ selectedAgent.lastConnection | date:'fullDate' }}
+                            Dernière connexion : {{ selectedAgent.lastConnection | date:'fullDate' }} {{ selectedAgent.lastConnection | date:'HH:mm:ss' }}
                         </span>
                     </div>
+                    
                     
                     
                     

@@ -77,6 +77,10 @@ export const navbarData: INavbarData[] = [
             },
 
             {
+                routeLink: 'articles',
+                label: 'Liste des articles',
+            },
+            {
                 routeLink: 'categories',
                 label: 'Liste des categories',
             },

@@ -11,6 +11,8 @@ import { Mission } from '../../interfaces/Mission.interface';
 import { Quartier } from '../../interfaces/Quartier.interface';
 import { Rue } from '../../interfaces/Rue.interface.';
 import { Vehicule } from '../../interfaces/Vehicule.interface';
+import { Categorie } from '../../interfaces/Categorie.interface';
+import { Article } from '../../interfaces/Article.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -25,8 +27,9 @@ export class GetDataService {
     private myQuartiers = new BehaviorSubject<Quartier[]>([]);
     private myRues = new BehaviorSubject<Rue[]>([]);
     private myVehicules = new BehaviorSubject<Vehicule[]>([]);
-
-    // readonly API_URL = `${environment.apiUrl}/dailies`;
+    private myConnectedUsers = new BehaviorSubject<Agent[]>([]);
+    private myCategories = new BehaviorSubject<Categorie[]>([]);
+    private myArticles = new BehaviorSubject<Article[]>([]);
 
     constructor(private http: HttpClient) {
         this.getAgentsFromApi();
@@ -38,6 +41,9 @@ export class GetDataService {
         this.getQuartierFromApi();
         this.getRueFromApi();
         this.getVehiculeFromApi();
+        this.getConnectedUsersFromApi();
+        this.getCategoriesFromApi();
+        this.getArticlesFromApi();
     }
 
     // Listing des agents
@@ -52,6 +58,23 @@ export class GetDataService {
             },
             error: error => {
                 console.error('Error fetching agents: ', error);
+            },
+        });
+    }
+
+    // Listing des utilisateurs connectés
+    connectedUsers$: Observable<Agent[]> = this.myConnectedUsers
+        .asObservable()
+        .pipe(filter(users => users.length > 0));
+
+    private getConnectedUsersFromApi() {
+        this.http.get<Agent[]>(`${environment.apiUrl}/connected`).subscribe({
+            next: data => {
+                console.log('Connected users:', data); // Ajout du log pour les utilisateurs connectés
+                this.myConnectedUsers.next(data);
+            },
+            error: error => {
+                console.error('Error fetching connected users: ', error);
             },
         });
     }
@@ -198,5 +221,45 @@ export class GetDataService {
                 console.error('Error fetching vehicules: ', error);
             },
         });
+    }
+
+    // Listing des catégories
+    categories$: Observable<Categorie[]> = this.myCategories
+        .asObservable()
+        .pipe(filter(categories => categories.length > 0));
+
+    private getCategoriesFromApi() {
+        this.http
+            .get<Categorie[]>(`${environment.apiUrl}/categories`)
+            .subscribe({
+                next: data => {
+                    this.myCategories.next(
+                        data.filter(categorie => !categorie.deletedAt)
+                    );
+                },
+                error: error => {
+                    console.error('Error fetching categories: ', error);
+                },
+            });
+    }
+
+    // Listing des articles
+    articles$: Observable<Article[]> = this.myArticles
+        .asObservable()
+        .pipe(filter(articles => articles.length > 0));
+
+    private getArticlesFromApi() {
+        this.http
+            .get<Article[]>(`${environment.apiUrl}/articles`)
+            .subscribe({
+                next: data => {
+                    this.myArticles.next(
+                        data.filter(article => !article.deletedAt)
+                    );
+                },
+                error: error => {
+                    console.error('Error fetching articles: ', error);
+                },
+            });
     }
 }

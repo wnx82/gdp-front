@@ -1,3 +1,4 @@
+
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main-page/dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
@@ -12,12 +13,13 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'reset-password/:token', component: ResetPasswordComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
 
-
+    // { path: 'categories', component: CategoriesComponent },
     {
         path: '',
         // canActivate: [AuthGuard],
@@ -46,6 +48,13 @@ const routes: Routes = [
                 loadChildren: () =>
                     import('./components/administration/agents/agents.module').then(
                         m => m.AgentsModule
+                    ),
+            },
+            {
+                path: 'articles',
+                loadChildren: () =>
+                    import('./components/administration/articles/articles.module').then(
+                        m => m.ArticlesModule
                     ),
             },
             {

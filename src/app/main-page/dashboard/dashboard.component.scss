@@ -18,3 +18,23 @@
     width: 500px;
     margin-bottom: 20px;
 }
+
+.container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.container .card {
+    flex: 1;
+    min-width: 300px; /* ajustez au besoin */
+}
+
+.no-bullets {
+    list-style-type: none;
+    padding: 0;
+}
+
+.no-bullets li {
+    margin: 5px 0;
+}

@@ -2,11 +2,13 @@
 
 <head>
     <title>Dashboard</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeicons/4.1.0/primeicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeng/11.4.5/themes/saga-blue/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeng/11.4.5/primeng.min.css">
 </head>
-<p-toast></p-toast>
 
 <body>
+    <p-toast></p-toast>
     <button pButton type="button" label="Clear All" (click)="clearAll()"></button>
 
     <h1>Dashboard</h1>
@@ -16,31 +18,47 @@
         <div class="card"><p-skeleton width="100%" height="400px"></p-skeleton></div>
     </div>
     <div *ngIf="dataLoaded">
-
-        <app-statistics></app-statistics>
-
-
-        <div class="card">
-            <div class="card-head">Top PV</div>
-            <div class="card-body">
-                <ul>
-                    <li>Rue A</li>
-                    <li>Rue B</li>
-                    <li>Rue C</li>
-                </ul>
-                <p>Top avertissements / pv for the past month</p>
+        <div class="container">
+            <div class="card">
+                <app-statistics></app-statistics>
+            </div>
+            <div class="card">
+                <div class="card-head">👥 Utilisateurs connectés</div>
+                <div class="card-body">
+                    <ul class="no-bullets">
+                        <li *ngFor="let user of connectedUsers">
+                            👤A{{ user.matricule }} - {{ user.lastname }} {{ user.firstname }} -
+                            <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-head">Agent Satisfaction</div>
-            <div class="card-body">
-                <div class="chart">Insert Agent satisfaction chart here</div>
-                <p>Agent satisfaction ratings for the past month</p>
+        <div class="container">
+            <div class="card">
+                <div class="card-head">Top PV</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Rue A</li>
+                        <li>Rue B</li>
+                        <li>Rue C</li>
+                    </ul>
+                    <p>Top avertissements / pv for the past month</p>
+                </div>
             </div>
+            <!-- Ajoutez plus de cartes ici si nécessaire -->
+        </div>
+        <div class="container">
+            <div class="card">
+                <div class="card-head">Agent Satisfaction</div>
+                <div class="card-body">
+                    <div class="chart">Insert Agent satisfaction chart here</div>
+                    <p>Agent satisfaction ratings for the past month</p>
+                </div>
+            </div>
+            <!-- Ajoutez plus de cartes ici si nécessaire -->
         </div>
     </div>
-
-
 </body>
 
 </html>

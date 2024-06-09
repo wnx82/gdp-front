@@ -1,5 +1,6 @@
 //app.module.ts
-import { NgModule,LOCALE_ID } from '@angular/core';
+import { NgModule,LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +17,7 @@ import { FooterComponent } from './main-page/footer/footer.component';
 import { BodyComponent } from './main-page/body/body.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { SublevelMenuComponent } from './sidenav/sublevel-menu.component';
-import { DashboardComponent } from './main-page/dashboard/dashboard.component';
+import { DashboardModule } from './main-page/dashboard/dashboard.module';
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
@@ -25,9 +26,10 @@ import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageServiceComponent } from './components/message-service/message-service.component';
-import { StatisticsComponent } from './components/statistics/statistics.component';
+// import { StatisticsComponent } from './components/statistics/statistics.component';
 import { PrimeNGConfig } from 'primeng/api';
-import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
+import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service';
+
 
 
 // import { ButtonModule } from 'primeng/button';
@@ -44,13 +46,14 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         BodyComponent,
         SidenavComponent,
         SublevelMenuComponent,
-        DashboardComponent,
+        
         NoOpenDirective,
         RegistrationComponent,
         ToUpperCasePipe,
         UploadComponent,
         MessageServiceComponent,
-        StatisticsComponent,
+        
+        // StatisticsComponent,
 
     ],
     imports: [
@@ -59,6 +62,7 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         FormsModule,
         CommonModule,
         AppRoutingModule,
+        DashboardModule,
         HttpClientModule,
         LayoutModule,
         ReactiveFormsModule,
@@ -72,6 +76,7 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ],
     bootstrap: [AppComponent],
+    // schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
     constructor(private primengConfig: PrimeNGConfig) {

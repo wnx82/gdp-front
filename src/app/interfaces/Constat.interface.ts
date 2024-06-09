@@ -37,7 +37,7 @@ export interface Constat {
     pv?: boolean | null;
     notes?: string | null;
     annexes?: (string | null)[];
-    createdAt: string | null;
-    updatedAt: string | null;
-    deletedAt: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    deletedAt?: string | null;
 }

@@ -3,14 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../services/localstorage/local-storage.service';
+import { GetDataService } from '../../services/getData/get-data.service';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-    dataLoaded = false; // flag to keep track of whether data is loaded or not
-
+    connectedUsers: any[] = [];
+    dataLoaded: boolean = false;
+    // dataLoaded = false; // flag to keep track of whether data is loaded or not
     // agentCount = 0; // Initialise la propriété agentCount à zéro
     // ruesCount = 0; // Initialise la propriété agentCount à zéro
     // missionsCount = 0; // Initialise la propriété agentCount à zéro
@@ -18,20 +20,16 @@ export class DashboardComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private _localStorageService: LocalStorageService
+        private _localStorageService: LocalStorageService,
+        private getDataService: GetDataService
     ) {}
     readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
-        // this.lastUpdate = new Date();
-        // this.http.get<any[]>(`${this.API_URL}/agents`).subscribe(agents => {
-        //     this.agentCount = agents.length;
-        // });
-        // this.http.get<any[]>(`${this.API_URL}/rues`).subscribe(rues => {
-        //     this.ruesCount = rues.length;
-        // });
-        // this.http.get<any[]>(`${this.API_URL}/missions`).subscribe(missions => {
-        //     this.missionsCount = missions.length;
-        // });
+
+        this.getDataService.connectedUsers$.subscribe(users => {
+            this.connectedUsers = users;
+            this.dataLoaded = true;
+          });
         setTimeout(() => {
             this._localStorageService.getAll();
             this.dataLoaded = true; //

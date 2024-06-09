@@ -1,0 +1,114 @@
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDialog" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer définitivement les données supprimées?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDialog = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger" (click)="confirmDeleteDeleted()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Confirmation de suppression" [(visible)]="displayConfirmationDelete" [modal]="true">
+    <div class="confirmation-dialog-content">
+        <p>Êtes-vous sûr de vouloir supprimer cet article?</p>
+    </div>
+    <p-footer>
+        <button pButton label="Annuler" class="p-button-secondary" (click)="displayConfirmationDelete = false"></button>
+        <button pButton label="Supprimer" class="p-button-danger"
+            (click)="deleteData(selectedArticle._id); displayConfirmationDelete = false;"></button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<div class="container">
+    <h1>Liste des articles</h1>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button pButton pRipple type="button" label="Ajouter un article" class="p-button-primary" icon="pi pi-plus"
+                style="margin-top: 3px;" (click)="toggleAdd()"></button>
+            <button pButton pRipple type="button" label="Restaurer les articles supprimés" class="p-button-success"
+                icon="pi pi-refresh" style="margin-top: 3px;" (click)="confirmRestoreDeleted()"></button>
+            <button pButton pRipple type="button" label="Supprimer définitivement les articles supprimés"
+                class="p-button-danger" icon="pi pi-trash" style="margin-top: 3px;" (click)="deleteDeleted()"></button>
+        </div>
+    </div>
+
+    <p-table [value]="articles" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['title', 'category']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="title">Titre<p-sortIcon field="title"></p-sortIcon></th>
+                <th pSortableColumn="category">Catégorie<p-sortIcon field="category"></p-sortIcon></th>
+                <th pSortableColumn="date">Date<p-sortIcon field="date"></p-sortIcon></th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-article>
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.category }}</td>
+                <td>{{ article.date | date }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                        (click)="selectData(article); toggleEdit()"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mx-2"
+                        (click)="onConfirmDelete(article)" pTooltip="Supprimer cet article"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+        </ng-template>
+    </p-table>
+
+    <p-dialog header="{{isAdding ? 'Ajouter un article' : 'Modifier un article'}}" [visible]="isDialogVisible"
+        [modal]="true" [maximizable]="true" [closable]="false" (onHide)="onHide()">
+
+        <form [formGroup]="articleForm"
+            (ngSubmit)="isAdding ? add(articleForm.value) : edit(selectedArticle._id, articleForm.value)">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <span class="p-float-label">
+                        <input type="text" formControlName="title" required pInputText [value]="selectedArticle.title">
+                        <label for="title">Titre</label>
+                    </span>
+                </div>
+                <div class="p-col-6">
+                    <span class="p-float-label">
+                        <input type="text" formControlName="category" required pInputText [value]="selectedArticle.category">
+                        <label for="category">Catégorie</label>
+                    </span>
+                </div>
+                <div class="p-col-6">
+                    <span class="p-float-label">
+                        <input type="date" formControlName="date" required pInputText [value]="selectedArticle.date">
+                        <label for="date">Date</label>
+                    </span>
+                </div>
+                <div class="p-col-12">
+                    <span class="p-float-label">
+                        <textarea formControlName="content" required pInputTextarea rows="5" [value]="selectedArticle.content"></textarea>
+                        <label for="content">Contenu</label>
+                    </span>
+                </div>
+                <div class="p-col-12">
+                    <span class="p-float-label">
+                        <input type="text" formControlName="author" pInputText [value]="selectedArticle.author">
+                        <label for="author">Auteur</label>
+                    </span>
+                </div>
+                <div class="p-d-flex p-jc-between">
+                    <div class="button-container">
+                        <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
+                            icon="pi pi-times" (click)="cancel()"></button>
+                        <button pButton pRipple type="submit" label="{{ isAdding ? 'Ajouter' : 'Modifier' }}"
+                            class="p-button-sm p-button-success" icon="{{ isAdding ? 'pi pi-plus' : 'pi pi-pencil' }}"
+                            [disabled]="!articleForm.valid"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+</div>
