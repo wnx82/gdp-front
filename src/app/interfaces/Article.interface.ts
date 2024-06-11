@@ -9,6 +9,7 @@ export interface Article {
     category: string;
     date: string;
     content: string;
+    severity: string;
     attachments: Attachment[] | null;
     author: string | null;
     createdAt?: string | null;

@@ -34,9 +34,9 @@
     </div>
 
     <p-table [value]="articles" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-        [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['title', 'category']">
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
+    [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['title', 'category']">
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="title">Titre<p-sortIcon field="title"></p-sortIcon></th>
@@ -46,7 +46,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-article>
-            <tr>
+            <tr [ngStyle]="getRowStyle(article.severity)">
                 <td>{{ article.title }}</td>
                 <td>{{ article.category }}</td>
                 <td>{{ article.date | date }}</td>
@@ -62,6 +62,9 @@
             <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
         </ng-template>
     </p-table>
+
+    <p-editor [style]="{ height: '320px' }" />
+
 
     <p-dialog header="{{isAdding ? 'Ajouter un article' : 'Modifier un article'}}" [visible]="isDialogVisible"
         [modal]="true" [maximizable]="true" [closable]="false" (onHide)="onHide()">
@@ -89,10 +92,20 @@
                 </div>
                 <div class="p-col-12">
                     <span class="p-float-label">
-                        <textarea formControlName="content" required pInputTextarea rows="5" [value]="selectedArticle.content"></textarea>
+                        <p-editor formControlName="content" [style]="{height: '320px'}"></p-editor>
                         <label for="content">Contenu</label>
                     </span>
                 </div>
+                <div class="p-col-12">
+                    <span class="p-float-label">
+                        <p-dropdown formControlName="severity" [options]="severityOptions" optionLabel="label" optionValue="value" placeholder="Sélectionnez une sévérité" required></p-dropdown>
+                        <label for="severity">Severity</label>
+                    </span>
+                </div>
+                
+                
+                
+                
                 <div class="p-col-12">
                     <span class="p-float-label">
                         <input type="text" formControlName="author" pInputText [value]="selectedArticle.author">

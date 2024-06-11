@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
+import { SharedUiModule } from '../../../services/shared-ui/shared-ui.module';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router'; 
 import { firstValueFrom } from 'rxjs';
 

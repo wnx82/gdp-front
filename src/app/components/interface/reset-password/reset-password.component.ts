@@ -5,8 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
-import { environment } from '../../environments/environment';
+import { SharedUiModule } from '../../../services/shared-ui/shared-ui.module';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',

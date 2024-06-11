@@ -9,10 +9,10 @@ import {
 } from '@angular/forms';
 import { Router,RouterModule  } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SharedUiModule } from '../../services/shared-ui/shared-ui.module';
-import { AuthService } from '../../services/auth/auth.service';
-import { environment } from '../../environments/environment';
-import { StatusService } from '../../services/status/status-service.service';
+import { SharedUiModule } from '../../../services/shared-ui/shared-ui.module';
+import { AuthService } from '../../../services/auth/auth.service';
+import { environment } from '../../../environments/environment';
+import { StatusService } from '../../../services/status/status.service';
 
 @Component({
     selector: 'app-login',

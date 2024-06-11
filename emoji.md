@@ -1,5 +1,6 @@
 ## Listing Emojis
 
+https://emojicopy.com/
 
 🎨
 :art:

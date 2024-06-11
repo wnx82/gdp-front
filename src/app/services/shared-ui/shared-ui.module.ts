@@ -32,6 +32,13 @@ import { ChipsModule } from 'primeng/chips';
 import { RippleModule } from 'primeng/ripple';
 import { InputMaskModule } from 'primeng/inputmask';
 import { BadgeModule } from 'primeng/badge';
+
+
+import { EditorModule } from 'primeng/editor';
+
+import { DropdownModule } from 'primeng/dropdown';
+
+
 @NgModule({
     declarations: [],
     exports: [
@@ -66,6 +73,8 @@ import { BadgeModule } from 'primeng/badge';
         ToastModule,
         ToggleButtonModule,
         InputMaskModule,
+        EditorModule,
+        DropdownModule
     ],
     providers: [MessageService],
 })

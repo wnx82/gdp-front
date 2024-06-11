@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { MessageService } from 'primeng/api';
-import { LocalStorageService } from '../../services/localstorage/local-storage.service';
-import { GetDataService } from '../../services/getData/get-data.service';
+import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
+import { GetDataService } from '../../../services/getData/get-data.service';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',

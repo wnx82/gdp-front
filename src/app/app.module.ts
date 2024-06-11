@@ -11,13 +11,13 @@ import { FormlyModule } from '@ngx-formly/core';
 // import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainPageComponent } from './main-page/main-page.component';
-import { LoaderComponent } from './main-page/loader/loader.component';
-import { FooterComponent } from './main-page/footer/footer.component';
-import { BodyComponent } from './main-page/body/body.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { SublevelMenuComponent } from './sidenav/sublevel-menu.component';
-import { DashboardModule } from './main-page/dashboard/dashboard.module';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { LoaderComponent } from './components/main-page/loader/loader.component';
+import { FooterComponent } from './components/main-page/footer/footer.component';
+import { BodyComponent } from './components/main-page/body/body.component';
+import { SidenavComponent } from './components/main-page/sidenav/sidenav.component';
+import { SublevelMenuComponent } from './components/main-page/sidenav/sublevel-menu.component';
+import { DashboardModule } from './components/main-page/dashboard/dashboard.module';
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
@@ -25,11 +25,19 @@ import { UploadComponent } from './services/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
-import { MessageServiceComponent } from './components/message-service/message-service.component';
+import { MessageServiceComponent } from './components/user/message-service/message-service.component';
 // import { StatisticsComponent } from './components/statistics/statistics.component';
 import { PrimeNGConfig } from 'primeng/api';
 import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service';
-
+//pour l'éditeur
+// import { EditorModule } from 'primeng/editor';
+// import { ButtonModule } from 'primeng/button';
+// import { DialogModule } from 'primeng/dialog';
+// import { ToastModule } from 'primeng/toast';
+// import { TableModule } from 'primeng/table';
+// import { DropdownModule } from 'primeng/dropdown';
+// import { InputTextModule } from 'primeng/inputtext';
+// import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 // import { ButtonModule } from 'primeng/button';
@@ -70,6 +78,15 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         // FormlyBootstrapModule,
         MessagesModule,
         SharedUiModule,
+        //pour l'éditor
+        // EditorModule,
+        // ButtonModule,
+        // DialogModule,
+        // ToastModule,
+        // TableModule,
+        // DropdownModule,
+        // InputTextModule,
+        // InputTextareaModule
     ],
     // providers: [MessageService],
     providers: [

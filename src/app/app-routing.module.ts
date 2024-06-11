@@ -1,18 +1,18 @@
 
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './main-page/dashboard/dashboard.component';
+import { DashboardComponent } from './components/main-page/dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { UploadComponent } from './services/upload/upload.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/interface/login/login.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
-import { MainPageComponent } from './main-page/main-page.component';
-import { MessageServiceComponent } from './components/message-service/message-service.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { MessageServiceComponent } from './components/user/message-service/message-service.component';
+import { ForgotPasswordComponent } from './components/interface/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/interface/reset-password/reset-password.component';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -32,7 +32,7 @@ const routes: Routes = [
             {
                 path: 'api',
                 loadChildren: () =>
-                    import('./components/api/api.module').then(
+                    import('./components/administration/api/api.module').then(
                         m => m.ApiModule
                     ),
             },
@@ -123,7 +123,7 @@ const routes: Routes = [
             {
                 path: 'statistics',
                 loadChildren: () =>
-                    import('./components/statistics/statistics.module').then(
+                    import('./components/main-page/statistics/statistics.module').then(
                         m => m.StatisticsModule
                     ),
             },
@@ -151,7 +151,7 @@ const routes: Routes = [
     {
         path: '**',
         loadChildren: () =>
-            import('./components/not-found/not-found.module').then(
+            import('./components/interface/not-found/not-found.module').then(
                 m => m.NotFoundModule
             ),
     },

@@ -14,6 +14,12 @@ import { Article, Attachment } from '../../../interfaces/Article.interface';
 export class ArticlesComponent implements OnInit {
     private apiUrl: string | undefined;
     articles: Article[] = [];
+    severityOptions: any[] = [
+        { label: 'Success', value: 'success' },
+        { label: 'Error', value: 'error' },
+        { label: 'Info', value: 'info' },
+        { label: 'Warning', value: 'warn' }
+    ];
     selectedArticle: any = {};
     isAdding: boolean = false;
     isEditing: boolean = false;
@@ -24,6 +30,7 @@ export class ArticlesComponent implements OnInit {
         category: new FormControl('', [Validators.required]),
         date: new FormControl('', [Validators.required]),
         content: new FormControl('', [Validators.required]),
+        severity: new FormControl('info', [Validators.required]), // Initialisé avec 'info'
         attachments: new FormControl<Attachment[] | null>([]),
         author: new FormControl(''),
     });
@@ -51,7 +58,7 @@ export class ArticlesComponent implements OnInit {
         this.http.get<Article[]>(this.API_URL).subscribe({
             next: data => {
                 this.articles = data;
-                console.log(this.articles)
+                console.log(this.articles);
             },
             error: error => {
                 console.log(error);
@@ -69,7 +76,7 @@ export class ArticlesComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Article ajouté',
                 });
-                this.articleForm.reset();
+                this.articleForm.reset({ severity: 'info' }); // Réinitialise avec 'info'
                 this.get();
             },
             error: error => {
@@ -101,7 +108,7 @@ export class ArticlesComponent implements OnInit {
                     summary: 'Succès',
                     detail: 'Modification effectuée',
                 });
-                this.articleForm.reset();
+                this.articleForm.reset({ severity: 'info' }); // Réinitialise avec 'info'
                 this.get();
             },
             error: error => {
@@ -222,9 +229,24 @@ export class ArticlesComponent implements OnInit {
             category: article?.category,
             date: article?.date,
             content: article?.content,
+            severity: article?.severity,
             attachments: article?.attachments,
             author: article?.author,
         });
+    }
+    getRowStyle(severity: string): any {
+        switch (severity) {
+            case 'success':
+                return { 'background-color': '#d4edda' }; // Vert clair pour success
+            case 'error':
+                return { 'background-color': '#f8d7da' }; // Rouge clair pour error
+            case 'info':
+                return { 'background-color': '#d1ecf1' }; // Bleu clair pour info
+            case 'warn':
+                return { 'background-color': '#fff3cd' }; // Jaune clair pour warning
+            default:
+                return {};
+        }
     }
 
     cancel() {
@@ -236,7 +258,7 @@ export class ArticlesComponent implements OnInit {
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedArticle = {};
-        this.articleForm.reset();
+        this.articleForm.reset({ severity: 'info' });
     }
 
     toggleEdit() {
