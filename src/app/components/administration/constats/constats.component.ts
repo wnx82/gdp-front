@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import {
     FormArray,
-    FormBuilder,
     FormControl,
     FormGroup,
     Validators,
@@ -84,7 +81,7 @@ export class ConstatsComponent implements OnInit {
         private router: Router
     ) {}
     storedValue: any;
-    rues: any[] = [];
+    rues: Rue[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
     rues$ = this.getDataService.rues$;
     agents$ = this.getDataService.agents$;

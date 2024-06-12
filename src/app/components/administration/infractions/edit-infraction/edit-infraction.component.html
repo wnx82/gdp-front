@@ -1,1 +1,44 @@
-<p>edit-infraction works!</p>
+    <form [formGroup]="dataForm" (ngSubmit)="edit(dataForm.value)">
+      <div class="p-grid">
+        <div class="p-col-6">
+          <span class="p-float-label">
+            <input type="text" id="category" formControlName="category" required pInputText />
+            <label for="category">Categorie</label>
+          </span>
+          <span class="p-float-label">
+            <input type="text" id="priority" formControlName="priority" pInputText />
+            <label for="priority">Priorité</label>
+          </span>
+  
+          <p-table [value]="list.controls">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Article</th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+              <tr [formGroupName]="rowIndex">
+                <td>
+                  <input type="text" formControlName="article" pInputText />
+                </td>
+                <td>
+                  <input type="text" formControlName="description" pInputText />
+                </td>
+                <td>
+                  <button pButton type="button" icon="pi pi-trash" (click)="deleteRowFromList(rowIndex)"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <button pButton type="button" label="Ajouter un article" (click)="addRow()"></button>
+        </div>
+        <div class="button-container p-col-12">
+          <div class="p-d-flex p-jc-between">
+            <button pButton pRipple type="button" label="Annuler" class="p-button-secondary" icon="pi pi-times" (click)="navigateToInfractions()"></button>
+            <button pButton pRipple type="submit" label="Modifier" class="p-button-success" icon="pi pi-pencil"></button>
+          </div>
+        </div>
+      </div>
+    </form>
