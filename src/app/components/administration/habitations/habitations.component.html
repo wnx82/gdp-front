@@ -120,29 +120,28 @@
                                             <span class="font-bold text-lg">Adresse</span>
                                         </div>
                                     </ng-template>
-                                    <span class="p-float-label">
-                                        <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true"
-                                            filterBy="nomComplet" [showClear]="true" placeholder="Sélectionnez une rue"
-                                            formControlName="rue" optionValue="_id">
-                                            <ng-template let-nom pTemplate="item">
-                                                <div class="let-nom">
-                                                    <div>{{nom.nomComplet}}</div>
+                            
+                                    <span class="p-float-label" style="margin-bottom: 1rem;">
+                                        <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
+                                            [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue" optionValue="_id">
+                                            <ng-template let-rue pTemplate="item">
+                                                <div class="let-rue">
+                                                    <div>{{rue.nomComplet}}</div>
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
+                                        <label for="rue">Rue</label>
                                     </span>
-
-
+                            
                                     <span class="p-float-label">
-                                        <input type="text" id="numero" name="numero" formControlName="numero"
-                                            pInputText>
-                                        <!-- <input type="text" id="numero" name="numero"
-                                [value]="selectedHabitation?.adresse?.[0]?.numero || null" formControlName="?numero"
-                                pInputText> -->
+                                        <input type="text" id="numero" name="numero" formControlName="numero" pInputText>
                                         <label for="numero">Numéro</label>
                                     </span>
                                 </p-fieldset>
                             </div>
+                            
+                            
+                            
                         </div>
                         <div style="flex: 1;">
                             <div formGroupName="dates" style="height: 100%;">

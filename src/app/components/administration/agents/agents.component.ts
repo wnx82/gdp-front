@@ -52,6 +52,7 @@ export class AgentsComponent implements OnInit {
             picture: new FormControl(''),
             formations: new FormArray([]),
             enable: new FormControl(true),
+            
             // lastConnection: new FormControl(''),
         });
     }

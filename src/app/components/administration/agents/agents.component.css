@@ -12,3 +12,13 @@
 .formation-item button {
     flex-shrink: 0;
 }
+
+
+
+
+
+.custom-ice-contact label {
+
+    left: 4rem; /* Ajustez cette valeur si nécessaire */
+
+}

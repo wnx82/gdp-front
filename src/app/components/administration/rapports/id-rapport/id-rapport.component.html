@@ -22,10 +22,13 @@
                             <span class="font-bold text-lg">Informations du Rapport</span>
                         </div>
                     </ng-template>
-                    <span class="p-float-label">
-                        <input type="text" formControlName="daily" required pInputText>
-                        <label for="daily">daily</label>
-                    </span>
+                    <div class="p-field">
+                        <span class="p-float-label">
+                            <input pInputText type="text" formControlName="daily" [disabled]="true" >
+                            <label for="daily">Daily</label>
+                        </span>
+                    </div>
+                    
 
                     <div class="p-field">
                         <span class="p-float-label">

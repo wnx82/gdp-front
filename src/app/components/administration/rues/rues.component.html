@@ -35,107 +35,99 @@
         </div>
     </div>
     <p-table #dataTableRues [value]="rues" [paginator]="true" [rows]="itemsPerPage" [showCurrentPageReport]="true"
-        [tableStyle]="{ 'min-width': '50rem' }"
-        currentPageReportTemplate="Affichage de {first} à {last} sur  {totalRecords} entrées"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nom', 'quartier','cp','localite']">
-        <ng-template pTemplate="caption">
-            <div class="flex">
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                    (click)="clear(dataTableRues)"></button>
-                <span class="p-input-icon-left ml-auto">
-                    <i class="pi pi-search"></i>
-                    <input #searchInput pInputText type="text"
-                        (input)="dataTableRues.filterGlobal(searchInput.value, 'contains')"
-                        placeholder="Search keyword" />
-                </span>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width:10%">Dénomination</th>
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées"
+    [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['nom', 'quartier', 'cp', 'localite']">
+    
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                (click)="clear(dataTableRues)"></button>
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input #searchInput pInputText type="text"
+                    (input)="dataTableRues.filterGlobal(searchInput.value, 'contains')"
+                    placeholder="Search keyword" />
+            </span>
+        </div>
+    </ng-template>
+    
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:10%">Dénomination</th>
+            <th style="width:10%">Nom
+                <p-columnFilter type="text" field="nom" matchMode="contains"></p-columnFilter>
+            </th>
+            <th style="width:10%">Quartier
+                <p-columnFilter field="quartier" matchMode="contains" [showMenu]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-dropdown [options]="quartiers" optionLabel="title" optionValue="title"
+                            (onChange)="dataTableRues.filter($event.value, 'quartier', 'contains')"
+                            placeholder="Tout" [showClear]="true">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.title"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th style="width:10%">Code Postal
+                <p-columnFilter field="cp" matchMode="equals" [showMenu]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-dropdown [options]="cpList" optionLabel="label" optionValue="value"
+                            (onChange)="dataTableRues.filter($event.value, 'cp', 'equals')"
+                            placeholder="Tous" [showClear]="true">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.value"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th style="width:10%">Localité
+                <p-columnFilter field="localite" matchMode="equals" [showMenu]="false">
+                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                        <p-dropdown [options]="localiteList" optionLabel="label" optionValue="value"
+                            (onChange)="dataTableRues.filter($event.value, 'localite', 'equals')"
+                            placeholder="Tous" [showClear]="true">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.value" [severity]="getSeverity(option.value)"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </th>
+            <th style="width:10%">Actions</th>
+        </tr>
+    </ng-template>
 
-                <th style="width:10%">Nom <p-columnFilter type="text" field="nom"></p-columnFilter>
-                </th>
-                <th style="width:10%">Quartier
-                    <p-columnFilter field="quartier" matchMode="contains" [showMenu]="false">
-                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-dropdown [options]="quartiers" optionLabel="title" (onChange)="filter($event.value)"
-                                placeholder="Tout" [showClear]="true">
-                                <ng-template let-option pTemplate="item">
-                                    <p-tag [value]="option.title"></p-tag>
-                                </ng-template>
-                            </p-dropdown>
-                        </ng-template>
-                    </p-columnFilter>
+    <ng-template pTemplate="body" let-rue>
+        <tr>
+            <td>{{ rue.denomination }}</td>
+            <td>{{ rue.nom }}</td>
+            <td>{{ rue.quartier }}</td>
+            <td>{{ rue.cp }}</td>
+            <td> <p-tag [value]="rue.localite" [severity]="getSeverity(rue.localite)"></p-tag></td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
+                    (click)="selectData(rue); toggleEdit()"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                    (click)="deleteRue(rue._id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
+    </ng-template>
+    
+    <ng-template pTemplate="paginatorright">
+        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-table>
 
 
 
-
-                    <!-- <th style="width:10%">Quartier <p-columnFilter type="text" field="quartier"></p-columnFilter> -->
-                </th>
-                <th style="width:10%">Code Postal
-                    <p-columnFilter field="cp" matchMode="equals" [showMenu]="false">
-                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-dropdown [options]="cpList" optionLabel="label" (onChange)="filter($event.value)"
-                                placeholder="Tous" [showClear]="true">
-                                <ng-template let-option pTemplate="item">
-                                    <p-tag [value]="option.value"></p-tag>
-                                </ng-template>
-                            </p-dropdown>
-                        </ng-template>
-                    </p-columnFilter>
-
-                    <!-- Code Postal<p-columnFilter type="text" field="cp"></p-columnFilter> -->
-                </th>
-
-                <th style="width:10%">Localité
-                    <p-columnFilter field="rue.localite" matchMode="equals" [showMenu]="false">
-                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-dropdown [options]="localiteList" optionLabel="label" (onChange)="filter($event.value)"
-                                placeholder="Tous" [showClear]="true">
-                                <ng-template let-option pTemplate="item">
-                                    <p-tag [value]="option.value" [severity]="getSeverity(option.value)"></p-tag>
-                                </ng-template>
-                            </p-dropdown>
-                        </ng-template>
-                    </p-columnFilter>
-
-                </th>
-
-                <th style="width:10%">Actions</th>
-            </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-rue>
-            <tr>
-                <td>{{ rue.denomination }}</td>
-                <td>{{ rue.nom }}</td>
-                <td>{{ rue.quartier }}</td>
-                <td>{{ rue.cp }}</td>
-                <td> <p-tag [value]="rue.localite" [severity]="getSeverity(rue.localite)"></p-tag></td>
-
-                <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
-                        (click)="selectData(rue); toggleEdit()"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                        (click)="deleteRue(rue._id)"></button>
-                </td>
-
-
-
-
-
-
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="toggleAdd()"></p-button>
-        </ng-template>
-        <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-        </ng-template>
-
-    </p-table>
 
     <p-dialog header="{{isAdding ? 'Ajouter une rue' : 'Modifier une rue'}}" [visible]="isDialogVisible"
         [modal]="true" [maximizable]="true" [closable]="false" (onHide)="cancel()">

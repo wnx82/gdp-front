@@ -7,7 +7,7 @@ import {
     FormBuilder,
     FormGroup,
     Validators,
-    FormArray,
+
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -16,7 +16,6 @@ import { LocalStorageService } from '../../../services/localstorage/local-storag
 import { Habitation } from '../../../interfaces/Habitation.interface';
 import { Rue } from '../../../interfaces/Rue.interface.';
 import { GetDataService } from '../../../services/getData/get-data.service';
-import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-habitations',
@@ -72,8 +71,11 @@ export class HabitationsComponent implements OnInit {
 
     ngOnInit() {
         this.getHabitations();
-        // this.rues = this._localStorageService.getRues();
-        this.rues$.subscribe(
+        this.getRues();
+    }
+    
+    getRues() {
+        this.getDataService.rues$.subscribe(
             rues => {
                 this.rues = rues;
             },
@@ -82,7 +84,6 @@ export class HabitationsComponent implements OnInit {
             }
         );
     }
-
     getHabitations() {
         let url = `${this.API_URL}`;
         const active = this.route.snapshot.params['active'];
@@ -169,28 +170,9 @@ export class HabitationsComponent implements OnInit {
             console.error('Données invalides', habitation);
             return;
         }
-        console.log('habitation update', habitation);
-        const updatedHabitation = {
-            // Écraser les champs modifiés
-            ...habitation,
-            adresse: {
-                ...habitation.adresse,
-            },
-            demandeur: {
-                ...habitation.demandeur,
-            },
-            dates: {
-                ...habitation.dates,
-            },
-            mesures: habitation.mesures?.length
-                ? habitation.mesures
-                : habitation.mesures || [],
-        };
-
         const url = `${this.API_URL}/${id}`;
 
         this.http.patch<Habitation>(url, this.dataForm.value).subscribe({
-            // this.http.patch<any>(url, updatedHabitation).subscribe({
             next: data => {
                 const index = this.habitations.findIndex(
                     a => a._id === data._id
@@ -215,7 +197,6 @@ export class HabitationsComponent implements OnInit {
             },
         });
     }
-
     onConfirmDelete(habitation: Habitation) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
@@ -298,59 +279,46 @@ export class HabitationsComponent implements OnInit {
         });
     }
 
-    // selectData(donnee: any) {
-    //     console.log('on est là');
-    //     this.selectedData = { ...donnee };
-    //     this.dataForm.setValue({
-    //         adresse: {
-    //             rue: donnee.adresse.rue,
-    //             numero: donnee.adresse.numero,
-    //         },
-    //         demandeur: {
-    //             nom: donnee.demandeur.nom,
-    //             tel: donnee.demandeur.tel,
-    //         },
-    //         dates: {
-    //             debut: donnee.dates.debut,
-    //             fin: donnee.dates.fin,
-    //         },
-    //         mesures: donnee.mesures || [],
-    //         vehicule: donnee.vehicule,
-    //         googlemap: donnee.googlemap,
-    //     });
-    //     console.log('Data form value: ', this.dataForm.value);
-    // }
-
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
         console.log('sélection de lhabitation', this.selectedHabitation);
-        const debut = habitation?.dates?.debut
-            ? new Date(habitation?.dates?.debut)
-            : null; // Convertit la date en instance de date si elle existe
-        const fin = habitation?.dates?.fin
-            ? new Date(habitation?.dates?.fin)
-            : null; // Convertit la date en instance de date si elle existe
+    
+        // Vérifiez la liste des rues disponibles et la rue de l'habitation
+        console.log('Liste des rues disponibles:', this.rues); // Debug
+        console.log('Rue de l\'habitation:', habitation.adresse.nomComplet); // Debug
+    
+        // Trouvez l'_id de la rue à partir de son nom complet
+        const selectedRue = this.rues.find(rue => rue.nomComplet === habitation.adresse.nomComplet);
+        const rueId = selectedRue ? selectedRue._id : null;
+        if (!rueId) {
+            console.error('Rue non trouvée:', habitation.adresse.nomComplet); // Debug
+        }
+    
+        const debut = habitation?.dates?.debut ? new Date(habitation.dates.debut) : null;
+        const fin = habitation?.dates?.fin ? new Date(habitation.dates.fin) : null;
         this.mesures = habitation?.mesures || [];
+    
         this.dataForm.patchValue({
             adresse: {
-                rue: habitation?.adresse?.nomComplet,
-                numero: habitation?.adresse?.numero,
+                rue: rueId, // Utilisez l'_id de la rue ici
+                numero: habitation.adresse.numero,
             },
             demandeur: {
-                nom: habitation?.demandeur?.nom,
-                tel: habitation?.demandeur?.tel,
+                nom: habitation.demandeur.nom,
+                tel: habitation.demandeur.tel,
             },
             dates: {
                 debut: debut,
                 fin: fin,
             },
-
-            mesures: habitation?.mesures || [],
-            vehicule: habitation?.vehicule,
-            googlemap: habitation?.googlemap,
+            mesures: habitation.mesures || [],
+            vehicule: habitation.vehicule,
+            googlemap: habitation.googlemap,
         });
-        console.log('Data form value: ', this.dataForm.value);
+    
+        console.log('Data form value:', this.dataForm.value);
     }
+    
 
     cancel() {
         this.selectedHabitation = {};

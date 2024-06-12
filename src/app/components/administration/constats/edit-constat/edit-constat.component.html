@@ -47,7 +47,6 @@
                                 </div>
                             </ng-template>
                         </p-multiSelect>
-
                     </div>
 
                     <div class="p-col-12 p-md-6">
@@ -58,7 +57,7 @@
                     </div>
                     <br>
                     <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
-                        <label for="agents">Rue: </label>
+                        <!-- <label for="agents">Rue: </label> -->
                         <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
                             [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue"
                             optionValue="_id">

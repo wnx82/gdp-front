@@ -86,7 +86,7 @@ export class EditConstatComponent implements OnInit {
         });
     }
 
-    rues: any[] = [];
+    rues: Rue[] = [];
     readonly API_URL = `${environment.apiUrl}/constats`;
     statuses: any[] = [];
     rues$ = this.getDataService.rues$;

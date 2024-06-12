@@ -6,6 +6,11 @@
 @import 'primeng/resources/primeng.min.css';
 @import 'primeng/resources/themes/lara-light-blue/theme.css';
 
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.snow.css';
+@import '../node_modules/quill/dist/quill.core.js';
+@import '../node_modules/quill/dist/quill.snow.js';
+
 // !@import '@angular/material/theming';
 
 

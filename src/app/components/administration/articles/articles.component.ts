@@ -4,12 +4,12 @@ import { environment } from '../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Article, Attachment } from '../../../interfaces/Article.interface'; 
-
+import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-articles',
     templateUrl: './articles.component.html',
     styleUrls: ['./articles.component.scss'],
-    providers: [MessageService],
+    providers: [MessageService,DatePipe],
 })
 export class ArticlesComponent implements OnInit {
     private apiUrl: string | undefined;
@@ -37,11 +37,14 @@ export class ArticlesComponent implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private datePipe: DatePipe,        
     ) {}
 
     readonly API_URL = `${environment.apiUrl}/articles`;
+    content: string = ''; 
 
+    
     ngOnInit(): void {
         this.get();
     }
@@ -58,7 +61,7 @@ export class ArticlesComponent implements OnInit {
         this.http.get<Article[]>(this.API_URL).subscribe({
             next: data => {
                 this.articles = data;
-                console.log(this.articles);
+                // console.log(this.articles);
             },
             error: error => {
                 console.log(error);
@@ -224,15 +227,26 @@ export class ArticlesComponent implements OnInit {
 
     selectData(article: Article) {
         this.selectedArticle = { ...article };
+        console.log(this.selectedArticle);
+        const formattedDate = this.datePipe.transform(article.date, 'dd/MM/yyyy');
+        console.log(formattedDate); 
         this.articleForm.patchValue({
             title: article?.title,
             category: article?.category,
-            date: article?.date,
+            date: formattedDate,
             content: article?.content,
             severity: article?.severity,
             attachments: article?.attachments,
             author: article?.author,
         });
+        console.log('Form State:', this.articleForm.value);
+    }
+    formatDate(dateString: string): string {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2); // Add leading zero
+        const day = ('0' + date.getDate()).slice(-2); // Add leading zero
+        return `${year}-${month}-${day}`;
     }
     getRowStyle(severity: string): any {
         switch (severity) {
@@ -254,23 +268,19 @@ export class ArticlesComponent implements OnInit {
         this.isAdding = false;
         this.isEditing = false;
     }
-
     toggleAdd() {
         this.isAdding = !this.isAdding;
         this.selectedArticle = {};
         this.articleForm.reset({ severity: 'info' });
     }
-
     toggleEdit() {
         this.isEditing = !this.isEditing;
     }
-
     onHide() {
         this.selectedArticle = {};
         this.isAdding = false;
         this.isEditing = false;
     }
-    
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
     }
