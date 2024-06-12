@@ -29,6 +29,7 @@ import { MessageServiceComponent } from './components/user/message-service/messa
 // import { StatisticsComponent } from './components/statistics/statistics.component';
 import { PrimeNGConfig } from 'primeng/api';
 import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service';
+import { CreateInfractionComponent } from './components/infractions/create-infraction/create-infraction.component';
 //pour l'éditeur
 // import { EditorModule } from 'primeng/editor';
 // import { ButtonModule } from 'primeng/button';
@@ -60,6 +61,7 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         ToUpperCasePipe,
         UploadComponent,
         MessageServiceComponent,
+        CreateInfractionComponent,
         
         // StatisticsComponent,
 

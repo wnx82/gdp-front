@@ -8,7 +8,7 @@ import { Infraction } from '../../../interfaces/Infraction.interface';
 @Component({
     selector: 'app-infractions',
     templateUrl: './infractions.component.html',
-    styleUrls: ['./infractions.component.css'],
+    styleUrls: ['./infractions.component.scss'],
     providers: [MessageService],
 })
 export class InfractionsComponent implements OnInit {
