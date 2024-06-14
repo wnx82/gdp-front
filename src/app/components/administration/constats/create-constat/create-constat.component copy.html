@@ -55,25 +55,23 @@
                     </div>
                     <br>
                     <div formGroupName="adresse" style="display: flex; flex-direction: column; gap: 20px;">
-                        <label for="Rue">Rue: </label>
-
+                        <label for="agents">Rue: </label>
+                        <p-dropdown [options]="this.rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
+                            [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue"
+                            optionValue="_id">
+                            <ng-template let-nom pTemplate="item">
+                                <div class="let-nom">
+                                    <div>{{nom.nomComplet}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        
                         <button pButton pRipple type="button" label="Géolocalisation" class="p-button-secondary p-button-outlined"
-                        icon="pi pi-map-marker" style="margin-top: 3px;" (click)="getGeolocation()"></button>
-                    
-                    <div *ngIf="location">
-                        <p>Rue/Localisation : {{ location }}</p>
-                    </div>
-                    
-                    <p-dropdown [options]="rues" optionLabel="nomComplet" [filter]="true" filterBy="nomComplet"
-                        [showClear]="true" placeholder="Sélectionnez une rue" formControlName="rue"
-                        optionValue="_id">
-                        <ng-template let-nom pTemplate="item">
-                            <div class="let-nom">
-                                <div>{{nom.nomComplet}}</div>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    
+                            icon="pi pi-map-marker" style="margin-top: 3px;" (click)="getGeolocation()"></button>
+                        
+                        <div *ngIf="location">
+                            <p>Rue/Localisation : {{ location }}</p>
+                        </div>
 
                         <span class="p-float-label">
                             <input pInputText formControlName="numero" />
