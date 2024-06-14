@@ -133,7 +133,7 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-	getSeverity(localite: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+	getSeverityLoc(localite: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
         switch (localite) {
             case 'Dottignies':
                 return 'warning';
@@ -146,8 +146,8 @@ export class RuesComponent implements OnInit {
             default:
                 return 'success'; // Vous pouvez également retourner 'secondary' ou 'contrast' selon vos besoins
         }
+
     }
-    
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',

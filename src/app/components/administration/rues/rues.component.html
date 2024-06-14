@@ -91,7 +91,7 @@
                             (onChange)="dataTableRues.filter($event.value, 'localite', 'equals')"
                             placeholder="Tous" [showClear]="true">
                             <ng-template let-option pTemplate="item">
-                                <p-tag [value]="option.value" [severity]="getSeverity(option.value)"></p-tag>
+                                <p-tag [value]="option.value" [severity]="getSeverityLoc(option.value)"></p-tag>
                             </ng-template>
                         </p-dropdown>
                     </ng-template>
@@ -106,8 +106,8 @@
             <td>{{ rue.denomination }}</td>
             <td>{{ rue.nom }}</td>
             <td>{{ rue.quartier }}</td>
-            <td>{{ rue.cp }}</td>
-            <td> <p-tag [value]="rue.localite" [severity]="getSeverity(rue.localite)"></p-tag></td>
+            <td><p-tag>{{ rue.cp }}</p-tag></td>
+            <td> <p-tag [value]="rue.localite" [severity]="getSeverityLoc(rue.localite)"></p-tag></td>
             <td>
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                     (click)="selectData(rue); toggleEdit()"></button>

@@ -38,7 +38,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-donnee>
             <tr>
-                <td>{{ donnee.horaire }}</td>
+                <td><p-tag>{{ donnee.horaire }}</p-tag></td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mx-2"
                         (click)="selectData(donnee); toggleEdit()"></button>
