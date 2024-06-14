@@ -1,0 +1,28 @@
+
+<div class="card-head">📊 Statistiques des constats</div>
+<div class="card-body">
+
+    <div class="form-group">
+      <label for="startDate">Date de début</label>
+      <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" (ngModelChange)="fetchStatistics()">
+    </div>
+    <div class="form-group">
+      <label for="endDate">Date de fin</label>
+      <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" (ngModelChange)="fetchStatistics()">
+    </div>
+  
+    <div *ngIf="pvCount !== null">
+      <h3>Nombre de PV : {{ pvCount }}</h3>
+    </div>
+  
+    <div *ngIf="streetsWithMostConstats.length > 0">
+      <h3>Rues avec le plus de constats :</h3>
+      <ul>
+        <li *ngFor="let street of streetsWithMostConstats">
+          {{ street.street }} - {{ street.count }} constats
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  

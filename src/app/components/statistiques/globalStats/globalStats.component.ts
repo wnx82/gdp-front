@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'app-statistics',
-    templateUrl: './statistics.component.html',
-    styleUrls: ['./statistics.component.scss'],
+    selector: 'app-globalStats',
+    templateUrl: './globalStats.component.html',
+    styleUrls: ['./globalStats.component.scss'],
 })
-export class StatisticsComponent {
+export class globalStats {
     agentCount = 0; // Initialise la propriété agentCount à zéro
     articlesCount = 0; // Initialise la propriété articlesCount à zéro
     categoriesCount = 0; // Initialise la propriété categoriesCount à zéro

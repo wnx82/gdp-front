@@ -123,8 +123,8 @@ const routes: Routes = [
             {
                 path: 'statistics',
                 loadChildren: () =>
-                    import('./components/main-page/statistics/statistics.module').then(
-                        m => m.StatisticsModule
+                    import('./components/statistiques/globalStats/globalStats.module').then(
+                        m => m.globStatisticsModule
                     ),
             },
             {

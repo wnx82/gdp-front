@@ -58,7 +58,8 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         RegistrationComponent,
         ToUpperCasePipe,
         UploadComponent,
-        MessageServiceComponent,    ],
+        MessageServiceComponent,
+          ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
