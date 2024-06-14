@@ -29,7 +29,6 @@ import { MessageServiceComponent } from './components/user/message-service/messa
 // import { StatisticsComponent } from './components/statistics/statistics.component';
 import { PrimeNGConfig } from 'primeng/api';
 import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service';
-import { CreateInfractionComponent } from './components/infractions/create-infraction/create-infraction.component';
 //pour l'éditeur
 // import { EditorModule } from 'primeng/editor';
 // import { ButtonModule } from 'primeng/button';
@@ -55,17 +54,11 @@ import { CreateInfractionComponent } from './components/infractions/create-infra
         BodyComponent,
         SidenavComponent,
         SublevelMenuComponent,
-        
         NoOpenDirective,
         RegistrationComponent,
         ToUpperCasePipe,
         UploadComponent,
-        MessageServiceComponent,
-        CreateInfractionComponent,
-        
-        // StatisticsComponent,
-
-    ],
+        MessageServiceComponent,    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -91,7 +84,7 @@ import { CreateInfractionComponent } from './components/infractions/create-infra
         // InputTextareaModule
     ],
     // providers: [MessageService],
-    providers: [
+    providers: [MessageService,
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ],
     bootstrap: [AppComponent],

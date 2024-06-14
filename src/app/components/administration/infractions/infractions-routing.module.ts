@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateInfractionComponent } from './create-infraction/create-infraction.component';
 import { EditInfractionComponent } from './edit-infraction/edit-infraction.component';
 import { InfractionsComponent } from './infractions.component';
-import { CreateInfractionComponent } from './create-infraction/create-infraction.component';
-import { EditInfractionComponent } from './edit-infraction/edit-infraction.component';
+
+
 
 const routes: Routes = [
   { path: 'create', component: CreateInfractionComponent },

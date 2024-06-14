@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { MessageService, SelectItem } from 'primeng/api';
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
-import { Habitation } from '../../../interfaces/Habitation.interface';
 import { Validation } from '../../../interfaces/Validation.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
 import { Rue } from '../../../interfaces/Rue.interface.';
-import { Agent } from '../../../interfaces/User.interface';
 
 @Component({
     selector: 'app-validations',
@@ -58,6 +56,24 @@ export class ValidationsComponent implements OnInit {
 
     ngOnInit() {
         this.getValidations();
+        this.getHabitations();
+        this.getAgents();
+    }
+
+    getAgents() {
+        this.getDataService.agents$.subscribe(
+            agents => {
+                this.agents = agents
+                    .filter(agent => agent.matricule !== null)
+                    .map(agent => ({
+                        value: agent.matricule!,
+                        label: `Agent ${agent.matricule}`,
+                    }));
+            },
+            error => console.error(error)
+        );
+    }
+    getHabitations(){
         this.habitationsActive$.subscribe(
             habitations => {
                 this.habitations = habitations.map(habitation => ({
@@ -69,20 +85,6 @@ export class ValidationsComponent implements OnInit {
         );
         this.rues$.subscribe(
             rues => this.rues = rues,
-            error => console.error(error)
-        );
-        this.loadAgents();
-    }
-    loadAgents() {
-        this.getDataService.agents$.subscribe(
-            agents => {
-                this.agents = agents
-                    .filter(agent => agent.matricule !== null)
-                    .map(agent => ({
-                        value: agent.matricule!,
-                        label: `Agent ${agent.matricule}`,
-                    }));
-            },
             error => console.error(error)
         );
     }
@@ -187,7 +189,7 @@ export class ValidationsComponent implements OnInit {
 
     selectValidation(validation: any) {
         this.selectedValidation = { ...validation };
-        console.log(this.selectValidation)
+        console.log('selectedValidation',this.selectValidation)
         const date = validation?.date ? new Date(validation.date) : null;
         const agentValues = validation?.agents?.matricule || [];
         this.dataForm.patchValue({

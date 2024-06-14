@@ -2,280 +2,287 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { MessageService } from 'primeng/api';
-import {
-    FormControl,
-    FormGroup,
-    FormArray,
-    FormBuilder,
-    Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
 import { Quartier } from '../../../interfaces/Quartier.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
 import { Mission } from '../../../interfaces/Mission.interface';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-quartiers',
-    templateUrl: './quartiers.component.html',
-    styleUrls: ['./quartiers.component.css'],
-    providers: [MessageService, ConfirmationService],
+  selector: 'app-quartiers',
+  templateUrl: './quartiers.component.html',
+  styleUrls: ['./quartiers.component.css'],
+  providers: [MessageService, ConfirmationService],
 })
 export class QuartiersComponent implements OnInit {
-    constructor(
-        private http: HttpClient,
-        private messageService: MessageService,
-        private _localStorageService: LocalStorageService,
-        private confirmationService: ConfirmationService,
-        private fb: FormBuilder,
-        private getDataService: GetDataService
-    ) {}
-    private apiUrl: string | undefined;
-    readonly API_URL = `${environment.apiUrl}/quartiers`;
-    quartiers: Quartier[] = [];
-    selectedData: any = {};
-    isAdding: boolean = false;
-    isEditing: boolean = false;
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService,
+    private _localStorageService: LocalStorageService,
+    private confirmationService: ConfirmationService,
+    private fb: FormBuilder,
+    private getDataService: GetDataService
+  ) {}
 
-    displayConfirmationDelete = false;
-    displayConfirmationDialog = false;
-    dataForm = new FormGroup({
-        title: new FormControl(''),
-        missions: new FormControl(''),
+  readonly API_URL = `${environment.apiUrl}/quartiers`;
+  quartiers: Quartier[] = [];
+  selectedQuartier: any = {};
+  isAdding: boolean = false;
+  isEditing: boolean = false;
+
+  displayConfirmationDelete = false;
+  displayConfirmationDialog = false;
+  dataForm: FormGroup = this.fb.group({
+    title: ['', Validators.required],
+    missions: [[], Validators.required],
+  });
+
+  missions: any[] = [];
+  missions$: Observable<Mission[]> = this.getDataService.missions$;
+
+  ngOnInit(): void {
+    this.get();
+    this.getMissions();
+  }
+
+  getMissions() {
+    this.missions$.subscribe(
+      (missions) => {
+        this.missions = missions
+          .filter((mission) => mission._id !== null)
+          .map((mission) => ({
+            value: mission._id!,
+            label: mission.title,
+          }));
+        console.log('missions loaded:', this.missions);
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  clear(table: Table) {
+    table.clear();
+  }
+
+  private handleError(error: any): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.message,
     });
-    selectedMission: any;
-    storedValue: any;
-    missions: Mission[] = [];
-    missions$: Observable<Mission[]> = this.getDataService.missions$;
+  }
 
-    ngOnInit(): void {
-        this.get();
-        // console.log(this.missions$);
-        // this._localStorageService.getMissions();
-    }
-    clear(table: Table) {
-        table.clear();
-    }
-    private handleError(error: any): void {
+
+
+  findMissionById(missionId: number): Observable<string> {
+    return this.missions$.pipe(
+        map(missions => missions.find(m => m._id === missionId)),
+        map(mission => (mission ? mission.title : '')!)
+    );
+}
+
+  get() {
+    this.http.get<Quartier[]>(this.API_URL).subscribe({
+      next: (data) => {
+        this.quartiers = data.filter((quartier) => !quartier.deletedAt);
+        console.log('get quartiers:', this.quartiers);
+      },
+      error: (error) => {
         this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
+          severity: 'error',
+          summary: 'Erreur',
+          detail: error.error.message,
         });
-    }
-    // findMissionById(missionId: number): string {
-    //     const mission: Mission | undefined = this.missions$.find(
-    //         m => m._id === missionId
-    //     );
-    //     console.log(mission?.title);
-    //     // console.log(mission.title);
-    //     return mission ? mission.title : '';
-    // }
-    findMissionById(missionId: number): Observable<string> {
-        return this.missions$.pipe(
-            map(missions => missions.find(m => m._id === missionId)),
-            // map(mission => (mission ? mission.title : ''))
-            map(mission => (mission ? mission.title : '')!)
-        );
-    }
+      },
+    });
+  }
 
-    get() {
-        this.http.get<Quartier[]>(`${this.API_URL}`).subscribe({
-            next: data => {
-                // console.log(data);
-                this.quartiers = data.filter(quartier => !quartier.deletedAt);
-                // console.log(this.quartiers);
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
-    }
-    add(quartier: any) {
-        this.http
-            .post<Quartier>(`${this.API_URL}`, this.dataForm.value)
-            .subscribe({
-                next: data => {
-                    this.quartiers.push(data);
-                    this.isAdding = false;
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Succès',
-                        detail: 'Quartier ajouté',
-                    });
-                    this.dataForm.reset();
-                    this.get();
-                },
-                error: error => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: error.error.message,
-                    });
-                },
-            });
-    }
-    edit(id: number, quartier: any) {
-        console.log(quartier);
-        if (!quartier) {
-            console.error('Données invalides', quartier);
-            return;
-        }
-        // Vérifier chaque champ de la quartier et utiliser la valeur actuelle si le champ n'a pas été modifié
-        const updatedRue = {
-            title:
-                quartier.title !== null
-                    ? quartier.title
-                    : this.selectedData.title,
-            missions:
-                quartier.missions !== null
-                    ? quartier.missions
-                    : this.selectedData.missions,
-
-            // Ajouter les autres champs de la quartier ici si nécessaire
-        };
-        const url = `${this.API_URL}/${id}`;
-        this.http.patch<Quartier>(url, this.dataForm.value).subscribe({
-            next: data => {
-                const index = this.quartiers.findIndex(r => r._id === data._id);
-                this.quartiers[index] = data;
-                this.selectedData = {};
-                this.isEditing = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Modification effectuée',
-                });
-                this.dataForm.reset();
-                this.get();
-            },
-            error: error => {
-                console.error('Erreur de requête PATCH', error);
-                if (error.error && error.error.message) {
-                    console.error(
-                        "Message d'erreur du serveur :",
-                        error.error.message
-                    );
-                }
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'La modification a échouée',
-                    // detail: error.error.message,
-                });
-            },
-        });
-    }
-    onConfirmDelete(mission: any) {
-        this.displayConfirmationDelete = true;
-        this.confirmationService.confirm({
-            message: 'Voulez-vous vraiment supprimer cette mission ?',
-            header: 'Confirmation de suppression',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.delete(mission._id);
-            },
-        });
-    }
-    delete(id: number) {
-        this.http.delete<Quartier>(`${this.API_URL}/${id}`).subscribe({
-            next: () => {
-                this.quartiers = this.quartiers.filter(r => r._id !== id);
-                this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Suppression',
-                    detail: 'Quartier effacé',
-                });
-                this.get();
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
-    }
-    deleteDeleted(): void {
-        this.displayConfirmationDialog = true;
-        //
-    }
-    confirmDeleteDeleted(): void {
-        // Mettez ici le code pour supprimer définitivement les données supprimées
-        const url = `${this.API_URL}/purge`;
-        this.http.post(url, {}).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Toutes les données ont été complètement effacées',
-                });
-                this.get(); // Met à jour la liste
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
-
-        this.displayConfirmationDialog = false;
-    }
-    confirmRestoreDeleted(): void {
-        // Mettez ici le code pour restaurer les données supprimées
-        const url = `${this.API_URL}/restore`;
-        this.http.post(url, {}).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Toutes les données ont été restaurées avec succès',
-                });
-                this.get(); // Met à jour la liste
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
-    }
-    selectData(donnee: any) {
-        this.selectedData = { ...donnee };
-        this.dataForm.patchValue({
-            title: donnee?.title,
-            missions: donnee?.mssions,
-        });
-    }
-    cancel() {
-        this.selectedData = {};
+  add(quartier: any) {
+    this.dataForm.value.missions = this.dataForm.value.missions.map((mission: any) => {
+      const missionData = this.missions.find((m) => m.value === mission.value);
+      return missionData ? missionData : mission;
+    });
+    this.http.post<Quartier>(this.API_URL, this.dataForm.value).subscribe({
+      next: (data) => {
+        this.quartiers.push(data);
         this.isAdding = false;
-        this.isEditing = false;
-    }
-    toggleAdd() {
-        this.isAdding = !this.isAdding;
-        this.selectedData = {};
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Quartier ajouté',
+        });
         this.dataForm.reset();
-    }
-    toggleEdit() {
-        this.isEditing = !this.isEditing;
-        // console.log(this.selectedData);
-    }
-    search() {
         this.get();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: error.error.message,
+        });
+      },
+    });
+  }
+
+  edit(id: number, quartier: any) {
+    if (!quartier) {
+      console.error('Données invalides', quartier);
+      return;
     }
-    get isDialogVisible(): boolean {
-        return this.isAdding || this.isEditing;
-      }
+
+    const url = `${this.API_URL}/${id}`;
+    this.dataForm.value.missions = this.dataForm.value.missions.map((mission: any) => {
+      const missionData = this.missions.find((m) => m.value === mission.value);
+      return missionData ? missionData : mission;
+    });
+    this.http.patch<Quartier>(url, this.dataForm.value).subscribe({
+      next: (data) => {
+        const index = this.quartiers.findIndex((r) => r._id === data._id);
+        this.quartiers[index] = data;
+        this.selectedQuartier = {};
+        this.isEditing = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Modification effectuée',
+        });
+        this.dataForm.reset();
+        this.get();
+      },
+      error: (error) => {
+        console.error('Erreur de requête PATCH', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'La modification a échouée',
+        });
+      },
+    });
+  }
+
+  onConfirmDelete(mission: any) {
+    this.displayConfirmationDelete = true;
+    this.confirmationService.confirm({
+      message: 'Voulez-vous vraiment supprimer cette mission ?',
+      header: 'Confirmation de suppression',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.delete(mission._id);
+      },
+    });
+  }
+
+  delete(id: number) {
+    this.http.delete<Quartier>(`${this.API_URL}/${id}`).subscribe({
+      next: () => {
+        this.quartiers = this.quartiers.filter((r) => r._id !== id);
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Suppression',
+          detail: 'Quartier effacé',
+        });
+        this.get();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: error.error.message,
+        });
+      },
+    });
+  }
+
+  deleteDeleted(): void {
+    this.displayConfirmationDialog = true;
+  }
+
+  confirmDeleteDeleted(): void {
+    const url = `${this.API_URL}/purge`;
+    this.http.post(url, {}).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Toutes les données ont été complètement effacées',
+        });
+        this.get();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: error.error.message,
+        });
+      },
+    });
+
+    this.displayConfirmationDialog = false;
+  }
+
+  confirmRestoreDeleted(): void {
+    const url = `${this.API_URL}/restore`;
+    this.http.post(url, {}).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Toutes les données ont été restaurées avec succès',
+        });
+        this.get();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: error.error.message,
+        });
+      },
+    });
+  }
+
+  selectQuartier(quartier: any) {
+    this.selectedQuartier = { ...quartier };
+    console.log('selected:', this.selectedQuartier);
+    // const missionsValues = quartier?.missions.map((missionId: string) => {
+    //   const mission = this.missions.find((m) => m.value === missionId);
+    //   console.log('mission found:', mission);
+    //   return mission ? mission : { value: missionId, label: missionId };
+    // });
+    // console.log('missionsValues:', missionsValues);
+    const missionsValues = quartier?.missions ||[];
+    this.dataForm.patchValue({
+      title: quartier?.title,
+      missions: missionsValues,
+    });
+    console.log('form values after patch:', this.dataForm.value);
+  }
+
+  cancel() {
+    this.selectedQuartier = {};
+    this.isAdding = false;
+    this.isEditing = false;
+  }
+
+  toggleAdd() {
+    this.isAdding = !this.isAdding;
+    this.selectedQuartier = {};
+    this.dataForm.reset();
+  }
+
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+  }
+
+  search() {
+    this.get();
+  }
+
+  get isDialogVisible(): boolean {
+    return this.isAdding || this.isEditing;
+  }
 }
