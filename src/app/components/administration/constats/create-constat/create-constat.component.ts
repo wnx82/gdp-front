@@ -316,6 +316,12 @@ export class CreateConstatComponent implements OnInit {
             });
         } else {
             console.warn(`Aucune rue trouvée pour le nom complet: ${locationJson.nomComplet}`);
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: `Aucune rue trouvée dans la liste pour la localisation: ${locationJson.nomComplet}`,
+            });
+            
         }
     }
 
