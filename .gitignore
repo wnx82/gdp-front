@@ -4,7 +4,9 @@
 src/app/environments/environment.ts
 src/app/environments/environment.prod.ts
 
+# without android
 /android 
+
 # Compiled output
 /dist
 /tmp

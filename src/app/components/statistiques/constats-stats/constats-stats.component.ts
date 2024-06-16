@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { Constat } from '../../../interfaces/Constat.interface';
-import { GetDataService } from '../../../services/getData/get-data.service';
-import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
 
 @Component({
     selector: 'app-constats-stats',
@@ -12,12 +10,13 @@ import { LocalStorageService } from '../../../services/localstorage/local-storag
     styleUrls: ['./constats-stats.component.scss'],
 })
 export class ConstatsStatsComponent implements OnInit {
-    private apiUrl: string | undefined;
+    private apiUrl = `${environment.apiUrl}/constats`;
     startDate!: Date;
     endDate!: Date;
-    pvCount: number = 0;
-    nonPvCount: number = 0;
+    pvCount = 0;
+    nonPvCount = 0;
     streetsWithMostConstats: { street: string; count: number }[] = [];
+    infractionsStats: { infraction: string; count: number }[] = [];
     agentsStats: { name: string; pvCount: number; nonPvCount: number }[] = [];
     constats: Constat[] = [];
     availableYears: { label: string; value: number | string }[] = [];
@@ -32,52 +31,43 @@ export class ConstatsStatsComponent implements OnInit {
     barData: any;
     barOptions: any;
 
+    streetBarData: any;
+    streetBarOptions: any;
+
+    infractionBarData: any;
+    infractionBarOptions: any;
+
     constructor(
         private http: HttpClient,
-        private _localStorageService: LocalStorageService,
-        private getDataService: GetDataService,
         private messageService: MessageService
     ) {}
 
-    readonly API_URL = `${environment.apiUrl}/constats`;
-
     ngOnInit(): void {
         this.initializeYears();
+        this.initializeOptions();
         this.getConstats();
-        this.initializePieOptions();
-        this.initializeBarOptions();
     }
 
     initializeYears() {
         const currentYear = new Date().getFullYear();
-        this.availableYears.push({ label: 'All', value: 'all' });
+        this.availableYears = [{ label: 'All', value: 'all' }];
         for (let year = 2022; year <= currentYear; year++) {
             this.availableYears.push({ label: year.toString(), value: year });
         }
     }
 
     onYearChange() {
-        this.processConstats(this.constats);
-        this.updateChartData();
-        this.updatePieData();
-        this.updateBarData();
+        this.processConstats();
+        this.updateCharts();
     }
 
     getConstats() {
-        const url = `${this.API_URL}`;
-        this.http.get<any[]>(url).subscribe({
+        this.http.get<Constat[]>(this.apiUrl).subscribe({
             next: constats => {
-                const filteredConstats = constats.filter(
-                    constat => !constat.deletedAt
-                );
-                this.constats = filteredConstats;
-                this.processConstats(filteredConstats);
-                this.updateChartData();
-                this.updatePieData();
-                this.updateBarData();
-                console.log('liste des constats: ', this.constats);
+                this.constats = constats.filter(c => !c.deletedAt);
+                this.processConstats();
+                this.updateCharts();
             },
-
             error: error => {
                 this.messageService.add({
                     severity: 'error',
@@ -88,11 +78,11 @@ export class ConstatsStatsComponent implements OnInit {
         });
     }
 
-    processConstats(filteredConstats: Constat[]) {
+    processConstats() {
         const constatsByYear =
             this.selectedYear === 'all'
-                ? filteredConstats
-                : filteredConstats.filter(
+                ? this.constats
+                : this.constats.filter(
                       con =>
                           con.date &&
                           new Date(con.date).getFullYear() === this.selectedYear
@@ -101,6 +91,7 @@ export class ConstatsStatsComponent implements OnInit {
         this.calculatePvAndNonPvCount(constatsByYear);
         this.calculateTopStreets(constatsByYear);
         this.calculateAgentsStats(constatsByYear);
+        this.calculateInfractionsStats(constatsByYear); // Nouvelle méthode pour les infractions
     }
 
     calculatePvAndNonPvCount(constats: Constat[]) {
@@ -129,7 +120,7 @@ export class ConstatsStatsComponent implements OnInit {
         >();
         constats.forEach(con => {
             con.agents.forEach(agent => {
-                const agentName = agent.toString(); // Convert agent number to string for consistency
+                const agentName = agent.toString();
                 if (!agentsMap.has(agentName)) {
                     agentsMap.set(agentName, { pvCount: 0, nonPvCount: 0 });
                 }
@@ -150,37 +141,58 @@ export class ConstatsStatsComponent implements OnInit {
         );
     }
 
-    updateChartData() {
-        const filteredConstats =
-            this.selectedYear === 'all'
-                ? this.constats
-                : this.constats.filter(
-                      con =>
-                          con.date &&
-                          new Date(con.date).getFullYear() === this.selectedYear
-                  );
+    calculateInfractionsStats(constats: Constat[]) {
+        const infractionsMap = new Map<string, number>();
+        constats.forEach(con => {
+            if (con.infractions) {
+                con.infractions.forEach(infraction => {
+                    if (infraction) {
+                        if (!infractionsMap.has(infraction)) {
+                            infractionsMap.set(infraction, 0);
+                        }
+                        infractionsMap.set(
+                            infraction,
+                            infractionsMap.get(infraction)! + 1
+                        );
+                    }
+                });
+            }
+        });
 
+        this.infractionsStats = Array.from(infractionsMap.entries())
+            .map(([infraction, count]) => ({ infraction, count }))
+            .sort((a, b) => b.count - a.count);
+    }
+
+    updateCharts() {
+        this.updateChartData();
+        this.updatePieData();
+        this.updateBarData();
+        this.updateStreetBarData();
+        this.updateInfractionBarData(); // Nouvelle méthode pour le graphique des infractions
+    }
+
+    updateChartData() {
         const years = Array.from(
             new Set(
-                filteredConstats.map(con =>
+                this.constats.map(con =>
                     con.date ? new Date(con.date).getFullYear() : null
                 )
             )
-        ).filter(year => year !== null && year > 2021); // Exclude 2020 and 2021 and null years
+        ).filter(year => year !== null && year > 2021) as number[];
 
         const pvCounts = years.map(
             year =>
-                filteredConstats.filter(
+                this.constats.filter(
                     con =>
                         con.date &&
                         new Date(con.date).getFullYear() === year &&
                         con.pv
                 ).length
         );
-
         const nonPvCounts = years.map(
             year =>
-                filteredConstats.filter(
+                this.constats.filter(
                     con =>
                         con.date &&
                         new Date(con.date).getFullYear() === year &&
@@ -207,7 +219,98 @@ export class ConstatsStatsComponent implements OnInit {
                 },
             ],
         };
+    }
 
+    updatePieData() {
+        const agents = this.agentsStats.map(agent => agent.name);
+        const counts = this.agentsStats.map(
+            agent => agent.pvCount + agent.nonPvCount
+        );
+        const backgroundColors = agents.map(() => this.getRandomPastelColor());
+
+        this.pieData = {
+            labels: agents,
+            datasets: [
+                {
+                    data: counts,
+                    backgroundColor: backgroundColors,
+                    hoverBackgroundColor: backgroundColors,
+                },
+            ],
+        };
+    }
+
+    updateBarData() {
+        const sortedAgents = this.agentsStats
+            .map(agent => ({
+                name: agent.name,
+                pvCount: agent.pvCount,
+                nonPvCount: agent.nonPvCount,
+                totalCount: agent.pvCount + agent.nonPvCount,
+            }))
+            .sort((a, b) => b.totalCount - a.totalCount);
+
+        const agents = sortedAgents.map(agent => agent.name);
+        const pvCounts = sortedAgents.map(agent => agent.pvCount);
+        const nonPvCounts = sortedAgents.map(agent => agent.nonPvCount);
+
+        this.barData = {
+            labels: agents,
+            datasets: [
+                {
+                    label: 'Avertissements',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    data: nonPvCounts,
+                },
+                {
+                    label: 'PV',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    data: pvCounts,
+                },
+            ],
+        };
+    }
+
+    updateStreetBarData() {
+        const top20Streets = this.streetsWithMostConstats.slice(0, 20);
+        const streets = top20Streets.map(street => street.street);
+        const counts = top20Streets.map(street => street.count);
+
+        this.streetBarData = {
+            labels: streets,
+            datasets: [
+                {
+                    label: 'Constats',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                    data: counts,
+                },
+            ],
+        };
+    }
+
+    updateInfractionBarData() {
+        const infractions = this.infractionsStats.map(inf => inf.infraction);
+        const counts = this.infractionsStats.map(inf => inf.count);
+
+        this.infractionBarData = {
+            labels: infractions,
+            datasets: [
+                {
+                    label: 'Infractions',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1,
+                    data: counts,
+                },
+            ],
+        };
+    }
+
+    initializeOptions() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         const textColorSecondary = documentStyle.getPropertyValue(
@@ -216,7 +319,35 @@ export class ConstatsStatsComponent implements OnInit {
         const surfaceBorder =
             documentStyle.getPropertyValue('--surface-border');
 
-        this.chartOptions = {
+        this.chartOptions = this.createChartOptions(
+            textColor,
+            textColorSecondary,
+            surfaceBorder
+        );
+        this.pieOptions = this.createPieOptions(textColor);
+        this.barOptions = this.createBarOptions(
+            textColor,
+            textColorSecondary,
+            surfaceBorder
+        );
+        this.streetBarOptions = this.createBarOptions(
+            textColor,
+            textColorSecondary,
+            surfaceBorder
+        );
+        this.infractionBarOptions = this.createBarOptions(
+            textColor,
+            textColorSecondary,
+            surfaceBorder
+        );
+    }
+
+    createChartOptions(
+        textColor: string,
+        textColorSecondary: string,
+        surfaceBorder: string
+    ) {
+        return {
             plugins: {
                 legend: {
                     labels: {
@@ -248,11 +379,8 @@ export class ConstatsStatsComponent implements OnInit {
         };
     }
 
-    initializePieOptions() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-
-        this.pieOptions = {
+    createPieOptions(textColor: string) {
+        return {
             plugins: {
                 legend: {
                     labels: {
@@ -264,16 +392,12 @@ export class ConstatsStatsComponent implements OnInit {
         };
     }
 
-    initializeBarOptions() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue(
-            '--text-color-secondary'
-        );
-        const surfaceBorder =
-            documentStyle.getPropertyValue('--surface-border');
-
-        this.barOptions = {
+    createBarOptions(
+        textColor: string,
+        textColorSecondary: string,
+        surfaceBorder: string
+    ) {
+        return {
             indexAxis: 'y',
             maintainAspectRatio: false,
             aspectRatio: 0.8,
@@ -311,63 +435,9 @@ export class ConstatsStatsComponent implements OnInit {
     }
 
     getRandomPastelColor() {
-        const hue = Math.floor(Math.random() * 360); // 0-360 for a wide range of colors
-        const saturation = 70 + Math.floor(Math.random() * 10); // 70-80 for pastel
-        const lightness = 85 + Math.floor(Math.random() * 10); // 85-95 for pastel
+        const hue = Math.floor(Math.random() * 360);
+        const saturation = 70 + Math.floor(Math.random() * 10);
+        const lightness = 85 + Math.floor(Math.random() * 10);
         return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    }
-
-    updatePieData() {
-        const agents = this.agentsStats.map(agent => agent.name);
-        const counts = this.agentsStats.map(
-            agent => agent.pvCount + agent.nonPvCount
-        ); // Cumulate PV and non-PV
-        const backgroundColors = agents.map(() => this.getRandomPastelColor());
-
-        this.pieData = {
-            labels: agents,
-            datasets: [
-                {
-                    data: counts,
-                    backgroundColor: backgroundColors,
-                    hoverBackgroundColor: backgroundColors,
-                },
-            ],
-        };
-    }
-
-    updateBarData() {
-        // Combine pvCount and nonPvCount into totalCount for sorting
-        const sortedAgents = this.agentsStats
-            .map(agent => ({
-                name: agent.name,
-                pvCount: agent.pvCount,
-                nonPvCount: agent.nonPvCount,
-                totalCount: agent.pvCount + agent.nonPvCount,
-            }))
-            .sort((a, b) => b.totalCount - a.totalCount);
-
-        // Extract sorted data
-        const agents = sortedAgents.map(agent => agent.name);
-        const pvCounts = sortedAgents.map(agent => agent.pvCount);
-        const nonPvCounts = sortedAgents.map(agent => agent.nonPvCount);
-
-        this.barData = {
-            labels: agents,
-            datasets: [
-                {
-                    label: 'Non PV',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    data: nonPvCounts,
-                },
-                {
-                    label: 'PV',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    data: pvCounts,
-                },
-            ],
-        };
     }
 }

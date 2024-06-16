@@ -1,4 +1,4 @@
-import { INavbarData } from './helper';
+import { INavbarData } from './sidenav/helper';
 
 export const navbarData: INavbarData[] = [
     {
@@ -13,7 +13,7 @@ export const navbarData: INavbarData[] = [
     },
 
     {
-        routeLink: 'statistics',
+        routeLink: 'dashboard',
         icon: 'fal fa-chart-bar',
         label: 'Statistics',
     },
