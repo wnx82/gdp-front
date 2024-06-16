@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
@@ -23,7 +23,6 @@ import { Dailie } from '../../../interfaces/Dailies.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
 import { Router } from '@angular/router';
 import 'add-to-calendar-button';
-
 
 @Component({
     selector: 'app-dailies',

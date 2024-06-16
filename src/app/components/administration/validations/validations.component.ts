@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
@@ -36,7 +36,7 @@ export class ValidationsComponent implements OnInit {
     itemsPerPage: number = 10;
     displayConfirmationDelete = false;
     displayConfirmationDialog = false;
-    
+
     dataForm: FormGroup = this.fb.group({
         agents: [''],
         habitation: ['', [Validators.required]],
@@ -67,32 +67,43 @@ export class ValidationsComponent implements OnInit {
                     .filter(agent => agent.matricule !== null)
                     .map(agent => ({
                         value: agent._id!,
-                        label: agent.matricule
+                        label: agent.matricule,
                         // label: `Agent ${agent.matricule}`,
                     }));
             },
             error => console.error(error)
         );
     }
-    getHabitations(){
+    getHabitations() {
         this.habitationsActive$.subscribe(
             habitations => {
                 this.habitations = habitations.map(habitation => ({
                     value: habitation._id,
-                    label: habitation.adresse?.nomComplet + ', ' + habitation.adresse?.numero,
+                    label:
+                        habitation.adresse?.nomComplet +
+                        ', ' +
+                        habitation.adresse?.numero,
                 }));
             },
             error => console.error(error)
         );
         this.rues$.subscribe(
-            rues => this.rues = rues,
+            rues => (this.rues = rues),
             error => console.error(error)
         );
     }
     getValidations() {
         this.http.get<Validation[]>(this.API_URL).subscribe({
-            next: data => this.validations = data.filter(validation => !validation.deletedAt),
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
+            next: data =>
+                (this.validations = data.filter(
+                    validation => !validation.deletedAt
+                )),
+            error: error =>
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                }),
         });
     }
 
@@ -100,27 +111,52 @@ export class ValidationsComponent implements OnInit {
         table.clear();
     }
 
-    getSeverity(localite: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    getSeverity(
+        localite: string
+    ):
+        | 'success'
+        | 'secondary'
+        | 'info'
+        | 'warning'
+        | 'danger'
+        | 'contrast'
+        | undefined {
         switch (localite) {
-            case 'Dottignies': return 'warning';
-            case 'Luingne': return 'danger';
-            case 'Herseaux': return 'info';
-            case 'Mouscron': return 'success';
-            default: return 'success';
+            case 'Dottignies':
+                return 'warning';
+            case 'Luingne':
+                return 'danger';
+            case 'Herseaux':
+                return 'info';
+            case 'Mouscron':
+                return 'success';
+            default:
+                return 'success';
         }
     }
 
     addValidation(validation: any) {
-        this.http.post<Validation>(this.API_URL, this.dataForm.value).subscribe({
-            next: data => {
-                this.validations.push(data);
-                this.isAdding = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Validation ajoutée' });
-                this.dataForm.reset();
-                this.getValidations();
-            },
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
-        });
+        this.http
+            .post<Validation>(this.API_URL, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    this.validations.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Validation ajoutée',
+                    });
+                    this.dataForm.reset();
+                    this.getValidations();
+                },
+                error: error =>
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    }),
+            });
     }
 
     editValidation(id: number, validation: any) {
@@ -128,18 +164,31 @@ export class ValidationsComponent implements OnInit {
             console.error('Données invalides', validation);
             return;
         }
-        this.http.patch<any>(`${this.API_URL}/${id}`, this.dataForm.value).subscribe({
-            next: data => {
-                const index = this.validations.findIndex(a => a._id === data._id);
-                this.validations[index] = data;
-                this.selectedValidation = {};
-                this.isEditing = false;
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Modification effectuée' });
-                this.dataForm.reset();
-                this.getValidations();
-            },
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
-        });
+        this.http
+            .patch<any>(`${this.API_URL}/${id}`, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    const index = this.validations.findIndex(
+                        a => a._id === data._id
+                    );
+                    this.validations[index] = data;
+                    this.selectedValidation = {};
+                    this.isEditing = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Modification effectuée',
+                    });
+                    this.dataForm.reset();
+                    this.getValidations();
+                },
+                error: error =>
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    }),
+            });
     }
 
     onConfirmDelete(validation: Validation) {
@@ -156,10 +205,19 @@ export class ValidationsComponent implements OnInit {
         this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
             next: () => {
                 this.validations = this.validations.filter(a => a._id !== id);
-                this.messageService.add({ severity: 'warn', summary: 'Suppression', detail: 'Validation effacée' });
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Suppression',
+                    detail: 'Validation effacée',
+                });
                 this.getValidations();
             },
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
+            error: error =>
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                }),
         });
     }
 
@@ -170,10 +228,19 @@ export class ValidationsComponent implements OnInit {
     confirmDeleteDeleted() {
         this.http.post(`${this.API_URL}/purge`, {}).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été complètement effacées' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été complètement effacées',
+                });
                 this.getValidations();
             },
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
+            error: error =>
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                }),
         });
         this.displayConfirmationDialog = false;
     }
@@ -181,18 +248,27 @@ export class ValidationsComponent implements OnInit {
     confirmRestoreDeleted() {
         this.http.post(`${this.API_URL}/restore`, {}).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Toutes les données ont été restaurées avec succès' });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Toutes les données ont été restaurées avec succès',
+                });
                 this.getValidations();
             },
-            error: error => this.messageService.add({ severity: 'error', summary: 'Erreur', detail: error.error.message }),
+            error: error =>
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: error.error.message,
+                }),
         });
     }
 
     selectValidation(validation: any) {
         this.selectedValidation = { ...validation };
 
-        console.log('selectedValidation',this.selectValidation)
-        
+        console.log('selectedValidation', this.selectValidation);
+
         const date = validation?.date ? new Date(validation.date) : null;
         const agentValues = validation?.agents?._id || [];
         console.log(agentValues);

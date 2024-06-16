@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import {
     FormBuilder,
@@ -268,5 +268,5 @@ export class MissionsComponent implements OnInit {
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
+    }
 }

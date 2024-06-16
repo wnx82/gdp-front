@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService, SelectItem } from 'primeng/api';
 import {
     FormControl,
     FormBuilder,
     FormGroup,
     Validators,
-
 } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -73,7 +72,7 @@ export class HabitationsComponent implements OnInit {
         this.getHabitations();
         this.getRues();
     }
-    
+
     getRues() {
         this.getDataService.rues$.subscribe(
             rues => {
@@ -119,7 +118,16 @@ export class HabitationsComponent implements OnInit {
         });
     }
 
-    getSeverity(localite: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    getSeverity(
+        localite: string
+    ):
+        | 'success'
+        | 'secondary'
+        | 'info'
+        | 'warning'
+        | 'danger'
+        | 'contrast'
+        | undefined {
         switch (localite) {
             case 'Dottignies':
                 return 'warning';
@@ -133,7 +141,6 @@ export class HabitationsComponent implements OnInit {
                 return 'success'; // Vous pouvez également retourner 'secondary' ou 'contrast' selon vos besoins
         }
     }
-    
 
     addHabitation(habitation: any) {
         let url = `${this.API_URL}`;
@@ -282,22 +289,28 @@ export class HabitationsComponent implements OnInit {
     selectHabitation(habitation: any) {
         this.selectedHabitation = { ...habitation };
         console.log('sélection de lhabitation', this.selectedHabitation);
-    
+
         // Vérifiez la liste des rues disponibles et la rue de l'habitation
         console.log('Liste des rues disponibles:', this.rues); // Debug
-        console.log('Rue de l\'habitation:', habitation.adresse.nomComplet); // Debug
-    
+        console.log("Rue de l'habitation:", habitation.adresse.nomComplet); // Debug
+
         // Trouvez l'_id de la rue à partir de son nom complet
-        const selectedRue = this.rues.find(rue => rue.nomComplet === habitation.adresse.nomComplet);
+        const selectedRue = this.rues.find(
+            rue => rue.nomComplet === habitation.adresse.nomComplet
+        );
         const rueId = selectedRue ? selectedRue._id : null;
         if (!rueId) {
             console.error('Rue non trouvée:', habitation.adresse.nomComplet); // Debug
         }
-    
-        const debut = habitation?.dates?.debut ? new Date(habitation.dates.debut) : null;
-        const fin = habitation?.dates?.fin ? new Date(habitation.dates.fin) : null;
+
+        const debut = habitation?.dates?.debut
+            ? new Date(habitation.dates.debut)
+            : null;
+        const fin = habitation?.dates?.fin
+            ? new Date(habitation.dates.fin)
+            : null;
         this.mesures = habitation?.mesures || [];
-    
+
         this.dataForm.patchValue({
             adresse: {
                 rue: rueId, // Utilisez l'_id de la rue ici
@@ -315,10 +328,9 @@ export class HabitationsComponent implements OnInit {
             vehicule: habitation.vehicule,
             googlemap: habitation.googlemap,
         });
-    
+
         console.log('Data form value:', this.dataForm.value);
     }
-    
 
     cancel() {
         this.selectedHabitation = {};
@@ -337,12 +349,9 @@ export class HabitationsComponent implements OnInit {
         // console.log(this.selectedHabitation);
     }
 
-
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-
-      
+    }
 
     // filterRues(event: any) {
     //     const query = event.query.toLowerCase();

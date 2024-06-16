@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Categorie } from '../../../interfaces/Categorie.interface';
@@ -42,7 +42,7 @@ export class CategoriesComponent implements OnInit {
         this.http.get<Categorie[]>(this.API_URL).subscribe({
             next: data => {
                 this.donnees = data.filter(donnee => !donnee.deletedAt);
-                console.log(this.donnees)
+                console.log(this.donnees);
             },
             error: error => {
                 console.log(error);
@@ -184,7 +184,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     onConfirmDelete(categorie: Categorie) {
-        this.selectedData = categorie; 
+        this.selectedData = categorie;
         this.displayConfirmationDelete = true;
     }
 
@@ -235,9 +235,8 @@ export class CategoriesComponent implements OnInit {
         this.isAdding = false;
         this.isEditing = false;
     }
-    
+
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-    
+    }
 }

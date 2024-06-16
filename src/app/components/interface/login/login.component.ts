@@ -11,7 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharedUiModule } from '../../../services/shared-ui/shared-ui.module';
 import { AuthService } from '../../../services/auth/auth.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { StatusService } from '../../../services/status/status.service';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 

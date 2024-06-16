@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Article, Attachment } from '../../../interfaces/Article.interface'; 
+import { Article, Attachment } from '../../../interfaces/Article.interface';
 import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-articles',
     templateUrl: './articles.component.html',
     styleUrls: ['./articles.component.scss'],
-    providers: [MessageService,DatePipe],
+    providers: [MessageService, DatePipe],
 })
 export class ArticlesComponent implements OnInit {
     private apiUrl: string | undefined;
@@ -18,7 +18,7 @@ export class ArticlesComponent implements OnInit {
         { label: 'Success', value: 'success' },
         { label: 'Error', value: 'error' },
         { label: 'Info', value: 'info' },
-        { label: 'Warning', value: 'warn' }
+        { label: 'Warning', value: 'warn' },
     ];
     selectedArticle: any = {};
     isAdding: boolean = false;
@@ -38,13 +38,12 @@ export class ArticlesComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private messageService: MessageService,
-        private datePipe: DatePipe,        
+        private datePipe: DatePipe
     ) {}
 
     readonly API_URL = `${environment.apiUrl}/articles`;
-    content: string = ''; 
+    content: string = '';
 
-    
     ngOnInit(): void {
         this.get();
     }
@@ -70,27 +69,29 @@ export class ArticlesComponent implements OnInit {
     }
 
     add(article: any) {
-        this.http.post<any>(`${this.API_URL}`, this.articleForm.value).subscribe({
-            next: data => {
-                this.articles.push(data);
-                this.isAdding = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Article ajouté',
-                });
-                this.articleForm.reset({ severity: 'info' }); // Réinitialise avec 'info'
-                this.get();
-            },
-            error: error => {
-                this.handleError(error);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
+        this.http
+            .post<any>(`${this.API_URL}`, this.articleForm.value)
+            .subscribe({
+                next: data => {
+                    this.articles.push(data);
+                    this.isAdding = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Article ajouté',
+                    });
+                    this.articleForm.reset({ severity: 'info' }); // Réinitialise avec 'info'
+                    this.get();
+                },
+                error: error => {
+                    this.handleError(error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    });
+                },
+            });
     }
 
     edit(id: number, article: any) {
@@ -117,7 +118,10 @@ export class ArticlesComponent implements OnInit {
             error: error => {
                 console.error('Erreur de requête PATCH', error);
                 if (error.error && error.error.message) {
-                    console.error("Message d'erreur du serveur :", error.error.message);
+                    console.error(
+                        "Message d'erreur du serveur :",
+                        error.error.message
+                    );
                 }
                 this.messageService.add({
                     severity: 'error',
@@ -200,7 +204,7 @@ export class ArticlesComponent implements OnInit {
     }
 
     onConfirmDelete(article: Article) {
-        this.selectedArticle = article; 
+        this.selectedArticle = article;
         this.displayConfirmationDelete = true;
     }
 
@@ -228,8 +232,11 @@ export class ArticlesComponent implements OnInit {
     selectData(article: Article) {
         this.selectedArticle = { ...article };
         console.log(this.selectedArticle);
-        const formattedDate = this.datePipe.transform(article.date, 'dd/MM/yyyy');
-        console.log(formattedDate); 
+        const formattedDate = this.datePipe.transform(
+            article.date,
+            'dd/MM/yyyy'
+        );
+        console.log(formattedDate);
         this.articleForm.patchValue({
             title: article?.title,
             category: article?.category,

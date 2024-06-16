@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -16,9 +16,11 @@ export class StatusService {
     checkDatabaseStatus(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}`).pipe(
             catchError((error: HttpErrorResponse) => {
-                let errorMessage = 'Une erreur est survenue lors de la vérification du statut de la base de données.';
+                let errorMessage =
+                    'Une erreur est survenue lors de la vérification du statut de la base de données.';
                 if (error.status === 500) {
-                    errorMessage = 'Erreur interne du serveur lors de la vérification du statut de la base de données.';
+                    errorMessage =
+                        'Erreur interne du serveur lors de la vérification du statut de la base de données.';
                 }
                 return throwError(errorMessage);
             })

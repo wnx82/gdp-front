@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
@@ -66,9 +66,7 @@ export class ApiComponent implements OnInit {
         this.displayConfirmationDelete = false;
         this.http.delete<string[]>(this.currentLogUrl).subscribe(
             () => {
-                console.log(
-                    'Le contenu du fichier a été effacé avec succès.'
-                );
+                console.log('Le contenu du fichier a été effacé avec succès.');
                 this.messageService.add({
                     severity: 'warn',
                     summary: 'Suppression',
@@ -95,7 +93,9 @@ export class ApiComponent implements OnInit {
 
     getDisplayRange(): string {
         const lastItemIndex = this.firstItemIndex + this.displayedLogs.length;
-        return `Affichage de ${this.firstItemIndex + 1} à ${lastItemIndex} sur ${this.logs.length} entrées`;
+        return `Affichage de ${
+            this.firstItemIndex + 1
+        } à ${lastItemIndex} sur ${this.logs.length} entrées`;
     }
 
     switchLogType(url: string) {

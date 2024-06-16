@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { Constat } from '../../../interfaces/Constat.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';

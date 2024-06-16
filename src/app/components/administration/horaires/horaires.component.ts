@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Horaire } from '../../../interfaces/Horaire.interface';
@@ -204,7 +204,5 @@ export class HorairesComponent implements OnInit {
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-    
-    
+    }
 }

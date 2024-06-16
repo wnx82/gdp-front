@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService, SelectItem } from 'primeng/api';
 import {
     FormControl,
@@ -101,21 +101,28 @@ export class RuesComponent implements OnInit {
                 console.error(error);
             }
         );
-    
+
         this.dataForm.get('cp')?.valueChanges.subscribe(value => {
-            const localite = this.cpList.find(option => option.value === value)?.name;
+            const localite = this.cpList.find(
+                option => option.value === value
+            )?.name;
             if (localite) {
-                this.dataForm.get('localite')?.setValue(localite, { emitEvent: false });
+                this.dataForm
+                    .get('localite')
+                    ?.setValue(localite, { emitEvent: false });
             }
         });
 
         this.dataForm.get('localite')?.valueChanges.subscribe(value => {
-            const codePostal = this.localiteList.find(option => option.value === value)?.cp;
+            const codePostal = this.localiteList.find(
+                option => option.value === value
+            )?.cp;
             if (codePostal) {
-                this.dataForm.get('cp')?.setValue(codePostal, { emitEvent: false });
+                this.dataForm
+                    .get('cp')
+                    ?.setValue(codePostal, { emitEvent: false });
             }
         });
-
     }
 
     get() {
@@ -133,7 +140,16 @@ export class RuesComponent implements OnInit {
             },
         });
     }
-	getSeverityLoc(localite: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    getSeverityLoc(
+        localite: string
+    ):
+        | 'success'
+        | 'secondary'
+        | 'info'
+        | 'warning'
+        | 'danger'
+        | 'contrast'
+        | undefined {
         switch (localite) {
             case 'Dottignies':
                 return 'warning';
@@ -146,7 +162,6 @@ export class RuesComponent implements OnInit {
             default:
                 return 'success'; // Vous pouvez également retourner 'secondary' ou 'contrast' selon vos besoins
         }
-
     }
     private handleError(error: any): void {
         this.messageService.add({
@@ -365,7 +380,5 @@ export class RuesComponent implements OnInit {
 
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
-      }
-	  
-      
+    }
 }

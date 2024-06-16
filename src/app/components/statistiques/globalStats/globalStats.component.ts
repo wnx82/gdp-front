@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-globalStats',
@@ -31,9 +31,11 @@ export class globalStats {
             this.agentCount = agents.length;
         });
         this.http.get<any[]>(`${this.API_URL}/articles`).subscribe(articles => {
-                this.articlesCount = articles.length;
-            });
-        this.http.get<any[]>(`${this.API_URL}/categories`).subscribe(categories => {
+            this.articlesCount = articles.length;
+        });
+        this.http
+            .get<any[]>(`${this.API_URL}/categories`)
+            .subscribe(categories => {
                 this.categoriesCount = categories.length;
             });
         this.http.get<any[]>(`${this.API_URL}/constats`).subscribe(constats => {

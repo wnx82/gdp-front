@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
 import { GetDataService } from '../../../services/getData/get-data.service';
@@ -25,11 +25,10 @@ export class DashboardComponent implements OnInit {
     ) {}
     readonly API_URL = `${environment.apiUrl}`;
     ngOnInit() {
-
         this.getDataService.connectedUsers$.subscribe(users => {
             this.connectedUsers = users;
             this.dataLoaded = true;
-          });
+        });
         setTimeout(() => {
             this._localStorageService.getAll();
             this.dataLoaded = true; //
