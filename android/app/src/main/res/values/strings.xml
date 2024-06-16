@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">gdp-front</string>
-    <string name="title_activity_main">gdp-front</string>
-    <string name="package_name">gdpfront.app</string>
-    <string name="custom_url_scheme">gdpfront.app</string>
-</resources>
