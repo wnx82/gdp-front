@@ -58,7 +58,6 @@ export class QuartiersComponent implements OnInit {
             value: mission._id!,
             label: mission.title,
           }));
-        console.log('missions loaded:', this.missions);
       },
       (error) => console.error(error)
     );
@@ -89,7 +88,6 @@ export class QuartiersComponent implements OnInit {
     this.http.get<Quartier[]>(this.API_URL).subscribe({
       next: (data) => {
         this.quartiers = data.filter((quartier) => !quartier.deletedAt);
-        console.log('get quartiers:', this.quartiers);
       },
       error: (error) => {
         this.messageService.add({

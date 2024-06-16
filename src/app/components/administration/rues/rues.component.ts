@@ -11,7 +11,7 @@ import {
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
-import { Rue } from '../../../interfaces/Rue.interface.';
+import { Rue } from '../../../interfaces/Rue.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
 @Component({
     selector: 'app-rues',

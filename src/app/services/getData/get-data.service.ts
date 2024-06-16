@@ -9,7 +9,7 @@ import { Horaire } from '../../interfaces/Horaire.interface';
 import { Infraction } from '../../interfaces/Infraction.interface';
 import { Mission } from '../../interfaces/Mission.interface';
 import { Quartier } from '../../interfaces/Quartier.interface';
-import { Rue } from '../../interfaces/Rue.interface.';
+import { Rue } from '../../interfaces/Rue.interface';
 import { Vehicule } from '../../interfaces/Vehicule.interface';
 import { Categorie } from '../../interfaces/Categorie.interface';
 import { Article } from '../../interfaces/Article.interface';
@@ -249,17 +249,15 @@ export class GetDataService {
         .pipe(filter(articles => articles.length > 0));
 
     private getArticlesFromApi() {
-        this.http
-            .get<Article[]>(`${environment.apiUrl}/articles`)
-            .subscribe({
-                next: data => {
-                    this.myArticles.next(
-                        data.filter(article => !article.deletedAt)
-                    );
-                },
-                error: error => {
-                    console.error('Error fetching articles: ', error);
-                },
-            });
+        this.http.get<Article[]>(`${environment.apiUrl}/articles`).subscribe({
+            next: data => {
+                this.myArticles.next(
+                    data.filter(article => !article.deletedAt)
+                );
+            },
+            error: error => {
+                console.error('Error fetching articles: ', error);
+            },
+        });
     }
 }

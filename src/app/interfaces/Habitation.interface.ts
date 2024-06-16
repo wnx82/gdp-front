@@ -1,4 +1,4 @@
-import { Rue } from './Rue.interface.';
+import { Rue } from './Rue.interface';
 
 export interface Habitation {
     // numero: any;

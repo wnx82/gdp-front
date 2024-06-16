@@ -8,7 +8,7 @@ import { Table } from 'primeng/table';
 import { LocalStorageService } from '../../../services/localstorage/local-storage.service';
 import { Validation } from '../../../interfaces/Validation.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
-import { Rue } from '../../../interfaces/Rue.interface.';
+import { Rue } from '../../../interfaces/Rue.interface';
 
 @Component({
     selector: 'app-validations',
@@ -61,13 +61,14 @@ export class ValidationsComponent implements OnInit {
     }
 
     getAgents() {
-        this.getDataService.agents$.subscribe(
+        this.agents$.subscribe(
             agents => {
                 this.agents = agents
                     .filter(agent => agent.matricule !== null)
                     .map(agent => ({
-                        value: agent.matricule!,
-                        label: `Agent ${agent.matricule}`,
+                        value: agent._id!,
+                        label: agent.matricule
+                        // label: `Agent ${agent.matricule}`,
                     }));
             },
             error => console.error(error)
@@ -189,9 +190,12 @@ export class ValidationsComponent implements OnInit {
 
     selectValidation(validation: any) {
         this.selectedValidation = { ...validation };
+
         console.log('selectedValidation',this.selectValidation)
+        
         const date = validation?.date ? new Date(validation.date) : null;
-        const agentValues = validation?.agents?.matricule || [];
+        const agentValues = validation?.agents?._id || [];
+        console.log(agentValues);
         this.dataForm.patchValue({
             agents: agentValues,
             habitation: validation?.habitation?._id,

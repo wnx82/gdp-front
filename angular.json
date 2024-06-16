@@ -47,9 +47,6 @@
             "styles": [
               "node_modules/primeng/resources/primeng.min.css",
               "src/styles.min.css"
-            ],
-            "scripts": [
-              "/node_modules/chart.js/dist/chart.min.js"
             ]
           },
           "configurations": {
@@ -133,9 +130,6 @@
             "styles": [
               "node_modules/primeng/resources/primeng.min.css",
               "src/styles.scss"
-            ],
-            "scripts": [
-              "/node_modules/chart.js/dist/chart.min.js"
             ]
           }
         }

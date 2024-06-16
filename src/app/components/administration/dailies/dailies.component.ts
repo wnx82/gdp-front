@@ -129,7 +129,13 @@ export class DailiesComponent implements OnInit {
         this.loading = true;
         const url = `${this.API_URL}/${dailiesId}/send`;
         this.http.post<any>(url, {}).subscribe({
-            next: data => {},
+            next: data => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Mail envoyé',
+                    detail: `Le mail a été envoyé avec succès`,
+                });
+            },
             error: error => {
                 this.handleError(error);
                 this.messageService.add({

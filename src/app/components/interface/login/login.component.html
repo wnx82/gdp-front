@@ -6,14 +6,28 @@
   <div class="parent">
     <div [ngClass]="{'active': isActive}" class="container">
       <div class="form-container sign-up">
-        <form>
-          <h1>Create Account</h1>
-          <span>or use your email for registration</span>
-          <input type="text" placeholder="Name">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Password">
-          <button>Sign Up</button>
+        <form class="signin-form" [formGroup]="registerForm">
+          <img src="assets/images/logo.png" alt="Logo GDP" class="logo">
+          <h1>S'enregistrer</h1>
+          <span>Vous devrez attendre l'activation de votre compte par l'administrateur</span>
+          <input pInputText id="emailRegister" name="emailRegister" formControlName="emailRegister" type="text" placeholder="Email" autocomplete="current-email" />
+          <small class="error-message" *ngIf="registerForm.get('emailRegister')?.invalid && (registerForm.get('emailRegister')?.dirty || registerForm.get('email')?.touched)">
+            {{ registerForm.get('email')?.hasError('required') ? 'L\'e-mail est requis' : registerForm.get('email')?.hasError('email') ? 'Veuillez entrer une adresse e-mail valide' : '' }}
+          </small>
+          <p-password formControlName="passwordRegister" name="passwordRegister" [toggleMask]="true" [feedback]="false" [placeholder]="'Mot de passe'" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
+          <small class="error-message" *ngIf="registerForm.get('passwordRegister')?.invalid && (registerForm.get('passwordRegister')?.dirty || registerForm.get('passwordRegister')?.touched)">
+            {{ registerForm.get('passwordRegister')?.hasError('minlength') ? 'Doit contenir au moins 3 caractères' : '' }}
+          </small>
+          <p-password formControlName="passwordRegisterVerification" name="passwordRegisterVerification" [toggleMask]="true" [feedback]="false" [placeholder]="'Répéter votre mot de passe'" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
+          <small class="error-message" *ngIf="registerForm.get('passwordRegisterVerification')?.invalid && (registerForm.get('passwordRegisterVerification')?.dirty || registerForm.get('passwordRegisterVerification')?.touched)">
+            {{ registerForm.get('passwordRegisterVerification')?.hasError('minlength') ? 'Doit contenir au moins 3 caractères' : '' }}
+          </small>
+          <small class="error-message" *ngIf="registerForm.errors?.['mismatch'] && (registerForm.get('passwordRegisterVerification')?.dirty || registerForm.get('passwordRegisterVerification')?.touched)">
+            Les mots de passe ne correspondent pas.
+          </small>
+          <button (click)="onRegister()" [class.disabled-button]="!isRegisterButtonEnabled()">S'enregistrer</button>
         </form>
+        
       </div>
 
       <div class="form-container sign-in">

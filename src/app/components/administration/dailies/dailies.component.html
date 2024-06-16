@@ -82,22 +82,18 @@
                     </div>
                 </td>
                 <td>{{ donnee.sent | date: 'yyyy-MM-dd HH:mm'}}</td>
-                <td><add-to-calendar-button [attr.name]="donnee.date | date: 'yyyy-MM-dd'"
-                        [attr.description]="findQuartierById(donnee.quartiers)" [attr.startDate]="donnee.date"
-                        [attr.startTime]="extractHoraires(donnee.horaire).heure_debut"
-                        [attr.endTime]="extractHoraires(donnee.horaire).heure_fin" timeZone="Europe/Brussels"
-                        location="World Wide Web" options="['Outlook.com']" language="fr">
+                <td>
+                    <add-to-calendar-button 
+                        [name]="donnee.date | date: 'yyyy-MM-dd'"
+                        [description]="findQuartierById(donnee.quartiers) | async"
+                        [startDate]="donnee.date | date: 'yyyy-MM-dd'"
+                        [startTime]="extractHoraires(donnee.horaire).heure_debut"
+                        [endTime]="extractHoraires(donnee.horaire).heure_fin"
+                        timeZone="Europe/Brussels"
+                        location="World Wide Web"
+                        options="['Outlook.com']"
+                        language="fr">
                     </add-to-calendar-button>
-                    <!-- <add-to-calendar-button 
-  name="Sample Event"
-  description="Play with me!"
-  startDate="2024-06-19"
-  startTime="10:15"
-  endTime="17:45"
-  timeZone="Europe/Brussels"
-  location="World Wide Web"
-  options="'Apple','Google','iCal','Outlook.com','Yahoo'"
-></add-to-calendar-button> -->
                 </td>
 
             </tr>

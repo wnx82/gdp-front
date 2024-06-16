@@ -1,7 +1,7 @@
 export interface Validation {
     label: string | null;
     _id: number;
-    agent?: string | null;
+    agents: string[] | null;
     habitation?: string | null;
     note?: string | null;
     date?: string | null;

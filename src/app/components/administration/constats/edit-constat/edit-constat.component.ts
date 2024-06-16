@@ -15,7 +15,7 @@ import { Table } from 'primeng/table';
 import { SelectItemGroup } from 'primeng/api';
 import { Agent } from '../../../../interfaces/User.interface';
 import { Constat } from '../../../../interfaces/Constat.interface';
-import { Rue } from '../../../../interfaces/Rue.interface.';
+import { Rue } from '../../../../interfaces/Rue.interface';
 import { ConstatsComponent } from '../constats.component';
 import { GetDataService } from '../../../../services/getData/get-data.service';
 @Component({
