@@ -1,28 +1,51 @@
-
 <div class="card-head">📊 Statistiques des constats</div>
 <div class="card-body">
+  <div>
+    <label for="year">Select Year:</label>
+    <p-dropdown 
+        [options]="availableYears" 
+        [(ngModel)]="selectedYear" 
+        placeholder="Select a year" 
+        (onChange)="onYearChange()">
+    </p-dropdown>
+  </div>
 
-    <div class="form-group">
-      <label for="startDate">Date de début</label>
-      <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" (ngModelChange)="fetchStatistics()">
+  <div class="stats-row">
+    <div class="stats-column">
+      <h3>Statistiques pour l'année {{ selectedYear === 'all' ? 'All' : selectedYear }}</h3>
+      <p>Nombre d'avertissements : {{ nonPvCount }}</p>
+      <p>Nombre de PV : {{ pvCount }}</p>
     </div>
-    <div class="form-group">
-      <label for="endDate">Date de fin</label>
-      <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" (ngModelChange)="fetchStatistics()">
-    </div>
-  
-    <div *ngIf="pvCount !== null">
-      <h3>Nombre de PV : {{ pvCount }}</h3>
-    </div>
-  
-    <div *ngIf="streetsWithMostConstats.length > 0">
-      <h3>Rues avec le plus de constats :</h3>
-      <ul>
-        <li *ngFor="let street of streetsWithMostConstats">
-          {{ street.street }} - {{ street.count }} constats
-        </li>
-      </ul>
+    <div class="stats-column">
+      <div class="card flex justify-content-center">
+        <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+      </div>
     </div>
   </div>
 
-  
+  <div class="stats-row">
+    <div class="stats-column">
+      <h4>Statistiques par agent</h4>
+      <div *ngFor="let agent of agentsStats">
+          <p><b>A{{ agent.name }} :</b> AV - {{ agent.nonPvCount }}, PV - {{ agent.pvCount }}</p>
+      </div>
+    </div>
+    <div class="stats-column">
+      <div class="card flex justify-content-center">
+        <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+      </div>
+    </div>
+    <div class="stats-column">
+      <div class="card flex justify-content-center">
+        <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h4>Statistiques par rue</h4>
+    <div *ngFor="let street of streetsWithMostConstats">
+      <p>{{ street.street }} : {{ street.count }}</p>
+    </div>
+  </div>
+</div>
