@@ -184,7 +184,7 @@ export class IdDailieComponent implements OnInit {
 
     cancel() {
         this.dataForm.reset();
-        this.router.navigate(['dailies']);
+        this.router.navigate(['admin/dailies']);
     }
 
     clear(table: Table) {

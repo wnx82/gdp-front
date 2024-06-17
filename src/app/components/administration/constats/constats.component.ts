@@ -129,7 +129,7 @@ export class ConstatsComponent implements OnInit {
     }
 
     editConstat(constatId: number) {
-        this.router.navigate(['constats', constatId]);
+        this.router.navigate(['admin/constats', constatId]);
     }
 
     onConfirmDelete(constat: any) {

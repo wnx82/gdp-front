@@ -53,6 +53,11 @@ export const navbarData: INavbarData[] = [
         label: 'Media',
     },
     {
+        routeLink: 'habitations',
+        icon: 'fal fa-camera',
+        label: 'Listing Habitations',
+    },
+    {
         routeLink: 'messages',
         icon: 'fal fa-message',
         label: 'Messages',
@@ -68,64 +73,64 @@ export const navbarData: INavbarData[] = [
             //     label: 'Profile',
             // },
             {
-                routeLink: 'api',
+                routeLink: 'admin/api',
                 label: 'Api',
             },
             {
-                routeLink: 'agents',
+                routeLink: 'admin/agents',
                 label: 'Liste des agents',
             },
 
             {
-                routeLink: 'articles',
+                routeLink: 'admin/articles',
                 label: 'Liste des articles',
             },
             {
-                routeLink: 'categories',
+                routeLink: 'admin/categories',
                 label: 'Liste des categories',
             },
             {
-                routeLink: 'constats',
+                routeLink: 'admin/constats',
                 label: 'Liste des constats',
             },
             {
-                routeLink: 'dailies',
+                routeLink: 'admin/dailies',
                 label: 'Liste des dailies',
             },
             {
-                routeLink: 'habitations',
+                routeLink: 'admin/habitations',
                 label: 'Liste des habitations',
             },
             {
-                routeLink: 'horaires',
+                routeLink: 'admin/horaires',
                 label: 'Liste des horaires',
             },
             {
-                routeLink: 'infractions',
+                routeLink: 'admin/infractions',
                 label: 'Liste des infractions',
             },
             {
-                routeLink: 'missions',
+                routeLink: 'admin/missions',
                 label: 'Liste des missions',
             },
             {
-                routeLink: 'quartiers',
+                routeLink: 'admin/quartiers',
                 label: 'Liste des quartiers',
             },
             {
-                routeLink: 'rapports',
+                routeLink: 'admin/rapports',
                 label: 'Liste des rapports',
             },
             {
-                routeLink: 'rues',
+                routeLink: 'admin/rues',
                 label: 'Liste des rues',
             },
             {
-                routeLink: 'validations',
+                routeLink: 'admin/validations',
                 label: 'Liste des validations',
             },
             {
-                routeLink: 'vehicules',
+                routeLink: 'admin/vehicules',
                 label: 'Liste des vehicules',
             },
             {

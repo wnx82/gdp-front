@@ -98,14 +98,6 @@ export class QuartiersComponent implements OnInit {
     }
 
     add(quartier: any) {
-        this.dataForm.value.missions = this.dataForm.value.missions.map(
-            (mission: any) => {
-                const missionData = this.missions.find(
-                    m => m.value === mission.value
-                );
-                return missionData ? missionData : mission;
-            }
-        );
         this.http.post<Quartier>(this.API_URL, this.dataForm.value).subscribe({
             next: data => {
                 this.quartiers.push(data);
@@ -135,14 +127,16 @@ export class QuartiersComponent implements OnInit {
         }
 
         const url = `${this.API_URL}/${id}`;
+
         this.dataForm.value.missions = this.dataForm.value.missions.map(
             (mission: any) => {
                 const missionData = this.missions.find(
                     m => m.value === mission.value
                 );
-                return missionData ? missionData : mission;
+                return missionData ? { _id: missionData._id } : mission;
             }
         );
+
         this.http.patch<Quartier>(url, this.dataForm.value).subscribe({
             next: data => {
                 const index = this.quartiers.findIndex(r => r._id === data._id);

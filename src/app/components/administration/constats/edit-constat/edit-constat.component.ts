@@ -274,7 +274,7 @@ export class EditConstatComponent implements OnInit {
         // this.isAdding = false;
         // this.isEditing = false;
         this.dataForm.reset();
-        this.router.navigate(['constats']);
+        this.router.navigate(['admin/constats']);
     }
 
     clear(table: Table) {

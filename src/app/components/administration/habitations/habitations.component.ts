@@ -352,41 +352,4 @@ export class HabitationsComponent implements OnInit {
     get isDialogVisible(): boolean {
         return this.isAdding || this.isEditing;
     }
-
-    // filterRues(event: any) {
-    //     const query = event.query.toLowerCase();
-    //     this.filteredRues = this.rues
-    //         .filter(
-    //             rue =>
-    //                 typeof rue.nomComplet === 'string' &&
-    //                 rue.nomComplet.toLowerCase().includes(query)
-    //         )
-
-    //         .sort((a, b) => {
-    //             const aIndex = a.nomComplet.toLowerCase().indexOf(query);
-    //             const bIndex = b.nomComplet.toLowerCase().indexOf(query);
-    //             if (aIndex < bIndex) {
-    //                 return -1;
-    //             }
-    //             if (aIndex > bIndex) {
-    //                 return 1;
-    //             }
-    //             // Si les deux rues ont la même position de la requête,
-    //             // on les trie par ordre alphabétique
-    //             return a.nomComplet.localeCompare(b.nomComplet);
-    //         })
-
-    //         .slice(0, 10)
-    //         .map(rue => rue.nomComplet);
-    // }
-
-    // addMesures() {
-    //     const mesuresArray = this.selectedHabitation?.mesures || []; // Récupérer la liste de mesures
-    //     const mesuresFormArray = this.dataForm.get('mesures') as FormArray; // Obtenir la référence au FormArray
-
-    //     // Ajouter chaque élément de mesures au FormArray
-    //     for (const mesure of mesuresArray) {
-    //         mesuresFormArray.push(new FormControl(mesure));
-    //     }
-    // }
 }

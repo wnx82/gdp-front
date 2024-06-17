@@ -150,10 +150,10 @@ export class DailiesComponent implements OnInit {
         }, 500);
     }
     editDailie(dailiesId: number) {
-        this.router.navigate(['dailies', dailiesId]);
+        this.router.navigate(['admin/dailies', dailiesId]);
     }
     ViewRapport(rapportId: number) {
-        this.router.navigate(['rapports', rapportId]);
+        this.router.navigate(['admin/rapports', rapportId]);
     }
     get() {
         this.http.get<Dailie[]>(this.API_URL).subscribe({

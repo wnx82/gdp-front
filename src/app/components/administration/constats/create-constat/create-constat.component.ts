@@ -192,9 +192,9 @@ export class CreateConstatComponent implements OnInit {
         return new Date();
     }
 
-    cancel() {
+    back() {
         this.dataForm.reset();
-        this.router.navigate(['constats']);
+        this.router.navigate(['admin/constats']);
     }
 
     clear(table: Table) {

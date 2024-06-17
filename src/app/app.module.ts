@@ -1,5 +1,5 @@
 //app.module.ts
-import { NgModule,LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,10 +25,11 @@ import { UploadComponent } from './services/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
-import { MessageServiceComponent } from './components/user/message-service/message-service.component';
+import { MessageServiceComponent } from './components/users/message-service/message-service.component';
 // import { StatisticsComponent } from './components/statistics/statistics.component';
 import { PrimeNGConfig } from 'primeng/api';
 import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service';
+
 //pour l'éditeur
 // import { EditorModule } from 'primeng/editor';
 // import { ButtonModule } from 'primeng/button';
@@ -38,7 +39,6 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
 // import { DropdownModule } from 'primeng/dropdown';
 // import { InputTextModule } from 'primeng/inputtext';
 // import { InputTextareaModule } from 'primeng/inputtextarea';
-
 
 // import { ButtonModule } from 'primeng/button';
 // import { PaginatorModule } from 'primeng/paginator';
@@ -59,7 +59,7 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         ToUpperCasePipe,
         UploadComponent,
         MessageServiceComponent,
-          ],
+    ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -74,6 +74,7 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         // FormlyBootstrapModule,
         MessagesModule,
         SharedUiModule,
+
         //pour l'éditor
         // EditorModule,
         // ButtonModule,
@@ -85,14 +86,12 @@ import { PRIMENG_LOCALE_FR } from './services/primeNgLocal/primeNgLocal.service'
         // InputTextareaModule
     ],
     // providers: [MessageService],
-    providers: [MessageService,
-        { provide: LOCALE_ID, useValue: 'fr-FR' }
-      ],
+    providers: [MessageService, { provide: LOCALE_ID, useValue: 'fr-FR' }],
     bootstrap: [AppComponent],
     // schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
     constructor(private primengConfig: PrimeNGConfig) {
         this.primengConfig.setTranslation(PRIMENG_LOCALE_FR);
-      }
+    }
 }

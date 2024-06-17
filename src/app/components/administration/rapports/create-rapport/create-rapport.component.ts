@@ -208,7 +208,7 @@ export class CreateRapportComponent implements OnInit {
 
     cancel() {
         this.dataForm.reset();
-        this.router.navigate(['dailies']);
+        this.router.navigate(['admin/sdailies']);
     }
 
     clear(table: Table) {

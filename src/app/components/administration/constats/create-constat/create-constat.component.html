@@ -4,7 +4,7 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <button pButton pRipple type="button" label="Retour" class="p-button-secondary p-button-outlined"
-                icon="pi pi-arrow-left" style="margin-top: 3px;" (click)="cancel()"></button>
+                icon="pi pi-arrow-left" style="margin-top: 3px;" (click)="back()"></button>
             <button pButton pRipple type="button" label="Reset" class="p-button-secondary p-button-outlined"
                 icon="pi pi-refresh" style="margin-top: 3px;" (click)="resetForm()"></button>
 
@@ -256,7 +256,7 @@
                 <div class="button-container">
                     <div class="p-d-flex p-jc-between">
                         <button pButton pRipple type="button" label="Annuler" class="p-button-sm p-button-secondary"
-                            icon="pi pi-times" (click)="cancel()"></button>
+                            icon="pi pi-times" (click)="back()"></button>
                         <button pButton pRipple type="submit" label="Ajouter" class="p-button-sm p-button-success"
                             icon="pi pi-plus" [disabled]="!dataForm.valid"></button>
 
