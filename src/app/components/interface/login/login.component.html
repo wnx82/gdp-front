@@ -14,14 +14,15 @@
           <small class="error-message" *ngIf="registerForm.get('emailRegister')?.invalid && (registerForm.get('emailRegister')?.dirty || registerForm.get('email')?.touched)">
             {{ registerForm.get('email')?.hasError('required') ? 'L\'e-mail est requis' : registerForm.get('email')?.hasError('email') ? 'Veuillez entrer une adresse e-mail valide' : '' }}
           </small>
-          <p-password formControlName="passwordRegister" name="passwordRegister" [toggleMask]="true" [feedback]="false" [placeholder]="'Mot de passe'" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
+          <p-password formControlName="passwordRegister" name="passwordRegister" [toggleMask]="true" [feedback]="false" [placeholder]="'Mot de passe'" class="password-field" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
           <small class="error-message" *ngIf="registerForm.get('passwordRegister')?.invalid && (registerForm.get('passwordRegister')?.dirty || registerForm.get('passwordRegister')?.touched)">
             {{ registerForm.get('passwordRegister')?.hasError('minlength') ? 'Doit contenir au moins 3 caractères' : '' }}
           </small>
-          <p-password formControlName="passwordRegisterVerification" name="passwordRegisterVerification" [toggleMask]="true" [feedback]="false" [placeholder]="'Répéter votre mot de passe'" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
+          <p-password formControlName="passwordRegisterVerification" name="passwordRegisterVerification" [toggleMask]="true" [feedback]="false" [placeholder]="'Répéter votre mot de passe'" class="password-field" [style]="{ 'width':'100%' }" [inputStyle]="{ 'width':'100%' }" autocomplete="current-password"></p-password>
           <small class="error-message" *ngIf="registerForm.get('passwordRegisterVerification')?.invalid && (registerForm.get('passwordRegisterVerification')?.dirty || registerForm.get('passwordRegisterVerification')?.touched)">
             {{ registerForm.get('passwordRegisterVerification')?.hasError('minlength') ? 'Doit contenir au moins 3 caractères' : '' }}
           </small>
+          
           <small class="error-message" *ngIf="registerForm.errors?.['mismatch'] && (registerForm.get('passwordRegisterVerification')?.dirty || registerForm.get('passwordRegisterVerification')?.touched)">
             Les mots de passe ne correspondent pas.
           </small>

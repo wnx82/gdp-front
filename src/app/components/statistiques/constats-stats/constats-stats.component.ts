@@ -50,7 +50,7 @@ export class ConstatsStatsComponent implements OnInit {
 
     initializeYears() {
         const currentYear = new Date().getFullYear();
-        this.availableYears = [{ label: 'All', value: 'all' }];
+        this.availableYears = [{ label: 'Toutes', value: 'all' }];
         for (let year = 2022; year <= currentYear; year++) {
             this.availableYears.push({ label: year.toString(), value: year });
         }

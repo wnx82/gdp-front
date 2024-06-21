@@ -38,6 +38,7 @@
     "quill": "^2.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "ws": "^8.17.1",
     "zone.js": "^0.14.7"
   },
   "devDependencies": {
@@ -55,6 +56,7 @@
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
     "sass": "^1.77.4",
-    "typescript": "~5.4.2"
+    "typescript": "~5.4.2",
+    "ws": ">=8.17.1"
   }
 }
