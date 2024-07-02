@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
 import { MessageService, SelectItem } from 'primeng/api';
 import {
     FormControl,
@@ -16,6 +14,8 @@ import { Habitation } from '../../../interfaces/Habitation.interface';
 import { Rue } from '../../../interfaces/Rue.interface';
 import { GetDataService } from '../../../services/getData/get-data.service';
 import { ActivatedRoute } from '@angular/router';
+import { HabitationsService } from '../../../services/components/habitations/habitations.service';
+
 @Component({
     selector: 'app-habitations',
     templateUrl: './habitations.component.html',
@@ -24,12 +24,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HabitationsComponent implements OnInit {
     constructor(
-        private http: HttpClient,
         private messageService: MessageService,
         private _localStorageService: LocalStorageService,
         private confirmationService: ConfirmationService,
         private formBuilder: FormBuilder,
         private getDataService: GetDataService,
+        private habitationsService: HabitationsService,
         private route: ActivatedRoute
     ) {
         this.dataForm = this.formBuilder.group({
@@ -50,9 +50,7 @@ export class HabitationsComponent implements OnInit {
             googlemap: [''],
         });
     }
-    private apiUrl: string | undefined;
-    readonly API_URL = `${environment.apiUrl}/habitations`;
-    // habitations: Habitation[] = [];
+
     habitations: Habitation[] = [];
     rues: Rue[] = [];
     selectedData: any = {};
@@ -74,7 +72,7 @@ export class HabitationsComponent implements OnInit {
     }
 
     getRues() {
-        this.getDataService.rues$.subscribe(
+        this.habitationsService.getRues().subscribe(
             rues => {
                 this.rues = rues;
             },
@@ -83,20 +81,14 @@ export class HabitationsComponent implements OnInit {
             }
         );
     }
+
     getHabitations() {
-        let url = `${this.API_URL}`;
-        const active = this.route.snapshot.params['active'];
-
-        if (active === 'active') {
-            url += '/active';
-        }
-
-        this.http.get<Habitation[]>(url).subscribe({
+        const active = this.route.snapshot.params['active'] === 'active';
+        this.habitationsService.getHabitations(active).subscribe({
             next: data => {
                 this.habitations = data.filter(
                     habitation => !habitation.deletedAt
                 );
-                // console.log(this.habitations); // log each habitation
             },
             error: error => {
                 this.messageService.add({
@@ -107,9 +99,11 @@ export class HabitationsComponent implements OnInit {
             },
         });
     }
+
     clear(table: Table) {
         table.clear();
     }
+
     private handleError(error: any): void {
         this.messageService.add({
             severity: 'error',
@@ -143,16 +137,9 @@ export class HabitationsComponent implements OnInit {
     }
 
     addHabitation(habitation: any) {
-        let url = `${this.API_URL}`;
-        // console.log(habitation);
-        console.log(this.dataForm.value);
-
-        this.http.post<Habitation>(url, this.dataForm.value).subscribe({
-            // this.dataForm.value.post<any>(url, habitation).subscribe({
-            // this.http.post<any>(url, habitation).subscribe({
+        this.habitationsService.addHabitation(this.dataForm.value).subscribe({
             next: data => {
                 this.habitations.push(data);
-
                 this.isAdding = false;
                 this.messageService.add({
                     severity: 'success',
@@ -177,33 +164,35 @@ export class HabitationsComponent implements OnInit {
             console.error('Données invalides', habitation);
             return;
         }
-        const url = `${this.API_URL}/${id}`;
 
-        this.http.patch<Habitation>(url, this.dataForm.value).subscribe({
-            next: data => {
-                const index = this.habitations.findIndex(
-                    a => a._id === data._id
-                );
-                this.habitations[index] = data;
-                this.selectedHabitation = {};
-                this.isEditing = false;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Modification effectuée',
-                });
-                this.dataForm.reset();
-                this.getHabitations();
-            },
-            error: error => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: error.error.message,
-                });
-            },
-        });
+        this.habitationsService
+            .editHabitation(id, this.dataForm.value)
+            .subscribe({
+                next: data => {
+                    const index = this.habitations.findIndex(
+                        a => a._id === data._id
+                    );
+                    this.habitations[index] = data;
+                    this.selectedHabitation = {};
+                    this.isEditing = false;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Modification effectuée',
+                    });
+                    this.dataForm.reset();
+                    this.getHabitations();
+                },
+                error: error => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: error.error.message,
+                    });
+                },
+            });
     }
+
     onConfirmDelete(habitation: Habitation) {
         this.displayConfirmationDelete = true;
         this.confirmationService.confirm({
@@ -217,7 +206,7 @@ export class HabitationsComponent implements OnInit {
     }
 
     deleteHabitation(id: number) {
-        this.http.delete<any>(`${this.API_URL}/${id}`).subscribe({
+        this.habitationsService.deleteHabitation(id).subscribe({
             next: () => {
                 this.habitations = this.habitations.filter(a => a._id !== id);
                 this.messageService.add({
@@ -239,19 +228,17 @@ export class HabitationsComponent implements OnInit {
 
     deleteDeleted(): void {
         this.displayConfirmationDialog = true;
-        //
     }
+
     confirmDeleteDeleted(): void {
-        // Mettez ici le code pour supprimer définitivement les données supprimées
-        const url = `${this.API_URL}/purge`;
-        this.http.post(url, {}).subscribe({
+        this.habitationsService.purgeHabitations().subscribe({
             next: () => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
                     detail: 'Toutes les données ont été complètement effacées',
                 });
-                this.getHabitations(); // Met à jour la liste
+                this.getHabitations();
             },
             error: error => {
                 this.messageService.add({
@@ -264,17 +251,16 @@ export class HabitationsComponent implements OnInit {
 
         this.displayConfirmationDialog = false;
     }
+
     confirmRestoreDeleted(): void {
-        // Mettez ici le code pour restaurer les données supprimées
-        const url = `${this.API_URL}/restore`;
-        this.http.post(url, {}).subscribe({
+        this.habitationsService.restoreHabitations().subscribe({
             next: () => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
                     detail: 'Toutes les données ont été restaurées avec succès',
                 });
-                this.getHabitations(); // Met à jour la liste
+                this.getHabitations();
             },
             error: error => {
                 this.messageService.add({
@@ -290,17 +276,15 @@ export class HabitationsComponent implements OnInit {
         this.selectedHabitation = { ...habitation };
         console.log('sélection de lhabitation', this.selectedHabitation);
 
-        // Vérifiez la liste des rues disponibles et la rue de l'habitation
-        console.log('Liste des rues disponibles:', this.rues); // Debug
-        console.log("Rue de l'habitation:", habitation.adresse.nomComplet); // Debug
+        console.log('Liste des rues disponibles:', this.rues);
+        console.log("Rue de l'habitation:", habitation.adresse.nomComplet);
 
-        // Trouvez l'_id de la rue à partir de son nom complet
         const selectedRue = this.rues.find(
             rue => rue.nomComplet === habitation.adresse.nomComplet
         );
         const rueId = selectedRue ? selectedRue._id : null;
         if (!rueId) {
-            console.error('Rue non trouvée:', habitation.adresse.nomComplet); // Debug
+            console.error('Rue non trouvée:', habitation.adresse.nomComplet);
         }
 
         const debut = habitation?.dates?.debut
@@ -313,7 +297,7 @@ export class HabitationsComponent implements OnInit {
 
         this.dataForm.patchValue({
             adresse: {
-                rue: rueId, // Utilisez l'_id de la rue ici
+                rue: rueId,
                 numero: habitation.adresse.numero,
             },
             demandeur: {
@@ -346,7 +330,6 @@ export class HabitationsComponent implements OnInit {
 
     toggleEdit() {
         this.isEditing = !this.isEditing;
-        // console.log(this.selectedHabitation);
     }
 
     get isDialogVisible(): boolean {

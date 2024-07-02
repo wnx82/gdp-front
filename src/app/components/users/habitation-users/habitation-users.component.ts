@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Habitation } from '../../../interfaces/Habitation.interface';
 import { Rue } from '../../../interfaces/Rue.interface';
-import { HabitationsService } from '../../../services/components/habitations.service';
+import { HabitationsService } from '../../../services/components/habitations/habitations.service';
 import { Table } from 'primeng/table';
 
 import { GoogleMapsModule } from '@angular/google-maps';

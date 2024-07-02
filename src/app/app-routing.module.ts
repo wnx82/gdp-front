@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
-import { UploadComponent } from './services/upload/upload.component';
+import { UploadComponent } from './components/administration/upload/upload.component';
 
 import { DashboardComponent } from './components/main-page/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './components/interface/forgot-password/forgot-password.component';

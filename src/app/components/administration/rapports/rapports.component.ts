@@ -145,7 +145,7 @@ export class RapportsComponent implements OnInit {
         }, 500);
     }
     editRapport(RapportId: number) {
-        this.router.navigate(['rapports', RapportId, 'edit']);
+        this.router.navigate(['admin/rapports', RapportId, 'edit']);
     }
     get() {
         this.http.get<Rapport[]>(this.API_URL).subscribe({

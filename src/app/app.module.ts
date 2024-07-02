@@ -21,7 +21,7 @@ import { DashboardModule } from './components/main-page/dashboard/dashboard.modu
 import { NoOpenDirective } from './no-open.directive';
 import { RegistrationComponent } from './services/registration/registration.component';
 import { ToUpperCasePipe } from './services/toUpperCase/to-upper-case.pipe';
-import { UploadComponent } from './services/upload/upload.component';
+import { UploadComponent } from './components/administration/upload/upload.component';
 import { SharedUiModule } from './services/shared-ui/shared-ui.module';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';

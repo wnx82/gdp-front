@@ -54,7 +54,7 @@ export const navbarData: INavbarData[] = [
     },
     {
         routeLink: 'habitations',
-        icon: 'fal fa-camera',
+        icon: 'fal fa-house',
         label: 'Listing Habitations',
     },
     {
